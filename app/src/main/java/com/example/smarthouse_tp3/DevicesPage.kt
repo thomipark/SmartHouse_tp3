@@ -1,29 +1,22 @@
 package com.example.smarthouse_tp3
 
-import android.media.Image
-import androidx.annotation.DrawableRes
-import androidx.annotation.StringRes
+
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.paddingFromBaseline
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Card
@@ -34,12 +27,9 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
-import androidx.compose.material3.SwitchColors
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarColors
-import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -47,13 +37,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.example.smarthouse_tp3.ui.theme.SmartHouse_tp3Theme
 
 
@@ -76,7 +66,7 @@ fun DeviceScreen(
             modifier = modifier.fillMaxWidth()
         ) {
             items(items = smallTileData) { item ->
-                DeviceSmallTile(icon = item.drawable, deviceType = item.text)
+                DeviceSmallTile(device = item)
             }
         }
     }
@@ -110,19 +100,8 @@ fun TopBarDevice(
 @Composable
 fun DeviceSmallTile(
     modifier: Modifier = Modifier,
-    @DrawableRes icon: Int,
-    @StringRes deviceType: Int
+    device: Device
 ){
-    var switchOn: Boolean by remember { mutableStateOf(false) } //el by es para no escribir el    .value
-    val myIcon: Int
-
-    if (switchOn) {
-        myIcon = R.drawable.device_oven_on
-    } else {
-        myIcon = icon
-    }
-
-
     Surface(
         shape = MaterialTheme.shapes.small,
         modifier = modifier
@@ -137,27 +116,36 @@ fun DeviceSmallTile(
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceEvenly,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(100.dp)
             ) {
                 Image(
-                    painter = painterResource(myIcon),
+                    painter = painterResource(device.getIcon()),
                     contentDescription = null,
                     modifier = Modifier
-                        .size(56.dp)
+                        .weight(0.3f) // 40% of the available width
+                        .padding(horizontal = 8.dp)
                 )
                 Text(
-                    text = stringResource(deviceType),
+                    text = device.getName(),
                     style = MaterialTheme.typography.headlineSmall,
-                    modifier = Modifier.padding(
-                        horizontal = 16.dp
-                    )
+                    modifier = Modifier
+                        .padding(horizontal = 8.dp)
+                        .weight(0.5f),
+                    overflow = TextOverflow.Ellipsis, // Truncate text if it overflows
+                    maxLines = 1 // Display the text in a single line
                 )
                 Switch(
-                    checked = switchOn,
-                    onCheckedChange = {switchOn = !switchOn},
+                    checked = device.getSwitchState(),
+                    onCheckedChange = {device.changeSwitchState()},
                     colors = SwitchDefaults.colors(
                         checkedThumbColor = Color.Green,
-                    )
+                    ),
+                    modifier = Modifier
+                        .weight(0.2f) // 30% of the available width
+                        .fillMaxWidth()
+                        .padding(8.dp)
                 )
 
             }
@@ -175,21 +163,20 @@ fun DevicesSmallTileRow (
         contentPadding = PaddingValues(horizontal = 16.dp),     //se meustra el icono perfecto
         modifier = modifier.fillMaxWidth()
     ) {
-        items(items = smallTileData){ item ->
-            DeviceSmallTile(icon = item.drawable, deviceType = item.text)
-        }
+//        items(items = smallTileData){ item ->
+//            DeviceSmallTile(icon = item.drawable, deviceType = item.text)
+//        }
     }
 }
 
 
 
-//@Preview (showBackground = false)
+@Preview (showBackground = false)
 @Composable
 fun SmallTilePreview(){
     SmartHouse_tp3Theme {
         DeviceSmallTile(
-            icon = R.drawable.device_oven,
-            deviceType = R.string.device_oven,
+            device = DeviceOven("thomi Oven"),
             modifier = Modifier.padding(8.dp)
         )
     }
@@ -216,22 +203,11 @@ fun DeviceScreenPreview () {
     }
 }
 
-private data class DrawableStringPair(
-    @DrawableRes val drawable: Int,
-    @StringRes val text: Int
-)
-
-private val smallTileData = listOf(
-    DrawableStringPair(R.drawable.device_oven, R.string.device_oven),
-    DrawableStringPair(R.drawable.device_oven, R.string.device_oven),
-    DrawableStringPair(R.drawable.device_oven, R.string.device_oven),
-    DrawableStringPair(R.drawable.device_oven, R.string.device_oven),
-    DrawableStringPair(R.drawable.device_oven, R.string.device_oven),
-    DrawableStringPair(R.drawable.device_oven, R.string.device_oven),
-    DrawableStringPair(R.drawable.device_oven, R.string.device_oven),
-    DrawableStringPair(R.drawable.device_oven, R.string.device_oven),
-    DrawableStringPair(R.drawable.device_oven, R.string.device_oven),
-    DrawableStringPair(R.drawable.device_oven, R.string.device_oven),
-    DrawableStringPair(R.drawable.device_oven, R.string.device_oven),
-    DrawableStringPair(R.drawable.device_oven, R.string.device_oven)
+val smallTileData = listOf<Device>(
+    DeviceOven("thomi light"),
+    DeviceOven("pepe oven"),
+    DeviceOven("juanasdas light"),
+    DeviceOven("martin oven"),
+    DeviceOven("ff light"),
+    DeviceOven("jasmin oven")
 )
