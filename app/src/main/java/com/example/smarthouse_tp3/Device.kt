@@ -4,7 +4,7 @@ package com.example.smarthouse_tp3
 import androidx.compose.runtime.mutableStateOf
 
 abstract class Device(name: String ) {
-    var switchState = mutableStateOf(false)
+    var switchState = mutableStateOf(true)
     private var name: String
 
     init{

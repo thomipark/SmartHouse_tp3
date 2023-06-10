@@ -1,8 +1,8 @@
 package com.example.smarthouse_tp3
 
-class DeviceOven(name: String) : Device (name) {
+class DeviceOven(name: String) : Device(name) {
     //    var temperature = mutableStateOf(1)
-    //    var grillMode = mutableStateof(
+    //    var grillMode = mutableStateof()
 
     override fun getIcon(): Int {
         return if (switchState.value){

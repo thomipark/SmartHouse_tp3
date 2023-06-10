@@ -15,7 +15,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.smarthouse_tp3.ui.theme.SmartHouse_tp3Theme
 
 class MainActivity : ComponentActivity() {
@@ -23,25 +24,12 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             SmartHouse_tp3Theme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    DeviceScreen()
-                }
+                MyNavHost()
             }
         }
     }
 }
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
 
 @Composable
 fun CartItemStateless(
@@ -49,7 +37,6 @@ fun CartItemStateless(
     incrementQuantity: () -> Unit,       //event
     decrementQuantity: () -> Unit
 ){
-
     Row {
         Text( text = "Cart item:")
         Button(
@@ -64,15 +51,51 @@ fun CartItemStateless(
     }
 }
 
-
 @Composable
-fun GreetingPreview() {
-    SmartHouse_tp3Theme {
-        Greeting("Android")
-    }
+fun BottomBar(
+    navController: NavController
+){
+    val items = listOf(
+        MainScreen.RoutinesScreen,
+        MainScreen.DevicesScreen,
+        MainScreen.PlacesScreen
+    )
+
+
 }
 
-@Preview (showBackground = true)
+@Composable
+fun BottomNavigation(
+    navController: NavController
+) {
+//    val navBackStackEntry by navController.currentBackStackEntryAsState()
+//    val currentRoute = navBackStackEntry?.destination?.route
+//    items.forEach { item ->
+//        BottomNavigationItem(
+//            icon = { Icon(imageVector = item.icon, contentDescription = item.title) },
+//            label = { Text(text = item.title) },
+//            alwaysShowLabel = true,
+//            selected = currentRoute == item.route,
+//            onClick = {
+//                navController.navigate(item.route) {
+//                    navController.graph.startDestinationRoute?.let { screenRoute ->
+//                        popUpTo(screenRoute) {
+//                            saveState = true
+//                        }
+//                        launchSingleTop = true
+//                        restoreState = true
+//                    }
+//                }
+//            }
+//        )
+//    }
+}
+
+
+
+/* --------------------- LAS PREVIEW EMPIEZAN ACA ------------------*/
+
+//@Preview (showBackground = true)
 @Composable
 fun CartItemStatelessPreview(){
     var quantity: Int by remember { mutableStateOf(1) }
@@ -83,3 +106,4 @@ fun CartItemStatelessPreview(){
         {quantity--}
     )
 }
+

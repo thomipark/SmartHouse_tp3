@@ -2,5 +2,6 @@
     <string name="app_name">SmartHouse_tp3</string>
     <string name="smallTile">small tile</string>
     <string name="device_oven">Oven</string>
+    <string name="device_screen">Devices</string>
 
 </resources>
