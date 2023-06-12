@@ -38,5 +38,7 @@ fun MyNavHost(
                 onNavigateToDevicesScreen = { navController.navigate("Devices") }
             )
         }
+
+
     }
 }

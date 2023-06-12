@@ -5,19 +5,23 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
+import androidx.compose.material.Button
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.OutlinedTextField
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 import com.example.smarthouse_tp3.ui.theme.SmartHouse_tp3Theme
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,32 +68,6 @@ fun BottomBar(
 
 }
 
-@Composable
-fun BottomNavigation(
-    navController: NavController
-) {
-//    val navBackStackEntry by navController.currentBackStackEntryAsState()
-//    val currentRoute = navBackStackEntry?.destination?.route
-//    items.forEach { item ->
-//        BottomNavigationItem(
-//            icon = { Icon(imageVector = item.icon, contentDescription = item.title) },
-//            label = { Text(text = item.title) },
-//            alwaysShowLabel = true,
-//            selected = currentRoute == item.route,
-//            onClick = {
-//                navController.navigate(item.route) {
-//                    navController.graph.startDestinationRoute?.let { screenRoute ->
-//                        popUpTo(screenRoute) {
-//                            saveState = true
-//                        }
-//                        launchSingleTop = true
-//                        restoreState = true
-//                    }
-//                }
-//            }
-//        )
-//    }
-}
 
 
 
@@ -105,5 +83,12 @@ fun CartItemStatelessPreview(){
         {quantity++},
         {quantity--}
     )
+}
+
+@Preview
+@Composable
+fun BottomBarPreview(){
+    val navController = rememberNavController()
+    BottomBar(navController = navController)
 }
 

@@ -1,5 +1,7 @@
 package com.example.smarthouse_tp3
 
+import ar.edu.itba.example.navigation.R
+
 class DeviceOven(name: String) : Device(name) {
     //    var temperature = mutableStateOf(1)
     //    var grillMode = mutableStateof()
@@ -11,5 +13,7 @@ class DeviceOven(name: String) : Device(name) {
             R.drawable.device_oven_off
         }
     }
+
+
 
 }
