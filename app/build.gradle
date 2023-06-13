@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace 'ar.edu.itba.example.navigation'
+    namespace 'com.example.smarthouse_tp3'
     compileSdk 33
 
     defaultConfig {
-        applicationId "ar.edu.itba.example.navigation"
+        applicationId "com.example.smarthouse_tp3"
         minSdk 28
         targetSdk 33
         versionCode 1

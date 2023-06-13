@@ -1,6 +1,5 @@
 package com.example.smarthouse_tp3
 
-import ar.edu.itba.example.navigation.R
 
 class DeviceOven(name: String) : Device(name) {
     //    var temperature = mutableStateOf(1)

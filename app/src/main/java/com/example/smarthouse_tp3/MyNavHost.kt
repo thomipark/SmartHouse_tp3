@@ -20,6 +20,12 @@ fun MyNavHost(
     ) {
 
         // Main Screens Devices - Routines - Places
+        composable("Favourites"){
+            RoutinesScreen(
+                onNavigateToDevicesScreen = { navController.navigate("Devices") }
+            )
+        }
+
         composable("Devices") {
             DeviceScreen (
                 onNavigateToRoutinesScreen = { navController.navigate("Routines") },
