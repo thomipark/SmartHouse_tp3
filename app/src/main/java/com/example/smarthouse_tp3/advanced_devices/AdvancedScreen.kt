@@ -1,8 +1,10 @@
 package com.example.smarthouse_tp3.advanced_devices
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
@@ -22,13 +25,22 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.smarthouse_tp3.Device
+import com.example.smarthouse_tp3.DeviceLight
 import com.example.smarthouse_tp3.DeviceOven
 import com.example.smarthouse_tp3.Type
+import com.github.skydoves.colorpicker.compose.AlphaSlider
+import com.github.skydoves.colorpicker.compose.AlphaTile
+import com.github.skydoves.colorpicker.compose.ColorEnvelope
+import com.github.skydoves.colorpicker.compose.HsvColorPicker
+import com.github.skydoves.colorpicker.compose.rememberColorPickerController
 
 @Composable
 fun DeviceConfigScreen(device: Device) {
@@ -62,7 +74,8 @@ fun DeviceTopBar(device: Device) {
                 contentDescription = null,
                 modifier = Modifier
                     .size(64.dp)
-                    .weight(1f)
+                    .weight(1f),
+                colorFilter = ColorFilter.tint(color = Color.Black)
             )
             Spacer(modifier = Modifier.width(16.dp))
             Text(
@@ -94,7 +107,7 @@ fun DeviceBody(device: Device) {
     when (device.deviceType) {
         Type.OVEN -> OvenConfigScreen()
         Type.AC -> AirConditionerConfigScreen()
-        Type.LIGHT -> LightConfigScreen()
+        Type.LIGHT -> LightConfigScreen(device = device as DeviceLight, changeColor = { device.changeColor() }) // No se porque no anda esto
         Type.FAUCET -> FaucetConfigScreen()
         Type.VACUUM -> VacuumConfigScreen()
         // Agrega más casos según los diferentes tipos de dispositivos que tengas
@@ -114,9 +127,58 @@ fun AirConditionerConfigScreen() {
 }
 
 @Composable
-fun LightConfigScreen() {
-    // Configuración específica para una luz
-    // Agrega composables y lógica según las necesidades de la luz
+fun LightConfigScreen(
+    device: DeviceLight,
+    changeColor: () -> Unit
+) {
+    val controller = rememberColorPickerController()
+    var color: Color = Color.Black
+    var hexCode: String = "#000000"
+    var fromUser: Boolean = false
+    Text(
+        text = "HUE",
+        fontSize = 24.sp,
+        modifier = Modifier.padding(start = 16.dp)
+    )
+    HsvColorPicker(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(350.dp)
+            .padding(10.dp),
+        controller = controller,
+        onColorChanged = { colorEnvelope: ColorEnvelope ->
+            color = colorEnvelope.color // ARGB color value.
+            // changeColor(colorEnvelope.hexCode) // Color hex code, which represents color value.
+            changeColor()
+            fromUser = colorEnvelope.fromUser // Represents this event is triggered by user or not.
+        }
+    )
+    Text(
+        text = "INTENSITY",
+        fontSize = 24.sp,
+        modifier = Modifier.padding(start = 16.dp)
+    )
+    AlphaSlider(
+        modifier = Modifier
+            .padding(10.dp)
+            .height(35.dp),
+        controller = controller,
+    )
+    Column (
+        modifier = Modifier.fillMaxWidth(),
+    ) {
+        Text(
+            modifier = Modifier.align(Alignment.CenterHorizontally),
+            text = device.hexCode,
+            fontSize = 24.sp
+        )
+        AlphaTile(
+            modifier = Modifier.align(Alignment.CenterHorizontally)
+                .size(80.dp)
+                .clip(RoundedCornerShape(6.dp)),
+            controller = controller
+        )
+    }
 }
 
 @Composable
@@ -133,8 +195,8 @@ fun VacuumConfigScreen() {
 @Preview
 @Composable
 fun DeviceTopBarPreview() {
-    val device = DeviceOven(
-        name = "My Device",
+    val device = DeviceLight(
+        name = "My Light",
     )
     DeviceConfigScreen(device = device)
 }
