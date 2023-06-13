@@ -40,8 +40,9 @@ fun MyNavHost(
         }
 
         composable("Places"){
-            PlacesScreen(
-                onNavigateToDevicesScreen = { navController.navigate("Devices") }
+            DeviceScreen (
+                onNavigateToRoutinesScreen = { navController.navigate("Routines") },
+                onNavigateToPlacesScreen = { navController.navigate("Places") }
             )
         }
 

@@ -5,20 +5,27 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Button
 import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
+import androidx.compose.material.TopAppBar
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -43,7 +50,7 @@ class MainActivity : ComponentActivity() {
 
                 Scaffold(
                     bottomBar = { if (showBottomBar) BottomBar(navController = navController) },
-                    topBar = { if (showBottomBar) BottomBar(navController = navController) }
+                    topBar = { TopBar(navController = navController) }
                 ) {
                     MyNavHost(navController = navController)
                 }
@@ -78,9 +85,9 @@ fun BottomBar(
 ){
     val items = listOf(
         MainScreen.FavouritesScreen,
+        MainScreen.PlacesScreen,
         MainScreen.RoutinesScreen,
-        MainScreen.DevicesScreen,
-        MainScreen.PlacesScreen
+        MainScreen.DevicesScreen
     )
 
     BottomNavigation {
@@ -106,9 +113,37 @@ fun BottomBar(
             )
         }
     }
-
-
 }
+
+@Composable
+fun TopBar(navController: NavController) {
+    val currentRoute = navController.currentDestination?.route ?: ""
+    val hideBackIcon = currentRoute == "Devices" || currentRoute == "Places" || currentRoute == "Favousrites" || currentRoute == "Routines"
+
+    TopAppBar(
+        navigationIcon = if (!hideBackIcon) {
+            {
+                IconButton(onClick = { navController.navigateUp() }) {
+                    Icon(
+                        imageVector = Icons.Filled.ArrowBack,
+                        contentDescription = "Back"
+                    )
+                }
+            }
+        } else {
+            null
+        },
+        title = {
+            Text(
+                text = currentRoute,
+                textAlign = TextAlign.Start,
+                modifier = Modifier
+                    .fillMaxWidth()
+            )
+                },
+    )
+}
+
 
 
 
