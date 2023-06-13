@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 @Composable
 fun AdvancedOvenScreen(
     modifier: Modifier = Modifier,
+    device: DeviceOven = DeviceOven("Pepe Oven")
 ){
     Box(
         modifier = Modifier.fillMaxSize()

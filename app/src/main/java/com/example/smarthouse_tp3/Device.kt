@@ -4,8 +4,9 @@ package com.example.smarthouse_tp3
 import androidx.compose.runtime.mutableStateOf
 
 abstract class Device(name: String ) {
-    var switchState = mutableStateOf(true)
+    private var switchState = mutableStateOf(true)
     private var name: String
+    abstract var deviceType: Type
 
     init{
         this.name = name
@@ -15,6 +16,10 @@ abstract class Device(name: String ) {
      * Returns the icon of the device depending its state On or Off
      */
     abstract fun getIcon() : Int
+
+    fun getType() : Type{
+        return deviceType
+    }
 
     fun getName(): String{
         return name
