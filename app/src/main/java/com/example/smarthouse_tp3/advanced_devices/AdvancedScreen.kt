@@ -17,13 +17,20 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Card
 import androidx.compose.material.Divider
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Switch
 import androidx.compose.material.SwitchDefaults
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -37,6 +44,7 @@ import com.example.smarthouse_tp3.Device
 import com.example.smarthouse_tp3.DeviceAirConditioner
 import com.example.smarthouse_tp3.DeviceLight
 import com.example.smarthouse_tp3.DeviceOven
+import com.example.smarthouse_tp3.R
 import com.example.smarthouse_tp3.Type
 import com.github.skydoves.colorpicker.compose.AlphaSlider
 import com.github.skydoves.colorpicker.compose.AlphaTile
@@ -107,7 +115,7 @@ fun DeviceTopBar(device: Device) {
 @Composable
 fun DeviceBody(device: Device) {
     when (device.deviceType) {
-        Type.OVEN -> OvenConfigScreen()
+        Type.OVEN -> OvenConfigScreen(device as DeviceOven)
         Type.AC -> AirConditionerConfigScreen(device = device as DeviceAirConditioner)
         Type.LIGHT -> LightConfigScreen(device = device as DeviceLight)//, changeColor = { device.changeColor(it) }) // No se porque no anda esto
         Type.FAUCET -> FaucetConfigScreen()
@@ -117,9 +125,131 @@ fun DeviceBody(device: Device) {
 }
 
 @Composable
-fun OvenConfigScreen() {
-    // Configuración específica para un horno
-    // Agrega composables y lógica según las necesidades del horno
+fun OvenConfigScreen(device: DeviceOven) {
+    Card(
+        modifier = Modifier
+            .padding(16.dp)
+            .fillMaxWidth(),
+        elevation = 4.dp
+    ) {
+        Row(
+            modifier = Modifier.padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Column(
+                modifier = Modifier.weight(0.8f),
+
+                ) {
+                Text(
+                    text = "Temperature: ${device.getTemperature().value}°C",
+                    style = MaterialTheme.typography.h5,
+                    modifier = Modifier.padding(bottom = 8.dp)
+                )
+            }
+            Column(
+                modifier = Modifier.weight(0.2f)
+            ) {
+                IconButton(
+                    onClick = { device.increaseTemperature() },
+                    modifier = Modifier.size(48.dp)
+                ) {
+                    Icon(
+                        Icons.Default.Add,
+                        contentDescription = "Increase Temperature"
+                    )
+                }
+                Spacer(modifier = Modifier.height(16.dp))
+                IconButton(
+                    onClick = { device.decreaseTemperature() },
+                    modifier = Modifier.size(48.dp)
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.minus),
+                        contentDescription = "Decrease Temperature"
+                    )
+                }
+            }
+        }
+    }
+
+    val iconfanIds = listOf(R.drawable.fan, R.drawable.fan_off)
+    val currentFanIndex = remember { mutableStateOf(0) }
+
+    val iconGrillIds = listOf(R.drawable.grill_outline, R.drawable.grill)
+    val currentGrillIndex = remember { mutableStateOf(0) }
+
+    val iconHeatIds = listOf(
+        R.drawable.border_bottom_variant,
+        R.drawable.border_top_variant,
+        R.drawable.border_top_bottom_variant
+    )
+    val currentHeatIndex = remember { mutableStateOf(0) }
+
+    Row(
+        modifier = Modifier.padding(16.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Column(
+            modifier = Modifier.weight(1f),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            IconButton(
+                onClick = {
+                    currentFanIndex.value = (currentFanIndex.value + 1) % iconfanIds.size
+                }
+            ) {
+                Icon(
+                    painter = painterResource(iconfanIds[currentFanIndex.value]),
+                    contentDescription = "Icon",
+                    modifier = Modifier.size(100.dp)
+                )
+            }
+            Text(
+                text = "Fan",
+                style = MaterialTheme.typography.body1
+            )
+        }
+        Column(
+            modifier = Modifier.weight(1f),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            IconButton(
+                onClick = {
+                    currentGrillIndex.value = (currentGrillIndex.value + 1) % iconGrillIds.size
+                }
+            ) {
+                Icon(
+                    painter = painterResource(iconGrillIds[currentGrillIndex.value]),
+                    contentDescription = "Icon",
+                    modifier = Modifier.size(100.dp)
+                )
+            }
+            Text(
+                text = "Grill",
+                style = MaterialTheme.typography.body1
+            )
+        }
+        Column(
+            modifier = Modifier.weight(1f),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            IconButton(
+                onClick = {
+                    currentHeatIndex.value = (currentHeatIndex.value + 1) % iconHeatIds.size
+                }
+            ) {
+                Icon(
+                    painter = painterResource(iconHeatIds[currentHeatIndex.value]),
+                    contentDescription = "Icon",
+                    modifier = Modifier.size(100.dp)
+                )
+            }
+            Text(
+                text = "Heat",
+                style = MaterialTheme.typography.body1
+            )
+        }
+    }
 }
 
 @Composable
