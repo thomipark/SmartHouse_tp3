@@ -2,24 +2,20 @@ package com.example.smarthouse_tp3
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.graphics.Color
 
 
 class DeviceAirConditioner(name: String) : Device(name) {
     //    var temperature = mutableStateOf(1)
     //    var grillMode = mutableStateof()
     override var deviceType: Type = Type.AC
+    override var deviceIcon : Int = R.drawable.device_air_conditioner_on
     private var temperature = mutableStateOf(21)
     private var mode = mutableStateOf(AirConditionerMode.FAN)
     private var fanSpeed = mutableStateOf(AirConditionerFanSpeed.AUTO)
     private var verticalFanDirection = mutableStateOf(AirConditionerVerticalFanDirection.AUTO)
     private var horizontalFanDirection = mutableStateOf(AirConditionerHorizontalFanDirection.AUTO)
-    override fun getIcon(): Int {
-        return if (getSwitchState()){
-            R.drawable.device_air_conditioner_on
-        } else {
-            R.drawable.device_air_conditioner_on
-        }
-    }
+
     fun getTemperature() : MutableState<Int> {
         return temperature
     }
@@ -75,6 +71,16 @@ class DeviceAirConditioner(name: String) : Device(name) {
         if (horizontalFanDirection.value.index > 0) {
             horizontalFanDirection.value =
                 AirConditionerHorizontalFanDirection.fromIndex(horizontalFanDirection.value.index - 1)
+        }
+    }
+
+    override fun changeSwitchState() {
+        super.changeSwitchState()
+        if (getSwitchState()) {
+            changeDeviceIconColor(Color.Blue)
+        }
+        else {
+            changeDeviceIconColor(Color.Black)
         }
     }
 

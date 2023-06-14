@@ -32,6 +32,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -82,7 +83,7 @@ fun DeviceTopBar(device: Device) {
                 modifier = Modifier
                     .size(64.dp)
                     .weight(1f),
-                //colorFilter = ColorFilter.tint(color = Color.Black) // Para cambiar el color del icono
+                colorFilter = ColorFilter.tint(color = device.getDeviceIconColor().value) // Para cambiar el color del icono
             )
             Spacer(modifier = Modifier.width(16.dp))
             Text(
@@ -515,7 +516,7 @@ fun VacuumConfigScreen() {
 @Preview
 @Composable
 fun DeviceTopBarPreview() {
-    val device = DeviceAirConditioner(
+    val device = DeviceOven(
         name = "My AC",
     )
     DeviceConfigScreen(device = device)

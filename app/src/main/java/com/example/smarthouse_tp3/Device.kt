@@ -1,11 +1,15 @@
 package com.example.smarthouse_tp3
 
 
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.graphics.Color
 
 abstract class Device(name: String ) {
-    private var switchState = mutableStateOf(true)
+    private var switchState = mutableStateOf(false)
     private var name: String
+    private var deviceIconColor = mutableStateOf(Color.Black)
+    abstract var deviceIcon : Int
     abstract var deviceType: Type
 
     init{
@@ -15,7 +19,18 @@ abstract class Device(name: String ) {
     /**
      * Returns the icon of the device depending its state On or Off
      */
-    abstract fun getIcon() : Int
+    // abstract fun getIcon() : Int
+
+    fun getIcon() :Int {
+        return deviceIcon
+    }
+
+    fun getDeviceIconColor() : MutableState<Color> {
+        return deviceIconColor
+    }
+    fun changeDeviceIconColor(newColor : Color) {
+        deviceIconColor.value = newColor
+    }
 
     fun getType() : Type{
         return deviceType
@@ -29,7 +44,7 @@ abstract class Device(name: String ) {
         return switchState.value
     }
 
-    fun changeSwitchState() {
+    open fun changeSwitchState() {
         switchState.value = !switchState.value
     }
 
