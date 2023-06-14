@@ -84,6 +84,16 @@ class DeviceAirConditioner(name: String) : Device(name) {
         }
     }
 
+    override fun getSmallIconsList(): List<Int> {
+        val iconsList = mutableListOf<Int>()
+        iconsList.add(R.drawable.fan)
+        iconsList.add(R.drawable.fan_speed_1)
+        iconsList.add(R.drawable.fan_speed_2)
+
+
+        return iconsList
+    }
+
 }
 
 enum class AirConditionerMode(val index: Int, val stringValue: String) {

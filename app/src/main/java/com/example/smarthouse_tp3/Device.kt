@@ -6,7 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.Color
 
 abstract class Device(name: String ) {
-    private var switchState = mutableStateOf(false)
+    private var switchState = mutableStateOf(true)
     private var name: String
     private var deviceIconColor = mutableStateOf(Color.Black)
     abstract var deviceIcon : Int
@@ -17,14 +17,15 @@ abstract class Device(name: String ) {
     }
 
     /**
-     * Returns the icon of the device depending its state On or Off
+     * Returns the icon of the device, should be used in pair with getDeviceIconColor
      */
-    // abstract fun getIcon() : Int
-
     fun getIcon() :Int {
         return deviceIcon
     }
 
+    /**
+     * Returns the color of the device when ON and OFF
+     */
     fun getDeviceIconColor() : MutableState<Color> {
         return deviceIconColor
     }
@@ -56,5 +57,12 @@ abstract class Device(name: String ) {
     fun setSwitchState(state: Boolean){
         switchState.value = state
     }
+
+
+    /**
+     *  Returns a list of icons that have the traits of the device, should be
+     *  used in smallTile when ON
+     */
+    abstract fun getSmallIconsList(): List<Int>
 
 }
