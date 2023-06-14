@@ -9,8 +9,10 @@ class DeviceAirConditioner(name: String) : Device(name) {
     //    var grillMode = mutableStateof()
     override var deviceType: Type = Type.AC
     private var temperature = mutableStateOf(21)
-
-
+    private var mode = mutableStateOf(AirConditionerMode.FAN)
+    private var fanSpeed = mutableStateOf(AirConditionerFanSpeed.AUTO)
+    private var verticalFanDirection = mutableStateOf(AirConditionerVerticalFanDirection.AUTO)
+    private var horizontalFanDirection = mutableStateOf(AirConditionerHorizontalFanDirection.AUTO)
     override fun getIcon(): Int {
         return if (getSwitchState()){
             R.drawable.device_air_conditioner_on
@@ -18,19 +20,127 @@ class DeviceAirConditioner(name: String) : Device(name) {
             R.drawable.device_air_conditioner_on
         }
     }
-
-    fun getTempareature() : MutableState<Int> {
+    fun getTemperature() : MutableState<Int> {
         return temperature
     }
-
-    fun incTemperature() {
+    fun increaseTemperature() {
         if (temperature.value < 38)
         temperature.value++
     }
-
-
-    fun decTemperature() {
+    fun decreaseTemperature() {
         if (temperature.value > 18)
             temperature.value--
+    }
+
+    fun getMode() : MutableState<AirConditionerMode> {
+        return mode
+    }
+
+    fun iterateMode() {
+        mode.value = AirConditionerMode.fromIndex(mode.value.index+1)
+    }
+
+    fun getFanSpeed() : MutableState<AirConditionerFanSpeed> {
+        return fanSpeed
+    }
+
+    fun iterateFanSpeed() {
+        fanSpeed.value = AirConditionerFanSpeed.fromIndex(fanSpeed.value.index+1)
+    }
+
+
+    fun getVerticalFanDirection() : MutableState<AirConditionerVerticalFanDirection> {
+        return verticalFanDirection
+    }
+
+    fun increaseVerticalFanDirection() {
+        verticalFanDirection.value = AirConditionerVerticalFanDirection.fromIndex(verticalFanDirection.value.index+1)
+    }
+
+    fun decreaseVerticalFanDirection() {
+        if(verticalFanDirection.value.index > 0) {
+            verticalFanDirection.value =
+                AirConditionerVerticalFanDirection.fromIndex(verticalFanDirection.value.index - 1)
+        }
+    }
+    fun getHorizontalFanDirection() : MutableState<AirConditionerHorizontalFanDirection> {
+        return horizontalFanDirection
+    }
+
+    fun increaseHorizontalFanDirection() {
+        horizontalFanDirection.value = AirConditionerHorizontalFanDirection.fromIndex(horizontalFanDirection.value.index+1)
+    }
+
+    fun decreaseHorizontalFanDirection() {
+        if (horizontalFanDirection.value.index > 0) {
+            horizontalFanDirection.value =
+                AirConditionerHorizontalFanDirection.fromIndex(horizontalFanDirection.value.index - 1)
+        }
+    }
+
+}
+
+enum class AirConditionerMode(val index: Int, val stringValue: String) {
+    HEAT(0, "HEAT"),
+    COLD(1, "COLD"),
+    FAN(2, "FAN");
+
+    companion object {
+        fun fromIndex(value: Int): AirConditionerMode {
+            return values().find { it.index == value } ?: HEAT
+        }
+    }
+
+}
+enum class AirConditionerFanSpeed(val index: Int, val stringValue: String) {
+    AUTO(0, "Automatic"),
+    FIRST(1, "25%"),
+    SECOND(2, "50%"),
+    THIRD(3, "75%"),
+    FOURTH(4, "100%");
+
+
+    companion object {
+        fun fromIndex(value: Int): AirConditionerFanSpeed{
+            return values().find { it.index == value } ?: AUTO
+        }
+    }
+}
+
+
+enum class AirConditionerVerticalFanDirection(val index: Int, val stringValue: String) {
+    AUTO(0, "Automatic"),
+    FIRST(1, "22"),
+    SECOND(2, "45"),
+    THIRD(3, "67"),
+    FOURTH(4, "90");
+
+
+    companion object {
+        fun fromIndex(value: Int): AirConditionerVerticalFanDirection{
+            if (value <= 0) {
+                return AUTO
+            }
+            return values().find { it.index == value } ?: fromIndex(value-1)
+        }
+    }
+}
+
+enum class AirConditionerHorizontalFanDirection(val index: Int, val stringValue: String) {
+    AUTO(0, "Automatic"),
+    FIRST(1, "-90"),
+    SECOND(2, "-45"),
+    THIRD(3, "0"),
+    FOURTH(4, "45"),
+    FIFTH(5, "90");
+
+
+    companion object {
+        fun fromIndex(value: Int): AirConditionerHorizontalFanDirection{
+            if (value <= 0) {
+                return AUTO
+            }
+            return values().find { it.index == value } ?: fromIndex(value-1)
+        }
     }
 }

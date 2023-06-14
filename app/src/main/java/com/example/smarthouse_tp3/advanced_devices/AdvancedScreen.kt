@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Button
 import androidx.compose.material.Card
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
@@ -32,6 +33,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -176,7 +178,7 @@ fun OvenConfigScreen(device: DeviceOven) {
     val iconHeatIds = listOf(
         R.drawable.border_bottom_variant,
         R.drawable.border_top_bottom_variant,
-        R.drawable.border_top_bottom_variant
+        R.drawable.border_top_variant
     )
     val currentHeatIndex = remember { mutableStateOf(0) }
 
@@ -251,17 +253,196 @@ fun OvenConfigScreen(device: DeviceOven) {
 fun AirConditionerConfigScreen(
     device : DeviceAirConditioner
 ) {
-    Row {
-        Column() {
+    Card(
+        modifier = Modifier
+            .padding(16.dp)
+            .fillMaxWidth(),
+        elevation = 4.dp
+    ) {
+        Row(
+            modifier = Modifier.padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Column(
+                modifier = Modifier.weight(0.8f),
+
+                ) {
+                Text(
+                    text = "${device.getTemperature().value}°C",
+                    style = MaterialTheme.typography.h5,
+                    modifier = Modifier.padding(start = 30.dp, bottom = 8.dp),
+                    fontSize = 80.sp,
+                )
+            }
+            Column(
+                modifier = Modifier.weight(0.2f)
+            ) {
+                IconButton(
+                    onClick = { device.increaseTemperature() },
+                    modifier = Modifier.size(48.dp)
+                ) {
+                    Icon(
+                        Icons.Default.Add,
+                        contentDescription = "Increase Temperature"
+                    )
+                }
+                Spacer(modifier = Modifier.height(16.dp))
+                IconButton(
+                    onClick =
+                    { device.decreaseTemperature() },
+                    modifier = Modifier.size(48.dp)
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.minus),
+                        contentDescription = "Decrease Temperature"
+                    )
+                }
+            }
+        }
+    }
+
+    val iconfanIds = listOf(
+        R.drawable.fan_auto,
+        R.drawable.fan,
+        R.drawable.fan_speed_1,
+        R.drawable.fan_speed_2,
+        R.drawable.fan_speed_3
+    )
+
+
+    val iconModeIds= listOf(
+        R.drawable.snowflake,
+        R.drawable.weather_sunny,
+        R.drawable.fan
+    )
+
+    Row(
+        modifier = Modifier.padding(16.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+
+        Column(
+            modifier = Modifier.weight(1f),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            IconButton(
+                onClick = {
+                    device.iterateMode()
+                }
+            ) {
+                Icon(
+                    painter = painterResource(iconModeIds[device.getMode().value.index]),
+                    contentDescription = "Icon",
+                    modifier = Modifier.size(100.dp)
+                )
+            }
             Text(
-                text = "${device.getTempareature().value} °C"
+                text = "MODE",
+                style = MaterialTheme.typography.body1
             )
         }
+        Column(
+            modifier = Modifier.weight(1f),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            IconButton(
+                onClick = {
+                    device.iterateFanSpeed()
+                }
+            ) {
+                Icon(
+                    painter = painterResource(iconfanIds[device.getFanSpeed().value.index]),
+                    contentDescription = "Icon",
+                    modifier = Modifier.size(100.dp)
+                )
+            }
+            Text(
+                text = "Fan Speed:\n${device.getFanSpeed().value.stringValue}",
+                style = MaterialTheme.typography.body1,
+                textAlign = TextAlign.Center
+            )
+        }
+    }
 
-        Column() {
+
+    Row(
+        modifier = Modifier.padding(16.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Column(
+            modifier = Modifier.weight(1f),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            IconButton(
+                onClick = {
+                    device.increaseVerticalFanDirection()
+                }
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.baseline_arrow_drop_up_24),
+                    contentDescription = "Icon",
+                    modifier = Modifier.size(100.dp)
+                )
+            }
+
+            Text(
+                text = device.getVerticalFanDirection().value.stringValue
+            )
+
+            IconButton(
+                onClick = {
+                    device.decreaseVerticalFanDirection()
+                }
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.baseline_arrow_drop_down_24),
+                    contentDescription = "Icon",
+                    modifier = Modifier.size(100.dp)
+
+                )
+            }
+
+        }
+        Column(
+            modifier = Modifier.weight(1f),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+
+            Row {
+                IconButton(
+                    onClick = {
+                        device.decreaseHorizontalFanDirection()
+                    }
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.baseline_arrow_left_24),
+                        contentDescription = "Icon",
+                        modifier = Modifier.size(80.dp)
+                    )
+                }
+
+
+
+                IconButton(
+                    onClick = {
+                        device.increaseHorizontalFanDirection()
+                    }
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.baseline_arrow_right_24),
+                        contentDescription = "Icon",
+                        modifier = Modifier.size(80.dp)
+
+                    )
+                }
+            }
+                  Text(
+                    text = device.getHorizontalFanDirection().value.stringValue
+                )
 
         }
     }
+
 
 }
 
