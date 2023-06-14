@@ -1,6 +1,7 @@
 package com.example.smarthouse_tp3.advanced_devices
 
-import android.annotation.SuppressLint
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
@@ -33,6 +34,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.smarthouse_tp3.Device
+import com.example.smarthouse_tp3.DeviceAirConditioner
 import com.example.smarthouse_tp3.DeviceLight
 import com.example.smarthouse_tp3.DeviceOven
 import com.example.smarthouse_tp3.Type
@@ -52,7 +54,7 @@ fun DeviceConfigScreen(device: Device) {
             Column(modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
-                ){
+            ){
                 DeviceBody(device)
             }
         }
@@ -75,7 +77,7 @@ fun DeviceTopBar(device: Device) {
                 modifier = Modifier
                     .size(64.dp)
                     .weight(1f),
-                colorFilter = ColorFilter.tint(color = Color.Black)
+                //colorFilter = ColorFilter.tint(color = Color.Black) // Para cambiar el color del icono
             )
             Spacer(modifier = Modifier.width(16.dp))
             Text(
@@ -106,8 +108,8 @@ fun DeviceTopBar(device: Device) {
 fun DeviceBody(device: Device) {
     when (device.deviceType) {
         Type.OVEN -> OvenConfigScreen()
-        Type.AC -> AirConditionerConfigScreen()
-        Type.LIGHT -> LightConfigScreen(device = device as DeviceLight, changeColor = { device.changeColor() }) // No se porque no anda esto
+        Type.AC -> AirConditionerConfigScreen(device = device as DeviceAirConditioner)
+        Type.LIGHT -> LightConfigScreen(device = device as DeviceLight)//, changeColor = { device.changeColor(it) }) // No se porque no anda esto
         Type.FAUCET -> FaucetConfigScreen()
         Type.VACUUM -> VacuumConfigScreen()
         // Agrega más casos según los diferentes tipos de dispositivos que tengas
@@ -121,19 +123,31 @@ fun OvenConfigScreen() {
 }
 
 @Composable
-fun AirConditionerConfigScreen() {
-    // Configuración específica para un aire acondicionado
-    // Agrega composables y lógica según las necesidades del aire acondicionado
+fun AirConditionerConfigScreen(
+    device : DeviceAirConditioner
+) {
+    Row {
+        Column() {
+            Text(
+                text = "${device.getTempareature().value} °C"
+            )
+        }
+
+        Column() {
+
+        }
+    }
+
 }
 
 @Composable
 fun LightConfigScreen(
-    device: DeviceLight,
-    changeColor: () -> Unit
+    device: DeviceLight
+    //changeColor: (String) -> Unit
 ) {
     val controller = rememberColorPickerController()
     var color: Color = Color.Black
-    var hexCode: String = "#000000"
+    var hexCode: String = "hola"
     var fromUser: Boolean = false
     Text(
         text = "HUE",
@@ -148,8 +162,7 @@ fun LightConfigScreen(
         controller = controller,
         onColorChanged = { colorEnvelope: ColorEnvelope ->
             color = colorEnvelope.color // ARGB color value.
-            // changeColor(colorEnvelope.hexCode) // Color hex code, which represents color value.
-            changeColor()
+            device.changeColor(colorEnvelope.hexCode) // Color hex code, which represents clor value.
             fromUser = colorEnvelope.fromUser // Represents this event is triggered by user or not.
         }
     )
@@ -169,11 +182,12 @@ fun LightConfigScreen(
     ) {
         Text(
             modifier = Modifier.align(Alignment.CenterHorizontally),
-            text = device.hexCode,
+            text = device.getHexCode().value,
             fontSize = 24.sp
         )
         AlphaTile(
-            modifier = Modifier.align(Alignment.CenterHorizontally)
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
                 .size(80.dp)
                 .clip(RoundedCornerShape(6.dp)),
             controller = controller
@@ -195,8 +209,8 @@ fun VacuumConfigScreen() {
 @Preview
 @Composable
 fun DeviceTopBarPreview() {
-    val device = DeviceLight(
-        name = "My Light",
+    val device = DeviceAirConditioner(
+        name = "My AC",
     )
     DeviceConfigScreen(device = device)
 }
