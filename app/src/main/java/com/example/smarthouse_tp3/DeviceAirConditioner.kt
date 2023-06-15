@@ -21,7 +21,7 @@ class DeviceAirConditioner(name: String) : Device(name) {
     }
     fun increaseTemperature() {
         if (temperature.value < 38)
-        temperature.value++
+            temperature.value++
     }
     fun decreaseTemperature() {
         if (temperature.value > 18)

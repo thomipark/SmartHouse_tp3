@@ -124,6 +124,7 @@ fun DeviceBody(device: Device) {
 
 @Composable
 fun OvenConfigScreen(device: DeviceOven) {
+
     Card(
         modifier = Modifier
             .padding(16.dp)
@@ -139,9 +140,10 @@ fun OvenConfigScreen(device: DeviceOven) {
 
                 ) {
                 Text(
-                    text = "Temperature: ${device.getTemperature().value}°C",
+                    text = "${device.getTemperature().value}°C",
                     style = MaterialTheme.typography.h5,
-                    modifier = Modifier.padding(bottom = 8.dp)
+                    modifier = Modifier.padding(start = 30.dp, bottom = 8.dp),
+                    fontSize = 80.sp,
                 )
             }
             Column(
@@ -158,7 +160,8 @@ fun OvenConfigScreen(device: DeviceOven) {
                 }
                 Spacer(modifier = Modifier.height(16.dp))
                 IconButton(
-                    onClick = { device.decreaseTemperature() },
+                    onClick =
+                    { device.decreaseTemperature() },
                     modifier = Modifier.size(48.dp)
                 ) {
                     Icon(
@@ -170,40 +173,38 @@ fun OvenConfigScreen(device: DeviceOven) {
         }
     }
 
-    val iconfanIds = listOf(R.drawable.fan, R.drawable.fan_off)
-    val currentFanIndex = remember { mutableStateOf(0) }
-
-    val iconGrillIds = listOf(R.drawable.grill_outline, R.drawable.grill)
-    val currentGrillIndex = remember { mutableStateOf(0) }
-
-    val iconHeatIds = listOf(
-        R.drawable.border_bottom_variant,
-        R.drawable.border_top_bottom_variant,
-        R.drawable.border_top_variant
+    val iconfanIds = listOf(
+        R.drawable.fan,
+        R.drawable.fan_off
     )
-    val currentHeatIndex = remember { mutableStateOf(0) }
+
+    val iconGrillIds = listOf(
+        R.drawable.grill,
+        R.drawable.grill_outline
+    )
 
     Row(
         modifier = Modifier.padding(16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
+
         Column(
             modifier = Modifier.weight(1f),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             IconButton(
                 onClick = {
-                    currentFanIndex.value = (currentFanIndex.value + 1) % iconfanIds.size
+                    device.iterateFanMode()
                 }
             ) {
                 Icon(
-                    painter = painterResource(iconfanIds[currentFanIndex.value]),
+                    painter = painterResource(iconfanIds[device.getFanMode().value.index]),
                     contentDescription = "Icon",
                     modifier = Modifier.size(100.dp)
                 )
             }
             Text(
-                text = "Fan",
+                text = "Fan: ${device.getFanMode().value.stringValue}",
                 style = MaterialTheme.typography.body1
             )
         }
@@ -213,37 +214,51 @@ fun OvenConfigScreen(device: DeviceOven) {
         ) {
             IconButton(
                 onClick = {
-                    currentGrillIndex.value = (currentGrillIndex.value + 1) % iconGrillIds.size
+                    device.iterateGrillMode()
                 }
             ) {
                 Icon(
-                    painter = painterResource(iconGrillIds[currentGrillIndex.value]),
+                    painter = painterResource(iconGrillIds[device.getGrillMode().value.index]),
                     contentDescription = "Icon",
                     modifier = Modifier.size(100.dp)
                 )
             }
             Text(
-                text = "Grill",
-                style = MaterialTheme.typography.body1
+                text = "Grill: ${device.getGrillMode().value.stringValue}",
+                style = MaterialTheme.typography.body1,
+                textAlign = TextAlign.Center
             )
+
         }
+    }
+    val iconHeatIds = listOf(
+        R.drawable.border_bottom_variant,
+        R.drawable.border_top_variant,
+        R.drawable.border_top_bottom_variant
+    )
+
+    Row(
+        modifier = Modifier.padding(16.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+
         Column(
             modifier = Modifier.weight(1f),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             IconButton(
                 onClick = {
-                    currentHeatIndex.value = (currentHeatIndex.value + 1) % iconHeatIds.size
+                    device.iterateHeatMode()
                 }
             ) {
                 Icon(
-                    painter = painterResource(iconHeatIds[currentHeatIndex.value]),
+                    painter = painterResource(iconHeatIds[device.getHeatMode().value.index]),
                     contentDescription = "Icon",
                     modifier = Modifier.size(100.dp)
                 )
             }
             Text(
-                text = "Heat",
+                text = "Heat: ${device.getHeatMode().value.stringValue}",
                 style = MaterialTheme.typography.body1
             )
         }
