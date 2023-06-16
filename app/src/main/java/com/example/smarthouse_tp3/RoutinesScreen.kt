@@ -13,16 +13,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Button
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Done
-import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -48,7 +44,7 @@ fun RoutinesScreen(
         modifier
             .padding(8.dp)
     ) {
-        RoutinesSmallTileRow()
+        SmallRoutineTilesRow()
         //Button(onClick = { onNavigateToDevicesScreen() }) {
         //    Text(text = "Go back to devices")
         //}
@@ -59,7 +55,7 @@ fun RoutinesScreen(
  * Genera un small tile de routine horizontal.
  */
 @Composable
-fun RoutineSmallTile(
+fun SmallRoutineTile(
     modifier: Modifier = Modifier,
     routine: Routine
 ){
@@ -93,7 +89,7 @@ fun RoutineSmallTile(
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            text = routine.getName(),
+                            text = routine.getRoutineName(),
                             style = MaterialTheme.typography.h6,
                             textAlign = TextAlign.Center,
                             maxLines = 1,
@@ -107,9 +103,9 @@ fun RoutineSmallTile(
                         .padding(horizontal = 20.dp)
                 ) {
                     val playIconSize = 40.dp // Adjust the size of the icon
-                    val playIcon = painterResource(if (routine.isPlaying()) R.drawable.screen_routines_icon else R.drawable.screen_routines_icon)
+                    val playIcon = painterResource(R.drawable.screen_routines_icon)
                     val playDescription = if (routine.isPlaying()) "Pause" else "Play"
-                    val playTint = if (routine.isPlaying()) Color.Green else Color.Black
+                    val playTint = if (routine.isPlaying()) Color(0xFF008000) else Color.Black
 
                     Icon(
                         painter = playIcon,
@@ -127,7 +123,7 @@ fun RoutineSmallTile(
 
 
 @Composable
-fun RoutinesSmallTileRow (
+fun SmallRoutineTilesRow (
     modifier: Modifier = Modifier
 ) {
     LazyColumn(
@@ -136,7 +132,7 @@ fun RoutinesSmallTileRow (
         modifier = modifier.fillMaxWidth()
     ) {
         items(items = smallRoutinesTileData) { item ->
-            RoutineSmallTile(routine = item)
+            SmallRoutineTile(routine = item)
         }
     }
 }
@@ -148,7 +144,7 @@ fun RoutinesSmallTileRow (
 @Composable
 fun SmallRoutineTilePreview(){
     SmartHouse_tp3Theme() {
-        RoutineSmallTile(
+        SmallRoutineTile(
             routine = Routine("Morning Routine"),
             modifier = Modifier.padding(8.dp)
         )
@@ -160,10 +156,10 @@ fun SmallRoutineTilePreview(){
 @Preview
 @Composable
 fun SmallRoutineTileRowPreview(){
-    RoutinesSmallTileRow()
+    SmallRoutineTilesRow()
 }
 
-val smallRoutinesTileData = listOf<Routine>(
+val smallRoutinesTileData = listOf(
     Routine("Afternoon Routine"),
     Routine("Bedtime Routine"),
 )
