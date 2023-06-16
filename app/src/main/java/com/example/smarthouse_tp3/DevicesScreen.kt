@@ -18,6 +18,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.Card
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
@@ -44,40 +45,17 @@ import com.example.smarthouse_tp3.ui.theme.SmartHouse_tp3Theme
 @Composable
 fun DeviceScreen(
     modifier: Modifier = Modifier,
-    onNavigateToRoutinesScreen: () -> Unit,
-    onNavigateToPlacesScreen: () -> Unit
+    onNavigateToConfigScreen: (Type) -> Unit
 ){
     Column(
         modifier
             .padding(8.dp)
     ) {
-        DevicesSmallTileRow()
+        DevicesSmallTileRow(onNavigateToConfigScreen = onNavigateToConfigScreen)
     }
 }
 
 
-/***
- * TopBar que va volar despues, pq la topbar debertia estar en el navHost o en el main,
- * pero al hacer click en la felchita se va a routines
- */
-// TODO ver esto
-@Composable
-fun TopBarDevice(
-    modifier: Modifier = Modifier,
-){
-    TopAppBar(
-        navigationIcon = {
-            IconButton(onClick = { /*TODO*/ }) {
-                Icon(
-                    imageVector = Icons.Default.ArrowBack,
-                    contentDescription = "Ir hacia arriba"
-                )
-            }
-        },
-        title = { Text(text = stringResource(id = R.string.device_screen)) },
-        backgroundColor = Color.LightGray
-    )
-}
 
 
 
@@ -85,10 +63,12 @@ fun TopBarDevice(
  * Genera un small tile de device alargado horizontalmente.
  * Se puede apagar y prender y en funcion de eso cambia la imagen o no
  */
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun DeviceSmallTile(
     modifier: Modifier = Modifier,
-    device: Device
+    device: Device,
+    onNavigateToConfigScreen: (Type) -> Unit
 ){
     Surface(
         shape = MaterialTheme.shapes.small,
@@ -97,7 +77,8 @@ fun DeviceSmallTile(
         Card (
             modifier = Modifier
                 .fillMaxWidth(),
-            backgroundColor = Color.LightGray
+            backgroundColor = Color.LightGray,
+            onClick = {onNavigateToConfigScreen(device.deviceType)}
         ){
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -167,7 +148,8 @@ fun DeviceSmallTile(
 
 @Composable
 fun DevicesSmallTileRow (
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onNavigateToConfigScreen: (Type) -> Unit
 ){
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -175,7 +157,11 @@ fun DevicesSmallTileRow (
         modifier = modifier.fillMaxWidth()
     ) {
         items(items = smallTileData) { item ->
-            DeviceSmallTile(device = item)
+            DeviceSmallTile(
+                device = item,
+                onNavigateToConfigScreen = onNavigateToConfigScreen
+            )
+
         }
     }
 }
@@ -203,17 +189,18 @@ fun SmallTilePreview(){
     SmartHouse_tp3Theme() {
         DeviceSmallTile(
             device = DeviceOven("thomi Oven"),
-            modifier = Modifier.padding(8.dp)
+            modifier = Modifier.padding(8.dp),
+            onNavigateToConfigScreen = {}
         )
     }
 }
 
 
 
-@Preview
+//@Preview
 @Composable
 fun DevicesSmallTileRowPreview(){
-    DevicesSmallTileRow()
+    DevicesSmallTileRow(onNavigateToConfigScreen = {})
 }
 
 

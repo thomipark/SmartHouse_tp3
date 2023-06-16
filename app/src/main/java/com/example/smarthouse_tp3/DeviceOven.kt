@@ -14,13 +14,13 @@ class DeviceOven(name: String) : Device(name) {
     private var grillMode = mutableStateOf(OvenGrillMode.ON)
     private var heatMode = mutableStateOf(OvenHeatMode.BOTTOM)
 
-    // override fun getIcon(): Int {
-    //     return if (getSwitchState()){
-    //         R.drawable.device_oven_on
-    //     } else {
-    //         R.drawable.device_oven_off
-    //     }
-    // }
+    //override fun getIcon(): Int {
+    //    return if (getSwitchState()){
+    //        R.drawable.device_oven_on
+    //    } else {
+    //        R.drawable.device_oven_off
+    //    }
+    //}
 
     override fun getSmallIconsList(): List<Int> {
         val iconsList = mutableListOf<Int>()
