@@ -1,7 +1,11 @@
 package com.example.smarthouse_tp3.advanced_devices
 
+import androidx.compose.foundation.Canvas
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.detectDragGestures
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -21,18 +25,24 @@ import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
+import androidx.compose.material.Slider
 import androidx.compose.material.Switch
 import androidx.compose.material.SwitchDefaults
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.drawscope.Fill
+import androidx.compose.ui.input.pointer.consumePositionChange
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -40,6 +50,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.smarthouse_tp3.Device
 import com.example.smarthouse_tp3.DeviceAirConditioner
+import com.example.smarthouse_tp3.DeviceFaucet
 import com.example.smarthouse_tp3.DeviceLight
 import com.example.smarthouse_tp3.DeviceOven
 import com.example.smarthouse_tp3.R
@@ -49,6 +60,22 @@ import com.github.skydoves.colorpicker.compose.AlphaTile
 import com.github.skydoves.colorpicker.compose.ColorEnvelope
 import com.github.skydoves.colorpicker.compose.HsvColorPicker
 import com.github.skydoves.colorpicker.compose.rememberColorPickerController
+import androidx.compose.animation.core.Animatable
+import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectDragGestures
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.DropdownMenu
+import androidx.compose.material.DropdownMenuItem
+import androidx.compose.runtime.*
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import com.example.smarthouse_tp3.FaucetUnits
 
 @Composable
 fun DeviceConfigScreen(device: Device) {
@@ -116,7 +143,7 @@ fun DeviceBody(device: Device) {
         Type.OVEN -> OvenConfigScreen(device as DeviceOven)
         Type.AC -> AirConditionerConfigScreen(device = device as DeviceAirConditioner)
         Type.LIGHT -> LightConfigScreen(device = device as DeviceLight)//, changeColor = { device.changeColor(it) }) // No se porque no anda esto
-        Type.FAUCET -> FaucetConfigScreen()
+        Type.FAUCET -> FaucetConfigScreen(device as DeviceFaucet)
         Type.VACUUM -> VacuumConfigScreen()
         // Agrega más casos según los diferentes tipos de dispositivos que tengas
     }
@@ -518,10 +545,107 @@ fun LightConfigScreen(
 }
 
 @Composable
-fun FaucetConfigScreen() {
-    // Configuración específica para un faucet
-    // Agrega composables y lógica según las necesidades del faucet
+fun FaucetConfigScreen(device: DeviceFaucet) {
+    var sliderValue = device.getWaterLevel().value
+    val volumeUnits = device.getFaucetUnitValues()
+    val selectedUnit = remember { mutableStateOf(device.getFaucetUnitValues()[FaucetUnits.KILOLITERS.index]) }
+    val formattedValue = (sliderValue / 100f).times(100).toInt()
+
+    Row(
+        modifier = Modifier.padding(16.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+
+        Column(
+            modifier = Modifier.weight(1f),
+            horizontalAlignment = Alignment.Start
+        ) {
+            Text(
+                text = "To Dispense: ${formattedValue}%",
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold
+            )
+        }
+    }
+
+    Row(
+        modifier = Modifier.padding(16.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+
+        Column(
+            modifier = Modifier.weight(1f),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Slider(
+                value = sliderValue,
+                onValueChange = { newValue ->
+                    sliderValue = newValue
+                    device.changeWaterLevel(sliderValue)
+                },
+                valueRange = 0f..100f,
+                modifier = Modifier.width(300.dp)
+            )
+        }
+    }
+
+    val isDropdownExpanded = remember { mutableStateOf(false) }
+
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 16.dp)
+    ) {
+        Button(
+            onClick = { isDropdownExpanded.value = true },
+            modifier = Modifier.clickable { isDropdownExpanded.value = true }
+                .size(width = 200.dp, height = 48.dp)
+        ) {
+            Text(
+                text = "Select Unit: ${selectedUnit.value}",
+                fontWeight = FontWeight.Bold
+            )
+        }
+        DropdownMenu(
+            expanded = isDropdownExpanded.value,
+            onDismissRequest = { isDropdownExpanded.value = false },
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Color.White)
+        ) {
+            volumeUnits.forEach { unit ->
+                DropdownMenuItem(onClick = {
+                    selectedUnit.value = unit
+                    device.changeUnit(unit)
+                    isDropdownExpanded.value = false
+                }) {
+                    Text(text = unit)
+                }
+            }
+        }
+    }
+
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp)
+    ) {
+        Button(
+            onClick = { },
+            modifier = Modifier.size(width = 200.dp, height = 48.dp)
+        ) {
+            Text(
+                text = "Dispense",
+                fontWeight = FontWeight.Bold
+            )
+        }
+    }
 }
+
+
+
+
+
 @Composable
 fun VacuumConfigScreen() {
     // Configuración específica para una vacuum
@@ -531,7 +655,7 @@ fun VacuumConfigScreen() {
 @Preview
 @Composable
 fun DeviceTopBarPreview() {
-    val device = DeviceOven(
+    val device = DeviceFaucet(
         name = "My AC",
     )
     DeviceConfigScreen(device = device)
