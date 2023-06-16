@@ -630,10 +630,6 @@ fun FaucetConfigScreen(device: DeviceFaucet) {
     }
 }
 
-
-
-
-
 @Composable
 fun VacuumConfigScreen(
     device: DeviceVacuum
@@ -862,7 +858,7 @@ fun VacuumConfigScreen(
 @Preview
 @Composable
 fun DeviceTopBarPreview() {
-    val device = DeviceFaucet(
+    val device = DeviceOven(
         name = "My AC",
     )
     DeviceConfigScreen(device = device)

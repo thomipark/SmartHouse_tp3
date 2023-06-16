@@ -3,5 +3,7 @@
     <string name="smallTile">small tile</string>
     <string name="device_oven">Oven</string>
     <string name="device_screen">Devices</string>
+    <string name="load_devices">Load Devices</string>
+    <string name="loading">Loading</string>
 
 </resources>

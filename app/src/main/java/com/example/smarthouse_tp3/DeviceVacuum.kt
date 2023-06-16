@@ -10,7 +10,7 @@ class DeviceVacuum(name: String) : Device(name) {
     //    var grillMode = mutableStateof()
     override var deviceType: Type = Type.VACUUM
     override var deviceIcon : Int = R.drawable.device_vacuum
-    private var battery = mutableStateOf(4)
+    private var battery = mutableStateOf(60)
     private var currentRoom = mutableStateOf("Kitchen")
     private var dockingRoom : String = "Living Room"
 
