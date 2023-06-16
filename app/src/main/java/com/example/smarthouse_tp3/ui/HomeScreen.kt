@@ -2,11 +2,10 @@ package com.example.smarthouse_tp3.ui
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -28,37 +27,9 @@ fun HomeScreen(
     viewModel: DeviceViewModel,
     modifier: Modifier = Modifier
 ) {
-
     val uiState by viewModel.uiState.collectAsState()
-
-    SwipeRefresh(
-        state = rememberSwipeRefreshState(uiState.isLoading),
-        onRefresh = { viewModel.fetchDevice("449f988c6f20d610") },
-    ) {
-        Column(
-            modifier = modifier
-        ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f)
-            ) {
-                if (uiState.isLoading)
-                    Column(
-                        modifier = Modifier.fillMaxSize(),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center
-                    ) {
-                        Text(
-                            text = stringResource(R.string.loading),
-                            fontSize = 16.sp
-                        )
-                    }
-                else {
-                    val device = uiState.device
-                    Text(text =device.toString())
-                }
-            }
+    Column() {
+        Row() {
             Button(
                 onClick = {
                     viewModel.fetchDevice("449f988c6f20d610")
@@ -72,7 +43,46 @@ fun HomeScreen(
                     modifier = Modifier.padding(8.dp))
             }
         }
+
+        Row() {
+            Button(
+                onClick = {
+                    viewModel.executeAction("449f988c6f20d610", "turnOn", emptyArray<String>())
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
+            ) {
+                Text(
+                    text = "turnOn",
+                    modifier = Modifier.padding(8.dp))
+            }
+        }
+
+        Row() {
+            Button(
+                onClick = {
+                    viewModel.executeAction("449f988c6f20d610", "turnOff", emptyArray<String>())
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
+            ) {
+                Text(
+                    text = "turnOff",
+                    modifier = Modifier.padding(8.dp))
+            }
+        }
+
+        Row() {
+            Text(
+                text = uiState.device.toString(),
+                modifier = Modifier.padding(8.dp))
+        }
+
     }
+
+
 }
 
 @Preview(showBackground = true)
@@ -82,5 +92,5 @@ fun HomeScreenPreview() {
     val viewModel: DeviceViewModel = viewModel()
     val uiState = viewModel.uiState
 
-        HomeScreen(viewModel = viewModel())
+    HomeScreen(viewModel = viewModel())
 }

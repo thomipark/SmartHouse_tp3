@@ -1,10 +1,7 @@
 package com.example.smarthouse_tp3.ui
 
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.smarthouse_tp3.data.network.RetrofitClient
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -44,6 +41,27 @@ class DeviceViewModel : ViewModel() {
                 }
             }
         }
+    }
+
+    fun executeAction(deviceId: String, actionName: String, params: Array<String>) {
+        fetchJob?.cancel()
+        fetchJob = viewModelScope.launch {
+            _uiState.update { it.copy(isLoading = true) }
+            runCatching {
+                val apiService = RetrofitClient.getApiService()
+                apiService.executeAction(deviceId, actionName, params)
+            }.onSuccess {
+                uiState.value.device?.id?.let { it1 -> fetchDevice(it1) }
+                 }
+            }
+            // .onFailure { e ->
+            //     _uiState.update { it.copy(
+            //         message = e.message,
+            //         isLoading = false
+            //     )
+            //     }
+            // }
+        // }
     }
 }
 
