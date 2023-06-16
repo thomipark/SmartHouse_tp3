@@ -60,7 +60,7 @@ fun DeviceScreen(
  * TopBar que va volar despues, pq la topbar debertia estar en el navHost o en el main,
  * pero al hacer click en la felchita se va a routines
  */
-
+// TODO ver esto
 @Composable
 fun TopBarDevice(
     modifier: Modifier = Modifier,

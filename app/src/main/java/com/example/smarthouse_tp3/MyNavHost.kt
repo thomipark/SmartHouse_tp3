@@ -6,6 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.smarthouse_tp3.com.example.smarthouse_tp3.RoutinesScreen
 
 @Composable
 fun MyNavHost(
@@ -22,7 +23,7 @@ fun MyNavHost(
         // Main Screens Devices - Routines - Places
         composable("Favourites"){
             RoutinesScreen(
-                onNavigateToDevicesScreen = { navController.navigate("Devices") }
+                //onNavigateToDevicesScreen = { navController.navigate("Devices") }
             )
         }
 
@@ -35,7 +36,7 @@ fun MyNavHost(
         
         composable("Routines"){
             RoutinesScreen(
-                onNavigateToDevicesScreen = { navController.navigate("Devices") }
+                //onNavigateToDevicesScreen = { navController.navigate("Devices") }
             )
         }
 

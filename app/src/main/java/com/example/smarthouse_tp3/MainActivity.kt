@@ -149,7 +149,7 @@ fun TopBar(navController: NavController) {
 
 
 /* --------------------- LAS PREVIEW EMPIEZAN ACA ------------------*/
-
+// TODO ver esto
 //@Preview (showBackground = true)
 @Composable
 fun CartItemStatelessPreview(){
