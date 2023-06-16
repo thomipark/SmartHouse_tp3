@@ -68,16 +68,17 @@ import com.example.smarthouse_tp3.FaucetUnits
 
 @Composable
 fun DeviceConfigScreen(device: Device) {
+    val light = DeviceLight("my light")
     Scaffold(
         topBar = {
-            DeviceTopBar(device)
+            DeviceTopBar(light)
         },
         content = {it
             Column(modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
             ){
-                DeviceBody(device)
+                DeviceBody(light)
             }
         }
     )
@@ -133,13 +134,11 @@ fun DeviceBody(device: Device) {
         Type.AC -> AirConditionerConfigScreen(device = device as DeviceAirConditioner)
         Type.LIGHT -> LightConfigScreen(device = device as DeviceLight)//, changeColor = { device.changeColor(it) }) // No se porque no anda esto
         Type.FAUCET -> FaucetConfigScreen(device as DeviceFaucet)
-        Type.VACUUM -> VacuumConfigScreen(device = device as DeviceVacuum)
-    }
+        Type.VACUUM -> VacuumConfigScreen(device = device as DeviceVacuum) }
 }
 
 @Composable
 fun OvenConfigScreen(device: DeviceOven) {
-
     Card(
         modifier = Modifier
             .padding(16.dp)
@@ -861,5 +860,5 @@ fun DeviceTopBarPreview() {
     val device = DeviceOven(
         name = "My AC",
     )
-    DeviceConfigScreen(device = device)
+//    DeviceConfigScreen(device = device)
 }
