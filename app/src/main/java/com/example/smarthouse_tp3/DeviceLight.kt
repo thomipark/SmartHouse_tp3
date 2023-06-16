@@ -27,6 +27,7 @@ class DeviceLight(name: String) : Device(name) {
     override fun changeSwitchState() {
         super.changeSwitchState()
         if (getSwitchState()) {
+            changeDeviceIconColor(Color.Yellow)
         }
         else {
             changeDeviceIconColor(Color.Black)
