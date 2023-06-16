@@ -8,6 +8,7 @@ import androidx.compose.ui.graphics.Color
 abstract class Device(name: String ) {
     private var switchState = mutableStateOf(false)
     private var name: String
+    private var room: String = "Kitchen"
     private var deviceIconColor = mutableStateOf(Color.Black)
     abstract var deviceIcon : Int
     abstract var deviceType: Type

@@ -26,6 +26,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Devices
@@ -48,10 +49,21 @@ class MainActivity : ComponentActivity() {
                 var showBottomBar by rememberSaveable { mutableStateOf(true) }
                 val navBackStackEntry by navController.currentBackStackEntryAsState()
 
+                val configOvenScreen = stringResource(id = R.string.config_oven_screen)
+                val configFaucetScreen = stringResource(id = R.string.config_faucet_screen)
+                val configACScreen = stringResource(id = R.string.config_ac_screen)
+                val configCurtainScreen = stringResource(id = R.string.config_curtain_screen)
+                val configLightScreen = stringResource(id = R.string.config_light_screen)
+                val configVacuumScreen = stringResource(id = R.string.config_light_screen)
+
                 showBottomBar = when (navBackStackEntry?.destination?.route) {
-                    "Favourites" -> false // on this screen bottom bar should be hidden
-                    "RouteOfScreenB" -> false // here too
-                    else -> true // in all other cases show bottom bar
+                    configOvenScreen -> false // on this screen, the bottom bar should be hidden
+                    configFaucetScreen -> false // on this screen, the bottom bar should be hidden
+                    configACScreen -> false // on this screen, the bottom bar should be hidden
+                    configCurtainScreen -> false // on this screen, the bottom bar should be hidden
+                    configLightScreen -> false // on this screen, the bottom bar should be hidden
+                    configVacuumScreen -> false // on this screen, the bottom bar should be hidden
+                    else -> true // in all other cases, show the bottom bar
                 }
 
                 Scaffold(
@@ -124,7 +136,7 @@ fun BottomBar(
 @Composable
 fun TopBar(navController: NavController) {
     val currentRoute = navController.currentDestination?.route ?: ""
-    val hideBackIcon = currentRoute == "Devices" || currentRoute == "Places" || currentRoute == "Favousrites" || currentRoute == "Routines"
+    val hideBackIcon = currentRoute == "Devices" || currentRoute == "Places" || currentRoute == "Favourites" || currentRoute == "Routines"
 
     TopAppBar(
         navigationIcon = if (!hideBackIcon) {
