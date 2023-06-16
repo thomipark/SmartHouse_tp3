@@ -30,7 +30,7 @@ class RoutinesViewModel : ViewModel() {
                 apiService.getAllRoutines()
             }.onSuccess { response ->
                 _uiState.update { it.copy(
-                    routines = response.body(),
+                    networkRoutineList = response.body(),
                     isLoading = false
                 ) }
             }.onFailure { e ->

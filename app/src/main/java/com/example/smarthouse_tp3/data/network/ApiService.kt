@@ -12,9 +12,7 @@ interface ApiService {
     suspend fun getAllDevices() : Response<NetworkDeviceList>
 
     @GET("api/devices")
-    suspend fun getDevices(@Query("deviceId") id: Int) : Response<NetworkDevice>
-
-
+    suspend fun getDevice(@Query("deviceId") id: Int) : Response<NetworkDevice>
 
     @GET("api/routines")
     suspend fun getAllRoutines() : Response<NetworkRoutineList>

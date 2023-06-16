@@ -55,8 +55,8 @@ fun HomeScreen(
                         )
                     }
                 else {
-                    val list = uiState.routines?.routines.orEmpty()
-                    Text(text =list.toString())
+                    val list = uiState.networkRoutineList?.routines.orEmpty()
+                    //Text(text =list.toString())
                     LazyVerticalGrid(
                         columns = GridCells.Adaptive(minSize = 196.dp)
                     ) {
