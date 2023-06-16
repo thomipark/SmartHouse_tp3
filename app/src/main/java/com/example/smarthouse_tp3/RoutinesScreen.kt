@@ -74,7 +74,7 @@ fun RoutineSmallTile(
         ){
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceEvenly,
+                horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(100.dp)
@@ -104,11 +104,9 @@ fun RoutineSmallTile(
                 IconButton(
                     onClick = { routine.togglePlay() },
                     modifier = Modifier
-                        .size(512.dp)
-                        .weight(0.3f)
-                        .padding(horizontal = 8.dp)
-                        .padding(vertical = 8.dp)
+                        .padding(horizontal = 20.dp)
                 ) {
+                    val playIconSize = 40.dp // Adjust the size of the icon
                     val playIcon = painterResource(if (routine.isPlaying()) R.drawable.screen_routines_icon else R.drawable.screen_routines_icon)
                     val playDescription = if (routine.isPlaying()) "Pause" else "Play"
                     val playTint = if (routine.isPlaying()) Color.Green else Color.Black
@@ -116,13 +114,15 @@ fun RoutineSmallTile(
                     Icon(
                         painter = playIcon,
                         contentDescription = playDescription,
-                        tint = playTint
+                        tint = playTint,
+                        modifier = Modifier.size(playIconSize)
                     )
                 }
             }
         }
     }
 }
+
 
 
 
