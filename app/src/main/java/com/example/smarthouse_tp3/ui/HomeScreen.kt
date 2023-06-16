@@ -25,7 +25,7 @@ import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 
 @Composable
 fun HomeScreen(
-    viewModel: RoutinesViewModel,
+    viewModel: DeviceViewModel,
     modifier: Modifier = Modifier
 ) {
 
@@ -33,7 +33,7 @@ fun HomeScreen(
 
     SwipeRefresh(
         state = rememberSwipeRefreshState(uiState.isLoading),
-        onRefresh = { viewModel.fetchRoutines() },
+        onRefresh = { viewModel.fetchDevice("449f988c6f20d610") },
     ) {
         Column(
             modifier = modifier
@@ -55,25 +55,13 @@ fun HomeScreen(
                         )
                     }
                 else {
-                    val list = uiState.networkRoutineList?.routines.orEmpty()
-                    //Text(text =list.toString())
-                    LazyVerticalGrid(
-                        columns = GridCells.Adaptive(minSize = 196.dp)
-                    ) {
-                        items(
-                            count = list.size,
-                            key = { index ->
-                                list[index].id.toString()
-                            }
-                        ) { index ->
-                            DeviceCard(list[index])
-                        }
-                    }
+                    val device = uiState.device
+                    Text(text =device.toString())
                 }
             }
             Button(
                 onClick = {
-                    viewModel.fetchRoutines()
+                    viewModel.fetchDevice("449f988c6f20d610")
                 },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -91,7 +79,7 @@ fun HomeScreen(
 @Composable
 fun HomeScreenPreview() {
 
-    val viewModel: RoutinesViewModel = viewModel()
+    val viewModel: DeviceViewModel = viewModel()
     val uiState = viewModel.uiState
 
         HomeScreen(viewModel = viewModel())
