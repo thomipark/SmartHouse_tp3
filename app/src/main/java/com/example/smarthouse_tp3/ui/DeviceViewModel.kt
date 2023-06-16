@@ -1,10 +1,7 @@
 package com.example.smarthouse_tp3.ui
 
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.smarthouse_tp3.data.network.RetrofitClient
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow

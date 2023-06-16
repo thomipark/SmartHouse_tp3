@@ -51,19 +51,18 @@ fun MyNavHost(
             )
         }
 
-
         composable(deviceScreen) {
             DevicesScreen (
-                onNavigateToConfigScreen = { type ->
-                    navController.navigate("Configuration Screen/$type")
+                onNavigateToConfigScreen = { deviceID ->
+                    navController.navigate("Configuration Screen/$deviceID")
                 }
             )
         }
 
         composable(favouritesScreen){
             FavoritesScreen(
-                onNavigateToConfigScreen = { type ->
-                    navController.navigate("Configuration Screen/$type")
+                onNavigateToConfigScreen = { deviceID ->
+                    navController.navigate("Configuration Screen/$deviceID")
                 },
                 onNavigateToDevicesScreen = { navController.navigate("Devices")},
                 onNavigateToPlacesScreen = { navController.navigate("Places")}
@@ -77,10 +76,10 @@ fun MyNavHost(
             )
         }
 
-        composable("Configuration Screen/{type}") { backStackEntry ->
-            val type = backStackEntry.arguments?.getInt("type")
-            val device = DeviceLight("my luz")
-            DeviceConfigScreen(device)
+        composable("Configuration Screen/{deviceID}") { backStackEntry ->
+            val deviceID = backStackEntry.arguments?.getString("deviceID")
+            //val device = fetchDevice(deviceID)
+            //DeviceConfigScreen(device = device)
         }
 
 
