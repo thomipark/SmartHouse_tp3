@@ -43,7 +43,7 @@ import com.example.smarthouse_tp3.ui.theme.SmartHouse_tp3Theme
  * Pantalla dedicada a Devices.
  */
 @Composable
-fun DeviceScreen(
+fun DevicesScreen(
     modifier: Modifier = Modifier,
     onNavigateToConfigScreen: (Type) -> Unit
 ){
@@ -206,7 +206,7 @@ fun DevicesSmallTileRowPreview(){
 
 //@Preview (showBackground = true)
 @Composable
-fun DeviceScreenPreview () {
+fun DevicesScreenPreview () {
     SmartHouse_tp3Theme() {
 
     }

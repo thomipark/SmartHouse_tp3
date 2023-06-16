@@ -54,7 +54,7 @@ class MainActivity : ComponentActivity() {
                 val configACScreen = stringResource(id = R.string.config_ac_screen)
                 val configCurtainScreen = stringResource(id = R.string.config_curtain_screen)
                 val configLightScreen = stringResource(id = R.string.config_light_screen)
-                val configVacuumScreen = stringResource(id = R.string.config_light_screen)
+                val configVacuumScreen = stringResource(id = R.string.config_vacuum_screen)
 
                 showBottomBar = when (navBackStackEntry?.destination?.route) {
                     configOvenScreen -> false // on this screen, the bottom bar should be hidden

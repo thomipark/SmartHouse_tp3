@@ -14,7 +14,8 @@ import androidx.compose.ui.tooling.preview.Preview
 @Composable
 fun PlacesScreen(
     modifier: Modifier = Modifier,
-    onNavigateToDevicesScreen: () -> Unit
+    onNavigateToDevicesScreen: () -> Unit,
+    onNavigateToRoutinesScreen: () -> Unit
 ){
     Box(
         modifier = Modifier
@@ -30,10 +31,10 @@ fun PlacesScreen(
     }
 }
 
-@Preview(showBackground = true)
+/*@Preview(showBackground = true)
 @Composable
 fun PlacesScreenPreview() {
     PlacesScreen(onNavigateToDevicesScreen = {})
 }
-
+*/
 

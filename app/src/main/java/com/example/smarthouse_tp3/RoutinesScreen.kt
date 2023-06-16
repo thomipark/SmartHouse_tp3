@@ -1,6 +1,7 @@
 package com.example.smarthouse_tp3.com.example.smarthouse_tp3
 
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,6 +13,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
@@ -23,6 +27,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -37,8 +42,8 @@ import com.example.smarthouse_tp3.ui.theme.SmartHouse_tp3Theme
 @Composable
 fun RoutinesScreen(
     modifier: Modifier = Modifier,
-    //onNavigateToDevicesScreen: () -> Unit,
-    //onNavigateToPlacesScreen: () -> Unit
+    onNavigateToDevicesScreen: () -> Unit,
+    onNavigateToPlacesScreen: () -> Unit
 ){
     Column(
         modifier
@@ -72,6 +77,7 @@ fun SmallRoutineTile(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier
+                    .padding(horizontal = 8.dp)
                     .fillMaxWidth()
                     .height(100.dp)
             ) {
@@ -120,19 +126,32 @@ fun SmallRoutineTile(
 }
 
 
-
-
 @Composable
 fun SmallRoutineTilesRow (
     modifier: Modifier = Modifier
 ) {
-    LazyColumn(
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-        contentPadding = PaddingValues(horizontal = 16.dp),
-        modifier = modifier.fillMaxWidth()
-    ) {
-        items(items = smallRoutinesTileData) { item ->
-            SmallRoutineTile(routine = item)
+    val isHorizontal = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
+
+    if (isHorizontal) {
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(2),
+            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
+            modifier = modifier.fillMaxWidth()
+        ) {
+            items(items = smallRoutinesTileData) { item ->
+                SmallRoutineTile(routine = item)
+            }
+        }
+    } else {
+        LazyColumn(
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            contentPadding = PaddingValues(horizontal = 16.dp),
+            modifier = modifier.fillMaxWidth()
+        ) {
+            items(items = smallRoutinesTileData) { item ->
+                SmallRoutineTile(routine = item)
+            }
         }
     }
 }

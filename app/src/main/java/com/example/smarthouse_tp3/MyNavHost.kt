@@ -14,6 +14,7 @@ import com.example.smarthouse_tp3.advanced_devices.AirConditionerConfigScreen
 import com.example.smarthouse_tp3.advanced_devices.DeviceConfigScreen
 import com.example.smarthouse_tp3.advanced_devices.LightConfigScreen
 import com.example.smarthouse_tp3.advanced_devices.OvenConfigScreen
+import com.example.smarthouse_tp3.com.example.smarthouse_tp3.RoutinesScreen
 
 @Composable
 fun MyNavHost(
@@ -45,13 +46,14 @@ fun MyNavHost(
         //MAIN SCREENS
         composable(routinesScreen){
             RoutinesScreen(
-                onNavigateToDevicesScreen = { navController.navigate("Devices") }
+                onNavigateToDevicesScreen = { navController.navigate("Devices")},
+                onNavigateToPlacesScreen = { navController.navigate("Places")}
             )
         }
 
 
         composable(deviceScreen) {
-            DeviceScreen (
+            DevicesScreen (
                 onNavigateToConfigScreen = { type ->
                     navController.navigate("Configuration Screen/$type")
                 }
@@ -59,14 +61,19 @@ fun MyNavHost(
         }
 
         composable(favouritesScreen){
-            RoutinesScreen(
-                onNavigateToDevicesScreen = { navController.navigate("Devices") }
+            FavoritesScreen(
+                onNavigateToConfigScreen = { type ->
+                    navController.navigate("Configuration Screen/$type")
+                },
+                onNavigateToDevicesScreen = { navController.navigate("Devices")},
+                onNavigateToPlacesScreen = { navController.navigate("Places")}
             )
         }
 
         composable(placesScreen) {
             PlacesScreen(
-                onNavigateToDevicesScreen = { navController.navigate("Routines") }
+                onNavigateToDevicesScreen = { navController.navigate("Devices") },
+                onNavigateToRoutinesScreen = { navController.navigate("Routines")}
             )
         }
 
