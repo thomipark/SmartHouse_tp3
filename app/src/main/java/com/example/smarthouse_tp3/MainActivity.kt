@@ -54,7 +54,7 @@ class MainActivity : ComponentActivity() {
                 val configACScreen = stringResource(id = R.string.config_ac_screen)
                 val configCurtainScreen = stringResource(id = R.string.config_curtain_screen)
                 val configLightScreen = stringResource(id = R.string.config_light_screen)
-                val configVacuumScreen = stringResource(id = R.string.config_light_screen)
+                val configVacuumScreen = stringResource(id = R.string.config_vacuum_screen)
 
                 showBottomBar = when (navBackStackEntry?.destination?.route) {
                     configOvenScreen -> false // on this screen, the bottom bar should be hidden
@@ -168,17 +168,7 @@ fun TopBar(navController: NavController) {
 
 /* --------------------- LAS PREVIEW EMPIEZAN ACA ------------------*/
 
-//@Preview (showBackground = true)
-@Composable
-fun CartItemStatelessPreview(){
-    var quantity: Int by remember { mutableStateOf(1) }
 
-    CartItemStateless(
-        quantity,
-        {quantity++},
-        {quantity--}
-    )
-}
 
 @Preview
 @Composable

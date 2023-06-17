@@ -13,7 +13,6 @@ package com.example.smarthouse_tp3
      abstract var deviceIcon : Int
      abstract var deviceType: Type
 
-
      abstract fun getSmallIconsList(): List<Int>
 
      init{

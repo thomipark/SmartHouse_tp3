@@ -1,26 +1,27 @@
 package com.example.smarthouse_tp3
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.core.os.bundleOf
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.smarthouse_tp3.advanced_devices.AirConditionerConfigScreen
 import com.example.smarthouse_tp3.advanced_devices.DeviceConfigScreen
-import com.example.smarthouse_tp3.advanced_devices.LightConfigScreen
-import com.example.smarthouse_tp3.advanced_devices.OvenConfigScreen
+import com.example.smarthouse_tp3.com.example.smarthouse_tp3.RoutinesScreen
+import com.example.smarthouse_tp3.ui.NavigationViewModel
 
 @Composable
 fun MyNavHost(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
-    startDestination: String = stringResource(id = R.string.device_screen)
+    startDestination: String = stringResource(id = R.string.device_screen),
+    navigationViewModel: NavigationViewModel = viewModel()
 ){
+    val navigationUiState by navigationViewModel.uiState.collectAsState()
     val deviceScreen = stringResource(id = R.string.device_screen)
     val placesScreen = stringResource(id = R.string.places_screen)
     val routinesScreen = stringResource(id = R.string.routines_screen)
@@ -45,39 +46,37 @@ fun MyNavHost(
         //MAIN SCREENS
         composable(routinesScreen){
             RoutinesScreen(
-                onNavigateToDevicesScreen = { navController.navigate("Devices") }
+                onNavigateToDevicesScreen = { navController.navigate("Devices")},
+                onNavigateToPlacesScreen = { navController.navigate("Places")}
             )
         }
 
-
         composable(deviceScreen) {
             DeviceScreen (
-                onNavigateToConfigScreen = { type ->
-                    navController.navigate("Configuration Screen/$type")
-                }
+                    navigationViewModel = navigationViewModel,
+                    onNavigateToConfigScreen = { navController.navigate("Configuration Screen") }
             )
         }
 
         composable(favouritesScreen){
-            RoutinesScreen(
-                onNavigateToDevicesScreen = { navController.navigate("Devices") }
+            FavoritesScreen(
+                onNavigateToConfigScreen = { deviceID ->
+                    navController.navigate("Configuration Screen/$deviceID")
+                },
+                onNavigateToDevicesScreen = { navController.navigate("Devices")},
+                onNavigateToPlacesScreen = { navController.navigate("Places")}
             )
         }
 
         composable(placesScreen) {
             PlacesScreen(
-                onNavigateToDevicesScreen = { navController.navigate("Routines") }
+                onNavigateToDevicesScreen = { navController.navigate("Devices") },
+                onNavigateToRoutinesScreen = { navController.navigate("Routines")}
             )
         }
 
-        composable("Configuration Screen/{type}") { backStackEntry ->
-            val type = backStackEntry.arguments?.getInt("type")
-            val device = DeviceLight("my luz")
-            DeviceConfigScreen(device)
+        composable("Configuration Screen") {
+            DeviceConfigScreen(navigationUiState.selectedDevice)
         }
-
-
-        //DEVICES SCREENS
-
     }
 }
