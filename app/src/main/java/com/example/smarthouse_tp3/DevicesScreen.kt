@@ -20,7 +20,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Card
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Slider
 import androidx.compose.material.Surface
 import androidx.compose.material.Switch
 import androidx.compose.material.SwitchDefaults
@@ -37,28 +36,28 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.smarthouse_tp3.ui.theme.SmartHouse_tp3Theme
+import com.example.smarthouse_tp3.ui.NavigationViewModel
 
 /***
  * Pantalla dedicada a Devices.
  */
 @Composable
-fun DevicesScreen(
+fun DeviceScreen(
     modifier: Modifier = Modifier,
-    onNavigateToConfigScreen: (Device) -> Unit
+    navigationViewModel: NavigationViewModel,
+    onNavigateToConfigScreen: () -> Unit
 ){
     Column(
         modifier
             .padding(8.dp)
     ) {
-        DevicesSmallTileRow(onNavigateToConfigScreen = onNavigateToConfigScreen)
+        DevicesSmallTileRow(
+            navigationViewModel = navigationViewModel,
+            onNavigateToConfigScreen = onNavigateToConfigScreen
+        )
     }
 }
-
-
-
 
 
 /**
@@ -70,7 +69,8 @@ fun DevicesScreen(
 fun DeviceSmallTile(
     modifier: Modifier = Modifier,
     device: Device,
-    onNavigateToConfigScreen: (Device) -> Unit
+    navigationViewModel: NavigationViewModel,
+    onNavigateToConfigScreen: () -> Unit
 ){
     Surface(
         shape = MaterialTheme.shapes.small,
@@ -80,7 +80,10 @@ fun DeviceSmallTile(
             modifier = Modifier
                 .fillMaxWidth(),
             backgroundColor = Color.LightGray,
-            onClick = {onNavigateToConfigScreen(device)}
+            onClick = {
+                navigationViewModel.selectNewDevice(device)
+                onNavigateToConfigScreen()
+            }
         ){
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -151,7 +154,8 @@ fun DeviceSmallTile(
 @Composable
 fun DevicesSmallTileRow(
     modifier: Modifier = Modifier,
-    onNavigateToConfigScreen: (Device) -> Unit
+    navigationViewModel: NavigationViewModel,
+    onNavigateToConfigScreen: () -> Unit
 ) {
     var selectedCategory by rememberSaveable { mutableStateOf(DeviceCategory.All) }
 
@@ -171,6 +175,7 @@ fun DevicesSmallTileRow(
             items(items = getFilteredDevices(selectedCategory)) { item ->
                 DeviceSmallTile(
                     device = item,
+                    navigationViewModel = navigationViewModel,
                     onNavigateToConfigScreen = onNavigateToConfigScreen
                 )
             }
@@ -247,7 +252,7 @@ fun SmallIconsList(imageList: List<Int>){
 
 
 //-------- A PARTIR DE ACA ESTAN LAS PREVIEW ------------------
-
+/*
 @Preview (showBackground = false)
 @Composable
 fun SmallTilePreview(){
@@ -261,14 +266,13 @@ fun SmallTilePreview(){
 }
 
 
-
 @Preview
 @Composable
 fun DevicesSmallTileRowPreview(){
     DevicesSmallTileRow(onNavigateToConfigScreen = {})
 }
 
-/*
+
 //@Preview (showBackground = true)
 @Composable
 fun DevicesScreenPreview () {
