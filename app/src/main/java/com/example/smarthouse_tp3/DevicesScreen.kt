@@ -37,6 +37,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.smarthouse_tp3.ui.NavigationViewModel
 import com.example.smarthouse_tp3.ui.theme.SmartHouse_tp3Theme
 
 /***
@@ -45,13 +46,17 @@ import com.example.smarthouse_tp3.ui.theme.SmartHouse_tp3Theme
 @Composable
 fun DeviceScreen(
     modifier: Modifier = Modifier,
-    onNavigateToConfigScreen: (Type) -> Unit
+    navigationViewModel: NavigationViewModel,
+    onNavigateToConfigScreen: () -> Unit
 ){
     Column(
         modifier
             .padding(8.dp)
     ) {
-        DevicesSmallTileRow(onNavigateToConfigScreen = onNavigateToConfigScreen)
+        DevicesSmallTileRow(
+            navigationViewModel = navigationViewModel,
+            onNavigateToConfigScreen = onNavigateToConfigScreen
+        )
     }
 }
 
@@ -68,7 +73,8 @@ fun DeviceScreen(
 fun DeviceSmallTile(
     modifier: Modifier = Modifier,
     device: Device,
-    onNavigateToConfigScreen: (Type) -> Unit
+    navigationViewModel: NavigationViewModel,
+    onNavigateToConfigScreen: () -> Unit
 ){
     Surface(
         shape = MaterialTheme.shapes.small,
@@ -78,7 +84,10 @@ fun DeviceSmallTile(
             modifier = Modifier
                 .fillMaxWidth(),
             backgroundColor = Color.LightGray,
-            onClick = {onNavigateToConfigScreen(device.deviceType)}
+            onClick = {
+                navigationViewModel.selectNewDevice(device)
+                onNavigateToConfigScreen()
+            }
         ){
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -149,7 +158,8 @@ fun DeviceSmallTile(
 @Composable
 fun DevicesSmallTileRow (
     modifier: Modifier = Modifier,
-    onNavigateToConfigScreen: (Type) -> Unit
+    navigationViewModel: NavigationViewModel,
+    onNavigateToConfigScreen: () -> Unit
 ){
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -159,9 +169,9 @@ fun DevicesSmallTileRow (
         items(items = smallTileData) { item ->
             DeviceSmallTile(
                 device = item,
+                navigationViewModel = navigationViewModel,
                 onNavigateToConfigScreen = onNavigateToConfigScreen
             )
-
         }
     }
 }
@@ -190,6 +200,7 @@ fun SmallTilePreview(){
         DeviceSmallTile(
             device = DeviceOven("thomi Oven"),
             modifier = Modifier.padding(8.dp),
+            navigationViewModel = NavigationViewModel(),
             onNavigateToConfigScreen = {}
         )
     }
@@ -200,7 +211,10 @@ fun SmallTilePreview(){
 //@Preview
 @Composable
 fun DevicesSmallTileRowPreview(){
-    DevicesSmallTileRow(onNavigateToConfigScreen = {})
+    DevicesSmallTileRow(
+        navigationViewModel = NavigationViewModel(),
+        onNavigateToConfigScreen = {}
+        )
 }
 
 

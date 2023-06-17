@@ -168,17 +168,7 @@ fun TopBar(navController: NavController) {
 
 /* --------------------- LAS PREVIEW EMPIEZAN ACA ------------------*/
 
-//@Preview (showBackground = true)
-@Composable
-fun CartItemStatelessPreview(){
-    var quantity: Int by remember { mutableStateOf(1) }
 
-    CartItemStateless(
-        quantity,
-        {quantity++},
-        {quantity--}
-    )
-}
 
 @Preview
 @Composable

@@ -68,17 +68,16 @@ import com.example.smarthouse_tp3.FaucetUnits
 
 @Composable
 fun DeviceConfigScreen(device: Device) {
-    val light = DeviceLight("my light")
     Scaffold(
         topBar = {
-            DeviceTopBar(light)
+            DeviceTopBar(device)
         },
         content = {it
             Column(modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
             ){
-                DeviceBody(light)
+                DeviceBody(device)
             }
         }
     )
