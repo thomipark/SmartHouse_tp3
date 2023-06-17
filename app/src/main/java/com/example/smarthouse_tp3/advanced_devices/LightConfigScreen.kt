@@ -12,6 +12,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -55,8 +56,8 @@ fun LightConfigScreen (
             color = colorEnvelope.color // ARGB color value.
             //viewModel.changeColor(controller.selectedColor.value.toArgb().toString().substring(3)) // Color hex code, which represents clor value.
             // viewModel.changeBrightness(controller.selectedColor.value.alpha * 100)
-
             viewModel.changeBrightness((controller.selectedColor.value.alpha * 100).toLong())
+            viewModel.changeColor(Integer.toHexString(controller.selectedColor.value.toArgb()).substring(2))
             fromUser = colorEnvelope.fromUser // Represents this event is triggered by user or not.
             hexCode = colorEnvelope.hexCode
         }
@@ -94,9 +95,17 @@ fun LightConfigScreen (
             text = uiState.state?.brightness.toString(),
             fontSize = 24.sp
         )
+
         Text(
             modifier = Modifier.align(Alignment.CenterHorizontally),
-            text = "${controller.selectedColor.value.alpha * 100}",
+            text = "Brightness ${controller.selectedColor.value.alpha * 100}",
+            fontSize = 24.sp
+        )
+
+
+        Text(
+            modifier = Modifier.align(Alignment.CenterHorizontally),
+            text = "Color: ${Integer.toHexString(controller.selectedColor.value.toArgb())}",
             fontSize = 24.sp
         )
 
