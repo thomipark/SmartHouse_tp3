@@ -4,6 +4,7 @@ import com.example.smarthouse_tp3.data.network.model.NetworkActionResult
 import com.example.smarthouse_tp3.data.network.model.NetworkDevice
 import com.example.smarthouse_tp3.data.network.model.NetworkDeviceList
 import com.example.smarthouse_tp3.data.network.model.NetworkDeviceResult
+import com.example.smarthouse_tp3.data.network.model.NetworkRoomList
 import com.example.smarthouse_tp3.data.network.model.NetworkRoutineList
 import retrofit2.Response
 import retrofit2.http.Body
@@ -27,4 +28,7 @@ interface ApiService {
 
     @GET("api/routines")
     suspend fun getAllRoutines() : Response<NetworkRoutineList>
+
+    @GET("api/rooms")
+    suspend fun getAllRooms() : Response<NetworkRoomList>
 }

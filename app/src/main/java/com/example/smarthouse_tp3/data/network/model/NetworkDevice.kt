@@ -7,6 +7,7 @@ data class NetworkDevice (
     @SerializedName("name"  ) var name  : String? = null,
     @SerializedName("type"  ) var type  : NetworkDeviceType?   = NetworkDeviceType(),
     @SerializedName("state" ) var state : NetworkDeviceState?  = NetworkDeviceState(),
+    @SerializedName("room" ) var  room : NetworkDeviceRoom?  = NetworkDeviceRoom(),
     @SerializedName("meta"  ) var meta  : NetworkMeta?   = NetworkMeta()
 )
 

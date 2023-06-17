@@ -1,5 +1,6 @@
 package com.example.smarthouse_tp3
 
+/*
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.Color
@@ -14,13 +15,13 @@ class DeviceVacuum(name: String) : Device(name) {
     private var currentRoom = mutableStateOf("Kitchen")
     private var dockingRoom : String = "Living Room"
 
-    private var mode = mutableStateOf(VacuumMode.VACUUM)
+    private var mode = mutableStateOf(com.example.smarthouse_tp3.ui.VacuumMode.VACUUM)
 
     fun getBattery() : MutableState<Int> {
         return battery
     }
 
-    fun getMode() : MutableState<VacuumMode> {
+    fun getMode() : MutableState<com.example.smarthouse_tp3.ui.VacuumMode> {
         return mode
     }
 
@@ -42,7 +43,7 @@ class DeviceVacuum(name: String) : Device(name) {
     }
 
     fun getBatteryIcon() : Int {
-        if (mode.value == VacuumMode.CHARGING) {
+        if (mode.value == com.example.smarthouse_tp3.ui.VacuumMode.CHARGING) {
             return R.drawable.baseline_battery_charging_full_24
         } else if (battery.value < 5) {
             return R.drawable.baseline_battery_alert_24
@@ -66,16 +67,16 @@ class DeviceVacuum(name: String) : Device(name) {
     }
 
     fun dock() {
-        mode.value = VacuumMode.CHARGING
+        mode.value = com.example.smarthouse_tp3.ui.VacuumMode.CHARGING
         changeCurrentRoom(dockingRoom)
     }
 
     fun changeModeMop() {
-        mode.value = VacuumMode.MOP
+        mode.value = com.example.smarthouse_tp3.ui.VacuumMode.MOP
     }
 
     fun changeModeVacuum() {
-        mode.value = VacuumMode.VACUUM
+        mode.value = com.example.smarthouse_tp3.ui.VacuumMode.VACUUM
     }
 
     fun getCurrentRoom() :MutableState<String> {
@@ -87,15 +88,4 @@ class DeviceVacuum(name: String) : Device(name) {
     }
 }
 
-enum class VacuumMode(val index: Int, val stringValue: String) {
-    VACUUM(0, "VACUUM"),
-    MOP(1, "MOP"),
-    CHARGING(2, "CHARGING");
-
-    companion object {
-        fun fromIndex(value: Int): VacuumMode{
-        return values().find { it.index == value } ?: VACUUM
-        }
-    }
-
-}
+*/

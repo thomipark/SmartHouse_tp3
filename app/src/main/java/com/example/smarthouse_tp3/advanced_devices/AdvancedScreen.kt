@@ -51,10 +51,10 @@ import com.example.smarthouse_tp3.DeviceAirConditioner
 import com.example.smarthouse_tp3.DeviceFaucet
 import com.example.smarthouse_tp3.DeviceLight
 import com.example.smarthouse_tp3.DeviceOven
-import com.example.smarthouse_tp3.DeviceVacuum
+import com.example.smarthouse_tp3.ui.DeviceVacuum
 import com.example.smarthouse_tp3.R
 import com.example.smarthouse_tp3.Type
-import com.example.smarthouse_tp3.VacuumMode
+import com.example.smarthouse_tp3.ui.VacuumMode
 import com.github.skydoves.colorpicker.compose.AlphaSlider
 import com.github.skydoves.colorpicker.compose.AlphaTile
 import com.github.skydoves.colorpicker.compose.ColorEnvelope
@@ -68,17 +68,16 @@ import com.example.smarthouse_tp3.FaucetUnits
 
 @Composable
 fun DeviceConfigScreen(device: Device) {
-    val light = DeviceLight("my light")
     Scaffold(
         topBar = {
-            DeviceTopBar(light)
+            DeviceTopBar(device)
         },
         content = {it
             Column(modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
             ){
-                DeviceBody(light)
+                DeviceBody(device)
             }
         }
     )
@@ -857,8 +856,8 @@ fun VacuumConfigScreen(
 @Preview
 @Composable
 fun DeviceTopBarPreview() {
-    val device = DeviceOven(
-        name = "My AC",
+    val device = DeviceLight(
+        name = "My Light",
     )
-//    DeviceConfigScreen(device = device)
+    DeviceConfigScreen(device = device)
 }
