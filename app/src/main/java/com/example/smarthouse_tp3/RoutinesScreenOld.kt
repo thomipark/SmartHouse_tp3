@@ -1,4 +1,4 @@
-package com.example.smarthouse_tp3
+/*package com.example.smarthouse_tp3
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,10 +12,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 
 @Composable
-fun PlacesScreen(
+fun RoutinesScreen(
     modifier: Modifier = Modifier,
-    onNavigateToDevicesScreen: () -> Unit,
-    onNavigateToRoutinesScreen: () -> Unit
+    onNavigateToDevicesScreen: () -> Unit
 ){
     Box(
         modifier = Modifier
@@ -23,7 +22,7 @@ fun PlacesScreen(
             .wrapContentSize(Alignment.Center)
     ) {
         Column() {
-            Text(text = "this is Places Screen")
+            Text(text = "this is Routines Screen")
             Button(onClick = { onNavigateToDevicesScreen() }) {
                 Text(text = "Go back to devices")
             }
@@ -31,10 +30,11 @@ fun PlacesScreen(
     }
 }
 
-/*@Preview(showBackground = true)
+@Preview(showBackground = true)
 @Composable
-fun PlacesScreenPreview() {
-    PlacesScreen(onNavigateToDevicesScreen = {})
+fun RoutinesScreenPreview() {
+    RoutinesScreen(onNavigateToDevicesScreen = {})
 }
-*/
 
+
+*/

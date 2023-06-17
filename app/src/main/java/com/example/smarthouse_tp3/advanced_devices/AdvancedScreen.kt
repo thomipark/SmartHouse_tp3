@@ -279,9 +279,7 @@ fun OvenConfigScreen(device: DeviceOven) {
 }
 
 @Composable
-fun AirConditionerConfigScreen(
-    device : DeviceAirConditioner
-) {
+fun AirConditionerConfigScreen(device : DeviceAirConditioner) {
     Card(
         modifier = Modifier
             .padding(16.dp)

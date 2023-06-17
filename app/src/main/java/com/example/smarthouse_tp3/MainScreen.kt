@@ -15,9 +15,7 @@ sealed class MainScreen(val title: String, val icon: Int, val route: String) {
     object DevicesScreen: MainScreen("Devices", R.drawable.screen_devices_icon, "Devices")
     object RoutinesScreen: MainScreen("Routines", R.drawable.screen_routines_icon, "Routines")
     object PlacesScreen: MainScreen("Places", R.drawable.screen_places_icon, "Places")
-
     object FavouritesScreen: MainScreen("Favourites", R.drawable.screen_favourites_icon, "Favourites")
-
 }
 
 
