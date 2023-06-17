@@ -1,36 +1,37 @@
 package com.example.smarthouse_tp3
-/*
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.Color
+import com.example.smarthouse_tp3.ui.AirConditionerFanSpeed
+import com.example.smarthouse_tp3.ui.AirConditionerHorizontalFanDirection
+import com.example.smarthouse_tp3.ui.AirConditionerMode
+import com.example.smarthouse_tp3.ui.AirConditionerVerticalFanDirection
 
 
 class DeviceAirConditioner(name: String) : Device(name) {
-    //    var temperature = mutableStateOf(1)
-    //    var grillMode = mutableStateof()
-    // override var deviceType: Type = Type.AC
-    // override var deviceIcon : Int = R.drawable.device_air_conditioner_on
-    // private var temperature = mutableStateOf(21)
-    // private var mode = mutableStateOf(AirConditionerMode.FAN)
-    // private var fanSpeed = mutableStateOf(AirConditionerFanSpeed.AUTO)
-    // private var verticalFanDirection = mutableStateOf(AirConditionerVerticalFanDirection.AUTO)
-    // private var horizontalFanDirection = mutableStateOf(AirConditionerHorizontalFanDirection.AUTO)
+    override var deviceType: Type = Type.AC
+    override var deviceIcon : Int = R.drawable.device_air_conditioner_on
+    private var temperature = mutableStateOf(21)
+    private var mode = mutableStateOf(AirConditionerMode.FAN)
+    private var fanSpeed = mutableStateOf(AirConditionerFanSpeed.AUTO)
+    private var verticalFanDirection = mutableStateOf(AirConditionerVerticalFanDirection.AUTO)
+    private var horizontalFanDirection = mutableStateOf(AirConditionerHorizontalFanDirection.AUTO)
 
-    // fun getTemperature() : MutableState<Int> {
-    //     return temperature
-    // }
-    // fun increaseTemperature() {
-    //     if (temperature.value < 38)
-    //         temperature.value++
-    // }
-    // fun decreaseTemperature() {
-    //     if (temperature.value > 18)
-    //         temperature.value--
-    // }
+    fun getTemperature() : MutableState<Int> {
+        return temperature
+    }
+    fun increaseTemperature() {
+        if (temperature.value < 38)
+            temperature.value++
+    }
+    fun decreaseTemperature() {
+        if (temperature.value > 18)
+            temperature.value--
+    }
 
-    // fun getMode() : MutableState<AirConditionerMode> {
-    //     return mode
-    // }
+    fun getMode() : MutableState<AirConditionerMode> {
+        return mode
+    }
 
     fun iterateMode() {
         mode.value = AirConditionerMode.fromIndex(mode.value.index+1)
@@ -95,6 +96,3 @@ class DeviceAirConditioner(name: String) : Device(name) {
     }
 
 }
-*/
-
-

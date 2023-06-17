@@ -51,7 +51,6 @@ import com.example.smarthouse_tp3.DeviceAirConditioner
 import com.example.smarthouse_tp3.DeviceFaucet
 import com.example.smarthouse_tp3.DeviceLight
 import com.example.smarthouse_tp3.DeviceOven
-import com.example.smarthouse_tp3.ui.DeviceVacuum
 import com.example.smarthouse_tp3.R
 import com.example.smarthouse_tp3.Type
 import com.example.smarthouse_tp3.ui.VacuumMode
@@ -64,6 +63,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.*
 import androidx.compose.ui.text.font.FontWeight
+import com.example.smarthouse_tp3.DeviceVacuum
 import com.example.smarthouse_tp3.FaucetUnits
 
 @Composable
