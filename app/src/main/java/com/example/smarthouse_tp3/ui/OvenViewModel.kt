@@ -1,7 +1,11 @@
 package com.example.smarthouse_tp3.ui
 
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.smarthouse_tp3.R
+import com.example.smarthouse_tp3.advanced_devices.LightConfigScreen
 import com.example.smarthouse_tp3.data.network.model.NetworkDeviceState
 import kotlinx.coroutines.flow.update
 
@@ -37,25 +41,53 @@ class OvenViewModel : DeviceViewModel() {
 
 
     fun increaseTemperature() {
-        if ((uiState.value.state?.temperature?.toInt() ?: 230) < 230) {
-            _uiState.value.state?.temperature?.plus(5)
-            uiState.value.id?.let {
-                executeAction(
-                    it, "setTemperature",
-                    arrayOf(uiState.value.state?.temperature.toString())
-                )
+        val state = uiState.value.state
+        if (state != null) {
+            if ((state.temperature?.toInt() ?: 230) < 230) {
+                _uiState.update { currentState ->
+                    currentState.copy(
+                        state = NetworkDeviceState(
+                            status = state.status,
+                            temperature = state.temperature?.let { it + 5L },
+                            heat = state.heat,
+                            grill = state.grill,
+                            convection = state.convection
+                        )
+                    )
+                }
+
+                uiState.value.id?.let {
+                    executeAction(
+                        it, "setTemperature",
+                        arrayOf(uiState.value.state?.temperature.toString())
+                    )
+                }
             }
         }
     }
 
     fun decreaseTemperature() {
-        if ((uiState.value.state?.temperature?.toInt() ?: 180) > 180) {
-            _uiState.value.state?.temperature?.minus(5)
-            uiState.value.id?.let {
-                executeAction(
-                    it, "setTemperature",
-                    arrayOf(uiState.value.state?.temperature.toString())
-                )
+        val state = uiState.value.state
+        if (state != null) {
+            if ((uiState.value.state?.temperature?.toInt() ?: 180) > 180) {
+                _uiState.update { currentState ->
+                    currentState.copy(
+                        state = NetworkDeviceState(
+                            status = state.status,
+                            temperature = state.temperature?.let { it - 5L },
+                            heat = state.heat,
+                            grill = state.grill,
+                            convection = state.convection
+                        )
+                    )
+                }
+
+                uiState.value.id?.let {
+                    executeAction(
+                        it, "setTemperature",
+                        arrayOf(uiState.value.state?.temperature.toString())
+                    )
+                }
             }
         }
     }
@@ -149,6 +181,9 @@ enum class OvenFanMode(val index: Int, val stringValue: String) {
             val nextIndex = (currentIndex + 1) % values().size
             return fromIndex(nextIndex)
         }
+        fun getIndexFromString(value: String): Int {
+            return OvenFanMode.values().indexOfFirst { it.stringValue == value }
+        }
     }
 
 }
@@ -171,6 +206,10 @@ enum class OvenGrillMode(val index: Int, val stringValue: String) {
             val nextIndex = (currentIndex + 1) % values().size
             return fromIndex(nextIndex)
         }
+
+        fun getIndexFromString(value: String): Int {
+            return OvenGrillMode.values().indexOfFirst { it.stringValue == value }
+        }
     }
 
 }
@@ -192,6 +231,10 @@ enum class OvenHeatMode(val index: Int, val stringValue: String) {
             val currentIndex = currentMode.index
             val nextIndex = (currentIndex + 1) % values().size
             return fromIndex(nextIndex)
+        }
+
+        fun getIndexFromString(value: String): Int {
+            return OvenHeatMode.values().indexOfFirst { it.stringValue == value }
         }
     }
 }
