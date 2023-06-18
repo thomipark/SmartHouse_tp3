@@ -184,9 +184,9 @@ fun FavoriteSmallTilePreview() {
     }
 }
 
-val favoriteSmallTileData = emptyList<Device>()
+//val favoriteSmallTileData = emptyList<Device>()
 
-/*
+
 val favoriteSmallTileData = listOf(
     DeviceAirConditioner("FAVORITE thomi AC"),
     DeviceOven("FAVORITE marcelo gallardo al horno"),
@@ -194,4 +194,4 @@ val favoriteSmallTileData = listOf(
     DeviceOven("FAVORITE martin oven"),
     DeviceAirConditioner("FAVORITE federico AC"),
 )
-*/
+
