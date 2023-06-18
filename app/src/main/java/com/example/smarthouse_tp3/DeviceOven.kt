@@ -1,7 +1,6 @@
 package com.example.smarthouse_tp3
 
 
-import android.media.Image
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.Color
@@ -19,10 +18,7 @@ class DeviceOven(name: String) : Device(name) {
     private var heatMode = mutableStateOf(OvenHeatMode.BOTTOM)
 
 
-
-
     override fun getSmallIconsList(): List<Int> {
-        val iconsList = mutableListOf<Int>()
         //if (temperature.value > 100) {
         //    iconsList.add(R.drawable.device_oven_on)
         //}
@@ -31,7 +27,7 @@ class DeviceOven(name: String) : Device(name) {
         //}
 
         //iconsList.add(R.drawable.device_lightbulb_on)
-        return iconsList
+        return mutableListOf()
     }
 
     fun getTemperature(): MutableState<Int> {

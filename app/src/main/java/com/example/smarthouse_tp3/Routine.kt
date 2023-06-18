@@ -1,4 +1,4 @@
-package com.example.smarthouse_tp3.com.example.smarthouse_tp3
+package com.example.smarthouse_tp3
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.Color

@@ -4,13 +4,9 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
-import androidx.compose.material.Button
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Scaffold
@@ -21,7 +17,6 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -29,14 +24,10 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.smarthouse_tp3.ui.DevicesViewModel
-import com.example.smarthouse_tp3.ui.HomeScreen
 import com.example.smarthouse_tp3.ui.theme.SmartHouse_tp3Theme
 
 class MainActivity : ComponentActivity() {
@@ -44,7 +35,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            SmartHouse_tp3Theme() {
+            SmartHouse_tp3Theme {
                 val navController = rememberNavController()
                 var showBottomBar by rememberSaveable { mutableStateOf(true) }
                 val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -78,31 +69,11 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun CartItemStateless(
-    quantity: Int,                      //  state
-    incrementQuantity: () -> Unit,       //event
-    decrementQuantity: () -> Unit
-){
-    Row {
-        Text( text = "Cart item:")
-        Button(
-            onClick = { incrementQuantity() },
-        ) {
-            Text(text = "+")
-        }
-        Button(onClick = { decrementQuantity() }) {
-            Text(text = "-")
-        }
-        Text(text = quantity.toString())
-    }
-}
-
-@Composable
 fun BottomBar(
     navController: NavController
 ){
     val items = listOf(
-        MainScreen.FavouritesScreen,
+        MainScreen.FavoritesScreen,
         MainScreen.PlacesScreen,
         MainScreen.RoutinesScreen,
         MainScreen.DevicesScreen
@@ -136,7 +107,7 @@ fun BottomBar(
 @Composable
 fun TopBar(navController: NavController) {
     val currentRoute = navController.currentDestination?.route ?: ""
-    val hideBackIcon = currentRoute == "Devices" || currentRoute == "Places" || currentRoute == "Favourites" || currentRoute == "Routines"
+    val hideBackIcon = currentRoute == "Devices" || currentRoute == "Places" || currentRoute == "Favorites" || currentRoute == "Routines"
 
     TopAppBar(
         navigationIcon = if (!hideBackIcon) {

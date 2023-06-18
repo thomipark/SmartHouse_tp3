@@ -1,4 +1,4 @@
-package com.example.smarthouse_tp3.com.example.smarthouse_tp3
+package com.example.smarthouse_tp3
 
 
 import android.content.res.Configuration
@@ -33,7 +33,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.smarthouse_tp3.R
 import com.example.smarthouse_tp3.ui.theme.SmartHouse_tp3Theme
 
 /***
@@ -41,9 +40,7 @@ import com.example.smarthouse_tp3.ui.theme.SmartHouse_tp3Theme
  */
 @Composable
 fun RoutinesScreen(
-    modifier: Modifier = Modifier,
-    onNavigateToDevicesScreen: () -> Unit,
-    onNavigateToPlacesScreen: () -> Unit
+    modifier: Modifier = Modifier
 ){
     Column(
         modifier
@@ -162,15 +159,13 @@ fun SmallRoutineTilesRow (
 @Preview (showBackground = false)
 @Composable
 fun SmallRoutineTilePreview(){
-    SmartHouse_tp3Theme() {
+    SmartHouse_tp3Theme {
         SmallRoutineTile(
             routine = Routine("Morning Routine"),
             modifier = Modifier.padding(8.dp)
         )
     }
 }
-
-
 
 @Preview
 @Composable

@@ -3,7 +3,6 @@ package com.example.smarthouse_tp3
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.Color
-import com.example.smarthouse_tp3.ui.DeviceViewModel
 
 
 class DeviceLight(name: String) : Device(name) {

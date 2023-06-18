@@ -11,7 +11,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.smarthouse_tp3.advanced_devices.DeviceConfigScreen
-import com.example.smarthouse_tp3.com.example.smarthouse_tp3.RoutinesScreen
 import com.example.smarthouse_tp3.ui.NavigationViewModel
 
 @Composable
@@ -25,14 +24,16 @@ fun MyNavHost(
     val deviceScreen = stringResource(id = R.string.device_screen)
     val placesScreen = stringResource(id = R.string.places_screen)
     val routinesScreen = stringResource(id = R.string.routines_screen)
-    val favouritesScreen = stringResource(id = R.string.favourites_screen)
+    val favouritesScreen = stringResource(id = R.string.favorites_screen)
 
+    /*
     val configOvenScreen = stringResource(id = R.string.config_oven_screen)
     val configFaucetScreen = stringResource(id = R.string.config_faucet_screen)
     val configACScreen = stringResource(id = R.string.config_ac_screen)
     val configCurtainScreen = stringResource(id = R.string.config_curtain_screen)
     val configLightScreen = stringResource(id = R.string.config_light_screen)
     val configVacuumScreen = stringResource(id = R.string.config_light_screen)
+     */
 
 
 
@@ -45,10 +46,7 @@ fun MyNavHost(
 
         //MAIN SCREENS
         composable(routinesScreen){
-            RoutinesScreen(
-                onNavigateToDevicesScreen = { navController.navigate("Devices")},
-                onNavigateToPlacesScreen = { navController.navigate("Places")}
-            )
+            RoutinesScreen()
         }
 
         composable(deviceScreen) {
@@ -59,20 +57,15 @@ fun MyNavHost(
         }
 
         composable(favouritesScreen){
-            FavoritesScreen(
-                onNavigateToConfigScreen = { deviceID ->
-                    navController.navigate("Configuration Screen/$deviceID")
-                },
-                onNavigateToDevicesScreen = { navController.navigate("Devices")},
-                onNavigateToPlacesScreen = { navController.navigate("Places")}
-            )
+            FavoritesScreen { deviceID ->
+                navController.navigate("Configuration Screen/$deviceID")
+            }
         }
 
         composable(placesScreen) {
             PlacesScreen(
-                onNavigateToDevicesScreen = { navController.navigate("Devices") },
-                onNavigateToRoutinesScreen = { navController.navigate("Routines")}
-            )
+                navigationViewModel = navigationViewModel
+            ) { navController.navigate("Configuration Screen") }
         }
 
         composable("Configuration Screen") {

@@ -40,6 +40,10 @@ package com.example.smarthouse_tp3
          return deviceType
      }
 
+     fun getRoom() : String{
+         return room
+     }
+
      fun getName(): String{
          return name
      }
@@ -57,6 +61,7 @@ package com.example.smarthouse_tp3
       * para darle valor inicial cuando la lea de la api. Por ahora esta funcion
       * no tiene uso en NetworkDevice.kt
       */
+     //TODO ver
      fun setSwitchState(state: Boolean){
          switchState.value = state
      }
