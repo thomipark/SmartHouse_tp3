@@ -1,10 +1,12 @@
 package com.example.smarthouse_tp3
 
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -40,6 +42,8 @@ fun MyNavHost(
         startDestination = startDestination,
         modifier = modifier
     ) {
+        val bottomPadding = Modifier.padding(0.dp, 0.dp, 0.dp, 56.dp)
+
 
         //MAIN SCREENS
         composable(routinesScreen) {
@@ -48,22 +52,28 @@ fun MyNavHost(
 
         composable(deviceScreen) {
             DeviceScreen(
-                navigationViewModel = navigationViewModel
+                navigationViewModel = navigationViewModel,
+                modifier = bottomPadding
             ) { navController.navigate("Configuration Screen") }
         }
 
         composable(favouritesScreen) {
-            FavoritesScreen { deviceID ->
+            FavoritesScreen(
+                modifier = bottomPadding
+            ) { deviceID ->
                 navController.navigate("Configuration Screen/$deviceID")
             }
         }
 
         composable(placesScreen) {
             PlacesScreen(
-                navigationViewModel = navigationViewModel
+                navigationViewModel = navigationViewModel,
+                modifier = bottomPadding
             ) { navController.navigate("Configuration Screen") }
         }
 
+
+        //SCREEEN DE LOS DISPOSITIVOS
         composable("Configuration Screen") {
             DeviceConfigScreen(navigationUiState.selectedDevice)
         }

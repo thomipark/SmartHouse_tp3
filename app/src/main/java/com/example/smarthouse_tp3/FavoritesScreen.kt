@@ -38,7 +38,7 @@ fun FavoritesScreen(
     onNavigateToConfigScreen: (Type) -> Unit
 ) {
     Column(
-        modifier = modifier.padding(8.dp)
+        modifier = modifier
     ) {
         FavoritesSmallTileRow(
             favoriteSmallTileData = favoriteSmallTileData,
