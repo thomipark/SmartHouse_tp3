@@ -47,7 +47,7 @@ fun RoutinesScreen(
     onNavigateToConfigScreen: () -> Unit
 ) {
     Column(
-        modifier = modifier.padding(16.dp)
+        modifier = modifier.padding(0.dp, 8.dp,0.dp,0.dp)
     ) {
         SmallRoutineTilesRow(
             navigationViewModel = navigationViewModel,
@@ -198,7 +198,18 @@ fun SmallRoutineTileRowPreview() {
     )
 }
 
+
+val routineDevice1Action1 = Action("turn on")
+val routineDevice1Action2 = Action("set temperature to 220 C")
+val routineDevice1 = RoutineDevice("Oven", listOf(routineDevice1Action1, routineDevice1Action2))
+
+val routineDevice2Action1 = Action("turn on")
+val routineDevice2Action2 = Action("set color to RED")
+val routineDevice2 = RoutineDevice("Light", listOf(routineDevice2Action1, routineDevice2Action2))
+
+val routine1 = Routine("Afternoon Routine", listOf(routineDevice1, routineDevice2))
+
+
 val smallRoutinesTileData = listOf(
-    Routine("Afternoon Routine"),
-    Routine("Bedtime Routine"),
+    routine1
 )
