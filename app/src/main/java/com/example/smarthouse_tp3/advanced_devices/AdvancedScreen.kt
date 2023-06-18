@@ -72,11 +72,13 @@ fun DeviceConfigScreen(device: Device) {
         topBar = {
             DeviceTopBar(device)
         },
-        content = {it
-            Column(modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState())
-            ){
+        content = {
+            it
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState())
+            ) {
                 DeviceBody(device)
             }
         }
@@ -133,7 +135,8 @@ fun DeviceBody(device: Device) {
         Type.AC -> AirConditionerConfigScreen(device = device as DeviceAirConditioner)
         Type.LIGHT -> LightConfigScreen(device = device as DeviceLight)//, changeColor = { device.changeColor(it) }) // No se porque no anda esto
         Type.FAUCET -> FaucetConfigScreen(device as DeviceFaucet)
-        Type.VACUUM -> VacuumConfigScreen(device = device as DeviceVacuum) }
+        Type.VACUUM -> VacuumConfigScreen(device = device as DeviceVacuum)
+    }
 }
 
 @Composable
@@ -279,7 +282,7 @@ fun OvenConfigScreen(device: DeviceOven) {
 }
 
 @Composable
-fun AirConditionerConfigScreen(device : DeviceAirConditioner) {
+fun AirConditionerConfigScreen(device: DeviceAirConditioner) {
     Card(
         modifier = Modifier
             .padding(16.dp)
@@ -337,7 +340,7 @@ fun AirConditionerConfigScreen(device : DeviceAirConditioner) {
     )
 
 
-    val iconModeIds= listOf(
+    val iconModeIds = listOf(
         R.drawable.snowflake,
         R.drawable.weather_sunny,
         R.drawable.fan
@@ -480,8 +483,9 @@ fun LightConfigScreen(
 ) {
     val controller = rememberColorPickerController()
     var color: Color = Color.Black
-    var hexCode: String = "hola"
-    var fromUser: Boolean = false
+    // TODO ver
+    var hexCode = "hola"
+    var fromUser = false
     Text(
         text = "HUE",
         fontSize = 24.sp,
@@ -510,7 +514,7 @@ fun LightConfigScreen(
             .height(35.dp),
         controller = controller,
     )
-    Column (
+    Column(
         modifier = Modifier.fillMaxWidth(),
     ) {
         Text(
@@ -532,7 +536,8 @@ fun LightConfigScreen(
 fun FaucetConfigScreen(device: DeviceFaucet) {
     var sliderValue = device.getWaterLevel().value
     val volumeUnits = device.getFaucetUnitValues()
-    val selectedUnit = remember { mutableStateOf(device.getFaucetUnitValues()[FaucetUnits.KILOLITERS.index]) }
+    val selectedUnit =
+        remember { mutableStateOf(device.getFaucetUnitValues()[FaucetUnits.KILOLITERS.index]) }
     val formattedValue = (sliderValue / 100f).times(100).toInt()
 
     Row(
@@ -582,7 +587,8 @@ fun FaucetConfigScreen(device: DeviceFaucet) {
     ) {
         Button(
             onClick = { isDropdownExpanded.value = true },
-            modifier = Modifier.clickable { isDropdownExpanded.value = true }
+            modifier = Modifier
+                .clickable { isDropdownExpanded.value = true }
                 .size(width = 200.dp, height = 48.dp)
         ) {
             Text(
@@ -636,17 +642,15 @@ fun VacuumConfigScreen(
     val options = listOf("Kitchen", "Santi's Room", "Living Room")
 
 
-    var mopColor : Color = Color.White
-    var vacColor : Color = Color.White
-    var dockColor : Color = Color.White
+    var mopColor: Color = Color.White
+    var vacColor: Color = Color.White
+    var dockColor: Color = Color.White
 
     if (device.getMode().value == VacuumMode.MOP) {
         mopColor = Color.LightGray
-    }
-    else if (device.getMode().value == VacuumMode.VACUUM) {
+    } else if (device.getMode().value == VacuumMode.VACUUM) {
         vacColor = Color.LightGray
-    }
-    else {
+    } else {
         dockColor = Color.LightGray
     }
 
@@ -750,7 +754,9 @@ fun VacuumConfigScreen(
     }
 
     Row(
-        modifier = Modifier.padding(16.dp).fillMaxWidth(),
+        modifier = Modifier
+            .padding(16.dp)
+            .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Column(
@@ -794,11 +800,12 @@ fun VacuumConfigScreen(
 
 
     Row(
-        modifier = Modifier.padding(16.dp).fillMaxWidth(),
+        modifier = Modifier
+            .padding(16.dp)
+            .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
-
 
 
         Button(
@@ -814,20 +821,19 @@ fun VacuumConfigScreen(
         ) {
 
 
-
-                Text(
-                    text = device.getCurrentRoom().value,
-                    modifier = Modifier.padding(start = 8.dp),
-                    style = MaterialTheme.typography.body1
-                )
+            Text(
+                text = device.getCurrentRoom().value,
+                modifier = Modifier.padding(start = 8.dp),
+                style = MaterialTheme.typography.body1
+            )
 
 
             Spacer(modifier = Modifier.width(8.dp))
-                Icon(
-                    painter = painterResource(R.drawable.baseline_arrow_drop_down_24),
-                    contentDescription = "Dropdown Icon",
-                    modifier = Modifier.size(20.dp)
-                )
+            Icon(
+                painter = painterResource(R.drawable.baseline_arrow_drop_down_24),
+                contentDescription = "Dropdown Icon",
+                modifier = Modifier.size(20.dp)
+            )
         }
 
         if (device.getMode().value != VacuumMode.CHARGING) {

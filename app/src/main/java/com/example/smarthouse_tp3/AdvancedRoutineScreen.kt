@@ -34,12 +34,13 @@ fun RoutineConfigScreen(routine: Routine) {
         topBar = {
             RoutineTopBar(routine)
         },
-        content = {it
+        content = {
+            it
             Column(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(horizontal = 8.dp)
-            ){
+            ) {
                 RoutineBody(routine)
             }
         }
@@ -67,7 +68,8 @@ fun RoutineTopBar(routine: Routine) {
                     .padding(horizontal = 20.dp)
             ) {
                 val playIconSize = 40.dp // Adjust the size of the icon
-                val playIcon = painterResource(if (routine.isPlaying()) R.drawable.screen_routines_icon else R.drawable.screen_routines_icon)
+                val playIcon =
+                    painterResource(if (routine.isPlaying()) R.drawable.screen_routines_icon else R.drawable.screen_routines_icon)
                 val playDescription = if (routine.isPlaying()) "Pause" else "Play"
                 val playTint = if (routine.isPlaying()) Color(0xFF008000) else Color.Black
 
@@ -143,7 +145,7 @@ fun AdvancedRoutineDeviceTile(
 fun RoutineBody(
     routine: Routine,
     modifier: Modifier = Modifier
-    ) {
+) {
     LazyColumn(
         contentPadding = PaddingValues(horizontal = 16.dp),
         modifier = modifier.fillMaxWidth()

@@ -34,7 +34,8 @@ fun HomeScreen(
             ) {
                 Text(
                     text = stringResource(R.string.load_devices),
-                    modifier = Modifier.padding(8.dp))
+                    modifier = Modifier.padding(8.dp)
+                )
             }
         }
 
@@ -49,7 +50,8 @@ fun HomeScreen(
             ) {
                 Text(
                     text = "turnOn",
-                    modifier = Modifier.padding(8.dp))
+                    modifier = Modifier.padding(8.dp)
+                )
             }
         }
 
@@ -64,7 +66,8 @@ fun HomeScreen(
             ) {
                 Text(
                     text = "turnOff",
-                    modifier = Modifier.padding(8.dp))
+                    modifier = Modifier.padding(8.dp)
+                )
             }
         }
 
@@ -73,7 +76,8 @@ fun HomeScreen(
         Row() {
             Text(
                 text = uiState.toString(),
-                modifier = Modifier.padding(8.dp))
+                modifier = Modifier.padding(8.dp)
+            )
         }
 
     }
@@ -92,7 +96,7 @@ fun LightScreen(
         Row() {
             Button(
                 onClick = {
-                          viewModel.changeColor("FF0000")
+                    viewModel.changeColor("FF0000")
                 },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -105,10 +109,10 @@ fun LightScreen(
             }
         }
 
-  Row() {
+        Row() {
             Button(
                 onClick = {
-                          viewModel.changeBrightness(100.toLong())
+                    viewModel.changeBrightness(100.toLong())
                 },
                 modifier = Modifier
                     .fillMaxWidth()

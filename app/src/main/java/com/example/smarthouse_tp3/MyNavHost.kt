@@ -19,7 +19,7 @@ fun MyNavHost(
     navController: NavHostController = rememberNavController(),
     startDestination: String = stringResource(id = R.string.device_screen),
     navigationViewModel: NavigationViewModel = viewModel()
-){
+) {
     val navigationUiState by navigationViewModel.uiState.collectAsState()
     val deviceScreen = stringResource(id = R.string.device_screen)
     val placesScreen = stringResource(id = R.string.places_screen)
@@ -45,18 +45,18 @@ fun MyNavHost(
     ) {
 
         //MAIN SCREENS
-        composable(routinesScreen){
+        composable(routinesScreen) {
             RoutinesScreen()
         }
 
         composable(deviceScreen) {
-            DeviceScreen (
-                    navigationViewModel = navigationViewModel,
-                    onNavigateToConfigScreen = { navController.navigate("Configuration Screen") }
+            DeviceScreen(
+                navigationViewModel = navigationViewModel,
+                onNavigateToConfigScreen = { navController.navigate("Configuration Screen") }
             )
         }
 
-        composable(favouritesScreen){
+        composable(favouritesScreen) {
             FavoritesScreen { deviceID ->
                 navController.navigate("Configuration Screen/$deviceID")
             }

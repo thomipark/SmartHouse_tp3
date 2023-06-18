@@ -29,15 +29,18 @@ class RoutinesViewModel : ViewModel() {
                 val apiService = RetrofitClient.getApiService()
                 apiService.getAllRoutines()
             }.onSuccess { response ->
-                _uiState.update { it.copy(
-                    networkRoutineList = response.body(),
-                    isLoading = false
-                ) }
+                _uiState.update {
+                    it.copy(
+                        networkRoutineList = response.body(),
+                        isLoading = false
+                    )
+                }
             }.onFailure { e ->
-                _uiState.update { it.copy(
-                    message = e.message,
-                    isLoading = false
-                )
+                _uiState.update {
+                    it.copy(
+                        message = e.message,
+                        isLoading = false
+                    )
                 }
             }
         }

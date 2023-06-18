@@ -29,15 +29,18 @@ class RoomsViewModel : ViewModel() {
                 val apiService = RetrofitClient.getApiService()
                 apiService.getAllRooms()
             }.onSuccess { response ->
-                _uiState.update { it.copy(
-                    rooms = response.body(),
-                    isLoading = false
-                ) }
+                _uiState.update {
+                    it.copy(
+                        rooms = response.body(),
+                        isLoading = false
+                    )
+                }
             }.onFailure { e ->
-                _uiState.update { it.copy(
-                    message = e.message,
-                    isLoading = false
-                )
+                _uiState.update {
+                    it.copy(
+                        message = e.message,
+                        isLoading = false
+                    )
                 }
             }
         }

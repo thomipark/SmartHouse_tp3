@@ -8,14 +8,14 @@ class DeviceFaucet(name: String) : Device(name) {
     override var deviceType: Type = Type.FAUCET
     override var deviceIcon: Int = R.drawable.device_sprinkler_on
     private var waterLevel: MutableState<Float> = mutableStateOf(0f)
-    private var unit: MutableState<String> = mutableStateOf(getFaucetUnitValues()[FaucetUnits.KILOLITERS.index])
+    private var unit: MutableState<String> =
+        mutableStateOf(getFaucetUnitValues()[FaucetUnits.KILOLITERS.index])
 
     override fun changeSwitchState() {
         super.changeSwitchState()
         if (getSwitchState()) {
             changeDeviceIconColor(Color.Blue)
-        }
-        else {
+        } else {
             changeDeviceIconColor(Color.Black)
         }
     }
@@ -24,7 +24,7 @@ class DeviceFaucet(name: String) : Device(name) {
         TODO("Not yet implemented")
     }
 
-    fun getWaterLevel() : MutableState<Float> {
+    fun getWaterLevel(): MutableState<Float> {
         return waterLevel
     }
 
@@ -40,7 +40,7 @@ class DeviceFaucet(name: String) : Device(name) {
         return unit.value
     }
 
-    fun changeUnit(newUnit:String){
+    fun changeUnit(newUnit: String) {
         unit.value = newUnit
     }
 

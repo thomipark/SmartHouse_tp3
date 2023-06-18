@@ -29,15 +29,18 @@ class DevicesViewModel : ViewModel() {
                 val apiService = RetrofitClient.getApiService()
                 apiService.getAllDevices()
             }.onSuccess { response ->
-                _uiState.update { it.copy(
-                    devices = response.body(),
-                    isLoading = false
-                ) }
+                _uiState.update {
+                    it.copy(
+                        devices = response.body(),
+                        isLoading = false
+                    )
+                }
             }.onFailure { e ->
-                _uiState.update { it.copy(
-                    message = e.message,
-                    isLoading = false
-                )
+                _uiState.update {
+                    it.copy(
+                        message = e.message,
+                        isLoading = false
+                    )
                 }
             }
         }

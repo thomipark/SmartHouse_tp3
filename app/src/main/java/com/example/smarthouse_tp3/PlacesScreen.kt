@@ -31,6 +31,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.smarthouse_tp3.data.network.model.NetworkRoomList
 import com.example.smarthouse_tp3.ui.NavigationViewModel
 import com.example.smarthouse_tp3.ui.RoomsViewModel
+
 @Composable
 fun PlacesScreen(
     modifier: Modifier = Modifier,

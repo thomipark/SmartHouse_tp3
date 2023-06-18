@@ -5,7 +5,7 @@ import com.example.smarthouse_tp3.R
 import com.example.smarthouse_tp3.data.network.model.NetworkDeviceState
 import kotlinx.coroutines.flow.update
 
-class AirCondtionerViewModel: DeviceViewModel() {
+class AirCondtionerViewModel : DeviceViewModel() {
     override fun fetchDevice(deviceId: String) {
         super.fetchDevice(deviceId)
         _uiState.update {
@@ -69,18 +69,18 @@ class AirCondtionerViewModel: DeviceViewModel() {
         horizontalSwing: String? = uiState.value.state?.horizontalSwing,
         fanSpeed: String? = uiState.value.state?.fanSpeed
     ) {
-          _uiState.update { currentState->
-                currentState.copy(
-                    state = NetworkDeviceState(
-                        status = status,
-                        temperature = temperature,
-                        mode = mode,
-                        verticalSwing = verticalSwing,
-                        horizontalSwing = horizontalSwing,
-                        fanSpeed = fanSpeed
-                    )
+        _uiState.update { currentState ->
+            currentState.copy(
+                state = NetworkDeviceState(
+                    status = status,
+                    temperature = temperature,
+                    mode = mode,
+                    verticalSwing = verticalSwing,
+                    horizontalSwing = horizontalSwing,
+                    fanSpeed = fanSpeed
                 )
-            }
+            )
+        }
     }
 
 
@@ -90,27 +90,30 @@ class AirCondtionerViewModel: DeviceViewModel() {
             updateUiState(mode = state.mode?.let { AirConditionerMode.getNextFromString(it).stringValue })
         }
         uiState.value.id?.let {
-            executeAction(it, "setMode",
+            executeAction(
+                it, "setMode",
                 arrayOf(uiState.value.state?.mode.toString())
             )
         }
     }
 
 
-        fun iterateFanSpeed() {
-            val state = uiState.value.state
-            if (state != null) {
-                updateUiState(fanSpeed = state.fanSpeed?.let { AirConditionerFanSpeed.getNextFromString(
+    fun iterateFanSpeed() {
+        val state = uiState.value.state
+        if (state != null) {
+            updateUiState(fanSpeed = state.fanSpeed?.let {
+                AirConditionerFanSpeed.getNextFromString(
                     it
-                ).stringValue })
-            }
-            uiState.value.id?.let {
-                executeAction(
-                    it, "setFanSpeed",
-                    arrayOf(uiState.value.state?.fanSpeed.toString())
-                )
-            }
+                ).stringValue
+            })
         }
+        uiState.value.id?.let {
+            executeAction(
+                it, "setFanSpeed",
+                arrayOf(uiState.value.state?.fanSpeed.toString())
+            )
+        }
+    }
 
     fun increaseVerticalFanDirection() {
         val state = uiState.value.state
@@ -134,7 +137,8 @@ class AirCondtionerViewModel: DeviceViewModel() {
         if (state != null) {
             updateUiState(
                 verticalSwing = state.verticalSwing?.let {
-                    AirConditionerVerticalFanDirection.getPrevFromString(it).stringValue }
+                    AirConditionerVerticalFanDirection.getPrevFromString(it).stringValue
+                }
             )
         }
         uiState.value.id?.let {
@@ -168,7 +172,8 @@ class AirCondtionerViewModel: DeviceViewModel() {
         if (state != null) {
             updateUiState(
                 horizontalSwing = state.horizontalSwing?.let {
-                    AirConditionerHorizontalFanDirection.getPrevFromString(it).stringValue }
+                    AirConditionerHorizontalFanDirection.getPrevFromString(it).stringValue
+                }
             )
         }
         uiState.value.id?.let {
@@ -190,10 +195,12 @@ enum class AirConditionerMode(val index: Int, val stringValue: String) {
         fun fromIndex(value: Int): AirConditionerMode {
             return values().find { it.index == value } ?: HEAT
         }
+
         fun fromString(value: String): AirConditionerMode {
             return values().find { it.stringValue == value } ?: HEAT
         }
-        fun getNextFromString(value : String) : AirConditionerMode {
+
+        fun getNextFromString(value: String): AirConditionerMode {
             val currentMode = fromString(value)
             val currentIndex = currentMode.index
             val nextIndex = (currentIndex + 1) % values().size
@@ -201,6 +208,7 @@ enum class AirConditionerMode(val index: Int, val stringValue: String) {
         }
     }
 }
+
 enum class AirConditionerFanSpeed(val index: Int, val stringValue: String) {
     AUTO(0, "auto"),
     FIRST(1, "25"),
@@ -212,10 +220,12 @@ enum class AirConditionerFanSpeed(val index: Int, val stringValue: String) {
         fun fromIndex(value: Int): AirConditionerFanSpeed {
             return values().find { it.index == value } ?: AUTO
         }
+
         fun fromString(value: String): AirConditionerFanSpeed {
             return values().find { it.stringValue == value } ?: AUTO
         }
-        fun getNextFromString(value : String) : AirConditionerFanSpeed {
+
+        fun getNextFromString(value: String): AirConditionerFanSpeed {
             val currentFanSpeed = fromString(value)
             val currentIndex = currentFanSpeed.index
             val nextIndex = (currentIndex + 1) % values().size
@@ -239,16 +249,19 @@ enum class AirConditionerVerticalFanDirection(val index: Int, val stringValue: S
         fun fromIndex(value: Int): AirConditionerVerticalFanDirection {
             return values().find { it.index == value } ?: AUTO
         }
+
         fun fromString(value: String): AirConditionerVerticalFanDirection {
             return values().find { it.stringValue == value } ?: AUTO
         }
-        fun getNextFromString(value : String) : AirConditionerVerticalFanDirection {
+
+        fun getNextFromString(value: String): AirConditionerVerticalFanDirection {
             val currentVerticalFanDirection = fromString(value)
             val currentIndex = currentVerticalFanDirection.index
             val nextIndex = (currentIndex + 1) % values().size
             return fromIndex(nextIndex)
         }
-        fun getPrevFromString(value : String) : AirConditionerVerticalFanDirection {
+
+        fun getPrevFromString(value: String): AirConditionerVerticalFanDirection {
             val currentVerticalFanDirection = fromString(value)
             val currentIndex = currentVerticalFanDirection.index
             val prevIndex = getPrevIndex(currentIndex, values().size)
@@ -269,16 +282,19 @@ enum class AirConditionerHorizontalFanDirection(val index: Int, val stringValue:
         fun fromIndex(value: Int): AirConditionerHorizontalFanDirection {
             return values().find { it.index == value } ?: AUTO
         }
+
         fun fromString(value: String): AirConditionerHorizontalFanDirection {
             return values().find { it.stringValue == value } ?: AUTO
         }
-        fun getNextFromString(value : String) : AirConditionerHorizontalFanDirection {
+
+        fun getNextFromString(value: String): AirConditionerHorizontalFanDirection {
             val currentHorizontalFanDirection = fromString(value)
             val currentIndex = currentHorizontalFanDirection.index
             val nextIndex = (currentIndex + 1) % values().size
             return fromIndex(nextIndex)
         }
-        fun getPrevFromString(value : String) : AirConditionerHorizontalFanDirection {
+
+        fun getPrevFromString(value: String): AirConditionerHorizontalFanDirection {
             val currentVerticalFanDirection = fromString(value)
             val currentIndex = currentVerticalFanDirection.index
             val prevIndex = getPrevIndex(currentIndex, values().size)

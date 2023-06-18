@@ -41,7 +41,7 @@ import com.example.smarthouse_tp3.ui.theme.SmartHouse_tp3Theme
 @Composable
 fun RoutinesScreen(
     modifier: Modifier = Modifier
-){
+) {
     Column(
         modifier
             .padding(8.dp)
@@ -60,16 +60,16 @@ fun RoutinesScreen(
 fun SmallRoutineTile(
     modifier: Modifier = Modifier,
     routine: Routine
-){
+) {
     Surface(
         shape = MaterialTheme.shapes.small,
         modifier = modifier
     ) {
-        Card (
+        Card(
             modifier = Modifier
                 .fillMaxWidth(),
             backgroundColor = Color.LightGray
-        ){
+        ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -124,7 +124,7 @@ fun SmallRoutineTile(
 
 
 @Composable
-fun SmallRoutineTilesRow (
+fun SmallRoutineTilesRow(
     modifier: Modifier = Modifier
 ) {
     val isHorizontal = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
@@ -156,9 +156,9 @@ fun SmallRoutineTilesRow (
 
 //-------- A PARTIR DE ACA ESTAN LAS PREVIEW ------------------
 
-@Preview (showBackground = false)
+@Preview(showBackground = false)
 @Composable
-fun SmallRoutineTilePreview(){
+fun SmallRoutineTilePreview() {
     SmartHouse_tp3Theme {
         SmallRoutineTile(
             routine = Routine("Morning Routine"),
@@ -169,7 +169,7 @@ fun SmallRoutineTilePreview(){
 
 @Preview
 @Composable
-fun SmallRoutineTileRowPreview(){
+fun SmallRoutineTileRowPreview() {
     SmallRoutineTilesRow()
 }
 

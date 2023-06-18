@@ -43,7 +43,7 @@ fun DeviceScreen(
     modifier: Modifier = Modifier,
     navigationViewModel: NavigationViewModel,
     onNavigateToConfigScreen: () -> Unit
-){
+) {
     Column(
         modifier = modifier.padding(8.dp)
     ) {
@@ -61,19 +61,19 @@ fun DeviceSmallTile(
     device: Device,
     navigationViewModel: NavigationViewModel,
     onNavigateToConfigScreen: () -> Unit
-){
+) {
     Surface(
         shape = MaterialTheme.shapes.small,
         modifier = modifier
     ) {
-        Card (
+        Card(
             modifier = Modifier.fillMaxWidth(),
             backgroundColor = Color.LightGray,
             onClick = {
                 navigationViewModel.selectNewDevice(device)
                 onNavigateToConfigScreen()
             }
-        ){
+        ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceEvenly,

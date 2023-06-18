@@ -26,7 +26,7 @@ import com.github.skydoves.colorpicker.compose.rememberColorPickerController
 
 
 @Composable
-fun LightConfigScreen (
+fun LightConfigScreen(
     viewModel: LightViewModel
     //changeColor: (String) -> Unit
 ) {
@@ -36,8 +36,9 @@ fun LightConfigScreen (
 
     val controller = rememberColorPickerController()
     var color: Color = Color.Black
-    var hexCode: String = "hola"
-    var fromUser: Boolean = false
+    //TODO ver
+    var hexCode = "hola"
+    var fromUser = false
 
 
 
@@ -57,7 +58,9 @@ fun LightConfigScreen (
             //viewModel.changeColor(controller.selectedColor.value.toArgb().toString().substring(3)) // Color hex code, which represents clor value.
             // viewModel.changeBrightness(controller.selectedColor.value.alpha * 100)
             viewModel.changeBrightness((controller.selectedColor.value.alpha * 100).toLong())
-            viewModel.changeColor(Integer.toHexString(controller.selectedColor.value.toArgb()).substring(2))
+            viewModel.changeColor(
+                Integer.toHexString(controller.selectedColor.value.toArgb()).substring(2)
+            )
             fromUser = colorEnvelope.fromUser // Represents this event is triggered by user or not.
             hexCode = colorEnvelope.hexCode
         }
@@ -73,7 +76,7 @@ fun LightConfigScreen (
             .height(35.dp),
         controller = controller,
     )
-    Column (
+    Column(
         modifier = Modifier.fillMaxWidth(),
     ) {
         // Text(
@@ -127,7 +130,7 @@ fun LightConfigScreen (
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
                 .size(80.dp),
-                //.clip(RoundedCornerShape(6.dp)),
+            //.clip(RoundedCornerShape(6.dp)),
             controller = controller
         )
     }
@@ -140,6 +143,6 @@ fun LightConfigScreenPreview() {
     val viewModel: LightViewModel = viewModel()
     viewModel.fetchDevice("4d842b03d28e19bc")
 
-    LightConfigScreen (viewModel = viewModel)
+    LightConfigScreen(viewModel = viewModel)
 
 }

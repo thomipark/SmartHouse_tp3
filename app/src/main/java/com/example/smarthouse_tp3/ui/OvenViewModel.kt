@@ -6,11 +6,13 @@ import com.example.smarthouse_tp3.data.network.model.NetworkDeviceState
 import kotlinx.coroutines.flow.update
 
 class OvenViewModel : DeviceViewModel() {
-    override fun fetchDevice(deviceId : String) {
+    override fun fetchDevice(deviceId: String) {
         super.fetchDevice(deviceId)
-        _uiState.update { it.copy(
-            deviceIcon = R.drawable.device_oven_off
-        ) }
+        _uiState.update {
+            it.copy(
+                deviceIcon = R.drawable.device_oven_off
+            )
+        }
     }
 
     override fun changeSwitchState() {
@@ -63,20 +65,21 @@ class OvenViewModel : DeviceViewModel() {
     fun iterateFanMode() {
         val state = uiState.value.state
         if (state != null) {
-            _uiState.update { currentState->
+            _uiState.update { currentState ->
                 currentState.copy(
                     state = NetworkDeviceState(
                         status = state.status,
                         temperature = state.temperature,
                         heat = state.heat,
                         grill = state.grill,
-                        convection  = state.convection?.let { OvenFanMode.getNextFromString(it).stringValue }
+                        convection = state.convection?.let { OvenFanMode.getNextFromString(it).stringValue }
                     )
                 )
             }
         }
         uiState.value.id?.let {
-            executeAction(it, "setConvection",
+            executeAction(
+                it, "setConvection",
                 arrayOf(uiState.value.state?.convection.toString())
             )
         }
@@ -86,20 +89,21 @@ class OvenViewModel : DeviceViewModel() {
     fun iterateGrillMode() {
         val state = uiState.value.state
         if (state != null) {
-            _uiState.update { currentState->
+            _uiState.update { currentState ->
                 currentState.copy(
                     state = NetworkDeviceState(
                         status = state.status,
                         temperature = state.temperature,
                         heat = state.heat,
                         grill = state.grill?.let { OvenGrillMode.getNextFromString(it).stringValue },
-                        convection  = state.convection
+                        convection = state.convection
                     )
                 )
             }
         }
         uiState.value.id?.let {
-            executeAction(it, "setGrill",
+            executeAction(
+                it, "setGrill",
                 arrayOf(uiState.value.state?.grill.toString())
             )
         }
@@ -109,20 +113,21 @@ class OvenViewModel : DeviceViewModel() {
     fun iterateHeatMode() {
         val state = uiState.value.state
         if (state != null) {
-            _uiState.update { currentState->
+            _uiState.update { currentState ->
                 currentState.copy(
                     state = NetworkDeviceState(
                         status = state.status,
                         temperature = state.temperature,
                         heat = state.heat?.let { OvenHeatMode.getNextFromString(it).stringValue },
                         grill = state.grill,
-                        convection  = state.convection
+                        convection = state.convection
                     )
                 )
             }
         }
         uiState.value.id?.let {
-            executeAction(it, "setHeat",
+            executeAction(
+                it, "setHeat",
                 arrayOf(uiState.value.state?.heat.toString())
             )
         }
@@ -140,10 +145,12 @@ enum class OvenFanMode(val index: Int, val stringValue: String) {
         fun fromIndex(value: Int): OvenFanMode {
             return values().find { it.index == value } ?: NORMAL
         }
+
         fun fromString(value: String): OvenFanMode {
             return values().find { it.stringValue == value } ?: NORMAL
         }
-        fun getNextFromString(value : String) : OvenFanMode {
+
+        fun getNextFromString(value: String): OvenFanMode {
             val currentMode = fromString(value)
             val currentIndex = currentMode.index
             val nextIndex = (currentIndex + 1) % values().size
@@ -162,10 +169,12 @@ enum class OvenGrillMode(val index: Int, val stringValue: String) {
         fun fromIndex(value: Int): OvenGrillMode {
             return values().find { it.index == value } ?: OFF
         }
+
         fun fromString(value: String): OvenGrillMode {
             return values().find { it.stringValue == value } ?: OFF
         }
-        fun getNextFromString(value : String) : OvenGrillMode {
+
+        fun getNextFromString(value: String): OvenGrillMode {
             val currentMode = fromString(value)
             val currentIndex = currentMode.index
             val nextIndex = (currentIndex + 1) % values().size
@@ -184,10 +193,12 @@ enum class OvenHeatMode(val index: Int, val stringValue: String) {
         fun fromIndex(value: Int): OvenHeatMode {
             return values().find { it.index == value } ?: CONVENTIONAL
         }
+
         fun fromString(value: String): OvenHeatMode {
             return values().find { it.stringValue == value } ?: CONVENTIONAL
         }
-        fun getNextFromString(value : String) : OvenHeatMode {
+
+        fun getNextFromString(value: String): OvenHeatMode {
             val currentMode = fromString(value)
             val currentIndex = currentMode.index
             val nextIndex = (currentIndex + 1) % values().size

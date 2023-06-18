@@ -71,7 +71,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun BottomBar(
     navController: NavController
-){
+) {
     val items = listOf(
         MainScreen.FavoritesScreen,
         MainScreen.PlacesScreen,
@@ -84,7 +84,12 @@ fun BottomBar(
         val currentRoute = navBackStackEntry?.destination?.route
         items.forEach { item ->
             BottomNavigationItem(
-                icon = { Icon(imageVector = ImageVector.vectorResource(id = item.icon), contentDescription = item.title) },
+                icon = {
+                    Icon(
+                        imageVector = ImageVector.vectorResource(id = item.icon),
+                        contentDescription = item.title
+                    )
+                },
                 label = { Text(text = item.title) },
                 alwaysShowLabel = true,
                 selected = currentRoute == item.route,
@@ -107,7 +112,8 @@ fun BottomBar(
 @Composable
 fun TopBar(navController: NavController) {
     val currentRoute = navController.currentDestination?.route ?: ""
-    val hideBackIcon = currentRoute == "Devices" || currentRoute == "Places" || currentRoute == "Favorites" || currentRoute == "Routines"
+    val hideBackIcon =
+        currentRoute == "Devices" || currentRoute == "Places" || currentRoute == "Favorites" || currentRoute == "Routines"
 
     TopAppBar(
         navigationIcon = if (!hideBackIcon) {
@@ -129,12 +135,9 @@ fun TopBar(navController: NavController) {
                 modifier = Modifier
                     .fillMaxWidth()
             )
-                },
+        },
     )
 }
-
-
-
 
 
 /* --------------------- LAS PREVIEW EMPIEZAN ACA ------------------*/
@@ -143,7 +146,7 @@ fun TopBar(navController: NavController) {
 
 @Preview
 @Composable
-fun BottomBarPreview(){
+fun BottomBarPreview() {
     val navController = rememberNavController()
     BottomBar(navController = navController)
 }

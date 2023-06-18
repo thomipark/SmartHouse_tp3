@@ -12,7 +12,7 @@ class NavigationViewModel : ViewModel() {
     val uiState: StateFlow<NavigationUiState> = _uiState.asStateFlow()
 
 
-    fun selectNewDevice(device : Device){
+    fun selectNewDevice(device: Device) {
         _uiState.update { currentState ->
             currentState.copy(
                 selectedDevice = device
