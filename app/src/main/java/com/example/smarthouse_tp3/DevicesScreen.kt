@@ -156,6 +156,10 @@ fun DevicesSmallTileRow(
         )
         val filteredDevices = getFilteredDevices(selectedCategory)
         if (filteredDevices.isEmpty()) {
+            val noDevicesText = when (selectedCategory) {
+                DeviceCategory.All -> "No devices added"
+                else -> "No devices of this type"
+            }
             Box(
                 modifier = Modifier
                     .fillMaxSize()
@@ -163,7 +167,7 @@ fun DevicesSmallTileRow(
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = "No devices of this type",
+                    text = noDevicesText,
                     style = MaterialTheme.typography.body1,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.padding(16.dp)
@@ -186,6 +190,7 @@ fun DevicesSmallTileRow(
         }
     }
 }
+
 
 @Composable
 fun SlideGroup(
