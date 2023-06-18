@@ -15,6 +15,7 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -25,9 +26,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.smarthouse_tp3.ui.NavigationViewModel
 import com.example.smarthouse_tp3.ui.theme.SmartHouse_tp3Theme
 
 class MainActivity : ComponentActivity() {
@@ -39,30 +42,27 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
                 var showBottomBar by rememberSaveable { mutableStateOf(true) }
                 val navBackStackEntry by navController.currentBackStackEntryAsState()
-
-                val configOvenScreen = stringResource(id = R.string.config_oven_screen)
-                val configFaucetScreen = stringResource(id = R.string.config_faucet_screen)
-                val configACScreen = stringResource(id = R.string.config_ac_screen)
-                val configCurtainScreen =
-                    stringResource(id = R.string.config_curtain_screen)
-                val configLightScreen = stringResource(id = R.string.config_light_screen)
-                val configVacuumScreen = stringResource(id = R.string.config_vacuum_screen)
+                val navigationViewModel: NavigationViewModel = viewModel()
+                val deviceConfigScreen = stringResource(id = R.string.device_configuration_screen)
+                val routineConfigScreen = stringResource(id = R.string.routine_configuration_screen)
 
                 showBottomBar = when (navBackStackEntry?.destination?.route) {
-                    configOvenScreen -> false // on this screen, the bottom bar should be hidden
-                    configFaucetScreen -> false // on this screen, the bottom bar should be hidden
-                    configACScreen -> false // on this screen, the bottom bar should be hidden
-                    configCurtainScreen -> false // on this screen, the bottom bar should be hidden
-                    configLightScreen -> false // on this screen, the bottom bar should be hidden
-                    configVacuumScreen -> false // on this screen, the bottom bar should be hidden
+                    deviceConfigScreen -> false
+                    routineConfigScreen -> false
                     else -> true // in all other cases, show the bottom bar
                 }
 
                 Scaffold(
                     bottomBar = { if (showBottomBar) BottomBar(navController = navController) },
-                    topBar = { TopBar(navController = navController) }
+                    topBar = { TopBar(
+                        navController = navController,
+                        navigationViewModel = navigationViewModel
+                    ) }
                 ) {
-                    MyNavHost(navController = navController)
+                    MyNavHost(
+                        navController = navController,
+                        navigationViewModel = navigationViewModel
+                    )
                 }
             }
         }
@@ -111,10 +111,15 @@ fun BottomBar(
 }
 
 @Composable
-fun TopBar(navController: NavController) {
+fun TopBar(
+    navController: NavController,
+    navigationViewModel: NavigationViewModel = viewModel()
+) {
     val currentRoute = navController.currentDestination?.route ?: ""
     val hideBackIcon =
-        currentRoute == "Devices" || currentRoute == "Places" || currentRoute == "Favorites" || currentRoute == "Routines"
+        currentRoute == stringResource(id = R.string.device_screen) || currentRoute == stringResource(id = R.string.favorites_screen) || currentRoute == stringResource(id = R.string.places_screen) || currentRoute == stringResource(id = R.string.routines_screen)
+    val navigationUiState by navigationViewModel.uiState.collectAsState()
+
 
     TopAppBar(
         navigationIcon = if (!hideBackIcon) {
@@ -130,12 +135,33 @@ fun TopBar(navController: NavController) {
             null
         },
         title = {
-            Text(
-                text = currentRoute,
-                textAlign = TextAlign.Start,
-                modifier = Modifier
-                    .fillMaxWidth()
-            )
+            when (currentRoute) {
+                stringResource(id = R.string.routine_configuration_screen) -> {
+                    navigationUiState.selectedRoutine?.let {
+                        Text(
+                            text = it.getRoutineName(),
+                            textAlign = TextAlign.Start,
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                    }
+                }
+                stringResource(id = R.string.device_configuration_screen) -> {
+                    navigationUiState.selectedDevice?.let {
+                        Text(
+                            text = it.getName(),
+                            textAlign = TextAlign.Start,
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                    }
+                }
+                else -> {
+                    Text(
+                        text = currentRoute,
+                        textAlign = TextAlign.Start,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
+            }
         },
     )
 }

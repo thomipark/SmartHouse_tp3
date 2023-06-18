@@ -18,6 +18,7 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Card
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
@@ -33,6 +34,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.smarthouse_tp3.ui.NavigationViewModel
 import com.example.smarthouse_tp3.ui.theme.SmartHouse_tp3Theme
 
 /***
@@ -40,25 +42,30 @@ import com.example.smarthouse_tp3.ui.theme.SmartHouse_tp3Theme
  */
 @Composable
 fun RoutinesScreen(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    navigationViewModel: NavigationViewModel,
+    onNavigateToConfigScreen: () -> Unit
 ) {
     Column(
-        modifier = modifier.padding(8.dp)
+        modifier = modifier.padding(16.dp)
     ) {
-        SmallRoutineTilesRow()
-        //Button(onClick = { onNavigateToDevicesScreen() }) {
-        //    Text(text = "Go back to devices")
-        //}
+        SmallRoutineTilesRow(
+            navigationViewModel = navigationViewModel,
+            onNavigateToConfigScreen = onNavigateToConfigScreen
+        )
     }
 }
 
 /**
  * Genera un small tile de routine horizontal.
  */
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun SmallRoutineTile(
     modifier: Modifier = Modifier,
-    routine: Routine
+    routine: Routine,
+    navigationViewModel: NavigationViewModel,
+    onNavigateToConfigScreen: () -> Unit
 ) {
     Surface(
         shape = MaterialTheme.shapes.small,
@@ -67,7 +74,11 @@ fun SmallRoutineTile(
         Card(
             modifier = Modifier
                 .fillMaxWidth(),
-            backgroundColor = Color.LightGray
+            backgroundColor = Color.LightGray,
+            onClick = {
+                navigationViewModel.selectNewRoutine(routine)
+                onNavigateToConfigScreen()
+            }
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -124,7 +135,9 @@ fun SmallRoutineTile(
 
 @Composable
 fun SmallRoutineTilesRow(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    navigationViewModel: NavigationViewModel,
+    onNavigateToConfigScreen: () -> Unit
 ) {
     val isHorizontal = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
 
@@ -136,7 +149,11 @@ fun SmallRoutineTilesRow(
             modifier = modifier.fillMaxWidth()
         ) {
             items(items = smallRoutinesTileData) { item ->
-                SmallRoutineTile(routine = item)
+                SmallRoutineTile(
+                    routine = item,
+                    navigationViewModel = navigationViewModel,
+                    onNavigateToConfigScreen = onNavigateToConfigScreen
+                )
             }
         }
     } else {
@@ -146,7 +163,11 @@ fun SmallRoutineTilesRow(
             modifier = modifier.fillMaxWidth()
         ) {
             items(items = smallRoutinesTileData) { item ->
-                SmallRoutineTile(routine = item)
+                SmallRoutineTile(
+                    routine = item,
+                    navigationViewModel = navigationViewModel,
+                    onNavigateToConfigScreen = onNavigateToConfigScreen
+                )
             }
         }
     }
@@ -161,7 +182,9 @@ fun SmallRoutineTilePreview() {
     SmartHouse_tp3Theme {
         SmallRoutineTile(
             routine = Routine("Morning Routine"),
-            modifier = Modifier.padding(8.dp)
+            modifier = Modifier.padding(8.dp),
+            onNavigateToConfigScreen = {},
+            navigationViewModel = NavigationViewModel()
         )
     }
 }
@@ -169,7 +192,10 @@ fun SmallRoutineTilePreview() {
 @Preview
 @Composable
 fun SmallRoutineTileRowPreview() {
-    SmallRoutineTilesRow()
+    SmallRoutineTilesRow(
+        onNavigateToConfigScreen = {},
+        navigationViewModel = NavigationViewModel()
+    )
 }
 
 val smallRoutinesTileData = listOf(

@@ -27,6 +27,8 @@ fun MyNavHost(
     val placesScreen = stringResource(id = R.string.places_screen)
     val routinesScreen = stringResource(id = R.string.routines_screen)
     val favouritesScreen = stringResource(id = R.string.favorites_screen)
+    val deviceConfigurationScreen = stringResource(id = R.string.device_configuration_screen)
+    val routineConfigurationScreen = stringResource(id = R.string.routine_configuration_screen)
 
     /*
     val configOvenScreen = stringResource(id = R.string.config_oven_screen)
@@ -47,35 +49,42 @@ fun MyNavHost(
 
         //MAIN SCREENS
         composable(routinesScreen) {
-            RoutinesScreen()
+            RoutinesScreen(
+                navigationViewModel = navigationViewModel,
+                modifier = bottomPadding
+            ) { navController.navigate(routineConfigurationScreen) }
         }
 
         composable(deviceScreen) {
             DeviceScreen(
                 navigationViewModel = navigationViewModel,
                 modifier = bottomPadding
-            ) { navController.navigate("Configuration Screen") }
+            ) { navController.navigate(deviceConfigurationScreen) }
         }
 
         composable(favouritesScreen) {
             FavoritesScreen(
                 modifier = bottomPadding
-            ) { deviceID ->
-                navController.navigate("Configuration Screen/$deviceID")
-            }
+            ) { navController.navigate(deviceConfigurationScreen) }
         }
 
         composable(placesScreen) {
             PlacesScreen(
                 navigationViewModel = navigationViewModel,
                 modifier = bottomPadding
-            ) { navController.navigate("Configuration Screen") }
+            ) { navController.navigate(deviceConfigurationScreen) }
         }
 
 
-        //SCREEEN DE LOS DISPOSITIVOS
-        composable("Configuration Screen") {
-            DeviceConfigScreen(navigationUiState.selectedDevice)
+        //SCREEEN DE DEVICE CONFIG
+        composable(deviceConfigurationScreen) {
+            navigationUiState.selectedDevice?.let { it1 -> DeviceConfigScreen(it1) }
+        }
+
+
+        //SCREEN DE ADVANCED ROUTINES
+        composable(routineConfigurationScreen) {
+            navigationUiState.selectedRoutine?.let { it1 -> RoutineConfigScreen(it1) }
         }
     }
 }
