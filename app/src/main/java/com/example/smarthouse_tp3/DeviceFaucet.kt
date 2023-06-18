@@ -3,6 +3,7 @@ package com.example.smarthouse_tp3
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.Color
+import com.example.smarthouse_tp3.ui.FaucetUnits
 
 class DeviceFaucet(name: String) : Device(name) {
     override var deviceType: Type = Type.FAUCET
@@ -47,19 +48,3 @@ class DeviceFaucet(name: String) : Device(name) {
 
 }
 
-enum class FaucetUnits(val index: Int, val stringValue: String) {
-    KILOLITERS(0, "Kiloliters"),
-    HECTOLITERS(1, "Hectoliters"),
-    DECALITERS(2, "Decaliters"),
-    LITERS(3, "Liters"),
-    DECILITERS(4, "Deciliters"),
-    CENTILITERS(5, "Centiliters"),
-    MILLILITERS(6, "Milliliters");
-
-    companion object {
-        fun fromIndex(value: Int): FaucetUnits {
-            return values().find { it.index == value } ?: KILOLITERS
-        }
-    }
-
-}

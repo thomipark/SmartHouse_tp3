@@ -5,7 +5,7 @@ import com.example.smarthouse_tp3.R
 import com.example.smarthouse_tp3.data.network.model.NetworkDeviceState
 import kotlinx.coroutines.flow.update
 
-class AirCondtionerViewModel: DeviceViewModel() {
+class AirConditionerViewModel: DeviceViewModel() {
     override fun fetchDevice(deviceId: String) {
         super.fetchDevice(deviceId)
         _uiState.update {
@@ -39,7 +39,7 @@ class AirCondtionerViewModel: DeviceViewModel() {
 
     fun increaseTemperature() {
         if ((uiState.value.state?.temperature?.toInt() ?: 38) < 38) {
-            _uiState.value.state?.temperature?.plus(1)
+            updateUiState(temperature = uiState.value.state?.temperature?.plus(1))
             uiState.value.id?.let {
                 executeAction(
                     it, "setTemperature",
@@ -51,7 +51,7 @@ class AirCondtionerViewModel: DeviceViewModel() {
 
     fun decreaseTemperature() {
         if ((uiState.value.state?.temperature?.toInt() ?: 18) > 18) {
-            _uiState.value.state?.temperature?.minus(1)
+            updateUiState(temperature = uiState.value.state?.temperature?.minus(1))
             uiState.value.id?.let {
                 executeAction(
                     it, "setTemperature",
@@ -69,18 +69,18 @@ class AirCondtionerViewModel: DeviceViewModel() {
         horizontalSwing: String? = uiState.value.state?.horizontalSwing,
         fanSpeed: String? = uiState.value.state?.fanSpeed
     ) {
-          _uiState.update { currentState->
-                currentState.copy(
-                    state = NetworkDeviceState(
-                        status = status,
-                        temperature = temperature,
-                        mode = mode,
-                        verticalSwing = verticalSwing,
-                        horizontalSwing = horizontalSwing,
-                        fanSpeed = fanSpeed
-                    )
+        _uiState.update { currentState->
+            currentState.copy(
+                state = NetworkDeviceState(
+                    status = status,
+                    temperature = temperature,
+                    mode = mode,
+                    verticalSwing = verticalSwing,
+                    horizontalSwing = horizontalSwing,
+                    fanSpeed = fanSpeed
                 )
-            }
+            )
+        }
     }
 
 
@@ -96,22 +96,28 @@ class AirCondtionerViewModel: DeviceViewModel() {
         }
     }
 
+    fun getMode() : AirConditionerMode? {
+        return uiState.value.state?.mode?.let { AirConditionerMode.fromString(it) }
+    }
 
-        fun iterateFanSpeed() {
-            val state = uiState.value.state
-            if (state != null) {
-                updateUiState(fanSpeed = state.fanSpeed?.let { AirConditionerFanSpeed.getNextFromString(
-                    it
-                ).stringValue })
-            }
-            uiState.value.id?.let {
-                executeAction(
-                    it, "setFanSpeed",
-                    arrayOf(uiState.value.state?.fanSpeed.toString())
-                )
-            }
+    fun iterateFanSpeed() {
+        val state = uiState.value.state
+        if (state != null) {
+            updateUiState(fanSpeed = state.fanSpeed?.let { AirConditionerFanSpeed.getNextFromString(
+                it
+            ).stringValue })
         }
+        uiState.value.id?.let {
+            executeAction(
+                it, "setFanSpeed",
+                arrayOf(uiState.value.state?.fanSpeed.toString())
+            )
+        }
+    }
 
+    fun getFanSpeed() : AirConditionerFanSpeed ? {
+        return uiState.value.state?.fanSpeed?.let { AirConditionerFanSpeed.fromString(it) }
+    }
     fun increaseVerticalFanDirection() {
         val state = uiState.value.state
         if (state != null) {

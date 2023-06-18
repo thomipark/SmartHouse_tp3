@@ -15,6 +15,11 @@
     <string name="config_curtain_screen">Curtain configuration</string>
     <string name="config_light_screen">Light configuration</string>
     <string name="config_vacuum_screen">Vacuum configuration</string>
+    <string name="intensity">Intensity</string>
+    <string name="hue">Hue</string>
+    <string name="mode">MODE</string>
+    <string name="fan_speed_text">Fan Speed:\n%s</string>
+    <string name="return_to_dock">RETURN TO CHARGING STATION</string>
 
 
 </resources>

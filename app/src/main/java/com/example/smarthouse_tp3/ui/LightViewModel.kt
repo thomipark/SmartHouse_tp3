@@ -1,5 +1,6 @@
 package com.example.smarthouse_tp3.ui
 
+import android.util.Log
 import androidx.compose.ui.graphics.Color
 import com.example.smarthouse_tp3.R
 import com.example.smarthouse_tp3.data.network.model.NetworkDeviceState
@@ -9,7 +10,13 @@ class LightViewModel : DeviceViewModel() {
     override fun fetchDevice(deviceId : String) {
         super.fetchDevice(deviceId)
         _uiState.update { it.copy(
-            deviceIcon = R.drawable.device_lightbulb_on
+            deviceIcon = R.drawable.device_lightbulb_on,
+            switchState = uiState.value.state?.status == "on",
+            deviceIconColor = if (uiState.value.state?.status == "on") {
+                Color.Yellow
+            } else {
+                Color.Black
+            }
         ) }
     }
 
@@ -39,7 +46,6 @@ class LightViewModel : DeviceViewModel() {
 
     fun changeBrightness(percent : Long) {
         uiState.value.id?.let { executeAction(it, "setBrightness", arrayOf(percent.toString())) }
-        // _uiState.value.device?.state?.brightness = percent.toString().toLong()
         val device = uiState.value
         if (device != null) {
             _uiState.update { currentState->
@@ -58,8 +64,10 @@ class LightViewModel : DeviceViewModel() {
         super.changeSwitchState()
         if (uiState.value.switchState) {
             changeDeviceIconColor(Color.Yellow)
+            uiState.value.id?.let { executeAction(it, "turnOn", arrayOf()) }
         } else {
             changeDeviceIconColor(Color.Black)
+            uiState.value.id?.let { executeAction(it, "turnOff", arrayOf()) }
         }
     }
 }

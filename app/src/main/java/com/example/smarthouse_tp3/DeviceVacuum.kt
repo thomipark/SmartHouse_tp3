@@ -42,7 +42,7 @@ class DeviceVacuum(name: String) : Device(name) {
     }
 
     fun getBatteryIcon() : Int {
-        if (mode.value == com.example.smarthouse_tp3.ui.VacuumMode.CHARGING) {
+        if (mode.value == com.example.smarthouse_tp3.ui.VacuumMode.DOCKED) {
             return R.drawable.baseline_battery_charging_full_24
         } else if (battery.value < 5) {
             return R.drawable.baseline_battery_alert_24
@@ -66,7 +66,7 @@ class DeviceVacuum(name: String) : Device(name) {
     }
 
     fun dock() {
-        mode.value = com.example.smarthouse_tp3.ui.VacuumMode.CHARGING
+        mode.value = com.example.smarthouse_tp3.ui.VacuumMode.DOCKED
         changeCurrentRoom(dockingRoom)
     }
 

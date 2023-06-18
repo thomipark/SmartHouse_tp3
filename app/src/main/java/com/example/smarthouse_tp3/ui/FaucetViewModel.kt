@@ -100,3 +100,26 @@ class FaucetViewModel: DeviceViewModel() {
     }
 }
 
+enum class FaucetUnits(val index: Int, val stringValue: String) {
+    KILOLITERS  (0, "kl"   ),
+    HECTOLITERS (1, "hl"   ),
+    DECALITERS  (2, "dal"  ),
+    LITERS      (3, "l"    ),
+    DECILITERS  (4, "dl"   ),
+    CENTILITERS (5, "cl"   ),
+    MILLILITERS (6, "ml"   );
+
+    companion object {
+        fun fromIndex(value: Int): FaucetUnits {
+            return values().find { it.index == value } ?: KILOLITERS
+        }
+
+        fun getFaucetUnitValues(): List<String> {
+            return FaucetUnits.values().map { it.stringValue }
+        }
+        fun fromString(value: String): FaucetUnits {
+            return values().find { it.stringValue == value } ?: KILOLITERS
+        }
+    }
+
+}
