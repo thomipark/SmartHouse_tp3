@@ -2,6 +2,7 @@ package com.example.smarthouse_tp3
 
 
 import android.content.res.Configuration
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -47,7 +48,7 @@ fun RoutinesScreen(
     onNavigateToConfigScreen: () -> Unit
 ) {
     Column(
-        modifier = modifier.padding(0.dp, 8.dp,0.dp,0.dp)
+        modifier = modifier.padding(0.dp, 8.dp, 0.dp, 0.dp)
     ) {
         SmallRoutineTilesRow(
             navigationViewModel = navigationViewModel,
@@ -68,18 +69,12 @@ fun SmallRoutineTile(
     onNavigateToConfigScreen: () -> Unit
 ) {
     Surface(
-        shape = MaterialTheme.shapes.small,
-        modifier = modifier
+        shape = MaterialTheme.shapes.small, modifier = modifier
     ) {
-        Card(
-            modifier = Modifier
-                .fillMaxWidth(),
-            backgroundColor = Color.LightGray,
-            onClick = {
-                navigationViewModel.selectNewRoutine(routine)
-                onNavigateToConfigScreen()
-            }
-        ) {
+        Card(modifier = Modifier.fillMaxWidth(), backgroundColor = Color.LightGray, onClick = {
+            navigationViewModel.selectNewRoutine(routine)
+            onNavigateToConfigScreen()
+        }) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -91,8 +86,7 @@ fun SmallRoutineTile(
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center,
-                    modifier = Modifier
-                        .weight(0.5f),
+                    modifier = Modifier.weight(0.5f),
                 ) {
                     Box(
                         modifier = Modifier
@@ -103,7 +97,7 @@ fun SmallRoutineTile(
                     ) {
                         Text(
                             text = routine.getRoutineName(),
-                            style = MaterialTheme.typography.h6,
+                            style = MaterialTheme.typography.h5,
                             textAlign = TextAlign.Center,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis, // Display the text in a single line
@@ -112,8 +106,7 @@ fun SmallRoutineTile(
                 }
                 IconButton(
                     onClick = { routine.togglePlay() },
-                    modifier = Modifier
-                        .padding(horizontal = 20.dp)
+                    modifier = Modifier.padding(horizontal = 20.dp)
                 ) {
                     val playIconSize = 40.dp // Adjust the size of the icon
                     val playIcon = painterResource(R.drawable.screen_routines_icon)
@@ -125,6 +118,90 @@ fun SmallRoutineTile(
                         contentDescription = playDescription,
                         tint = playTint,
                         modifier = Modifier.size(playIconSize)
+                    )
+                }
+            }
+        }
+    }
+}
+
+
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+fun SmallRoutineTileExtended(
+    modifier: Modifier = Modifier,
+    routine: Routine,
+    navigationViewModel: NavigationViewModel,
+    onNavigateToConfigScreen: () -> Unit
+) {
+    Surface(
+        shape = MaterialTheme.shapes.medium, modifier = modifier
+    ) {
+        Card(modifier = Modifier
+            .fillMaxWidth()
+            .height(128.dp),
+            backgroundColor = Color.LightGray, onClick = {
+            navigationViewModel.selectNewRoutine(routine)
+            onNavigateToConfigScreen()
+        }) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(8.dp)
+            ) {
+                Column(
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Text(
+                        text = routine.getRoutineName(),
+                        style = MaterialTheme.typography.h5,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(start = 16.dp)
+                    )
+                    var deviceNames = ""
+                    routine.getRoutineDevices().forEach { deviceNames += it.getDeviceName() + ", " }
+                    deviceNames = deviceNames.dropLast(2) // Remove the last ", "
+
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.padding(8.dp, 16.dp, 8.dp, 0.dp)
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .size(8.dp)
+                                .background(Color.Black)
+                                .padding(32.dp, 0.dp, 32.dp, 0.dp)
+                        )
+                        Text(
+                            text = deviceNames,
+                            style = MaterialTheme.typography.h6,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(start = 8.dp) // Add padding to create space between the box and text
+                        )
+                    }
+                }
+                IconButton(
+                    onClick = { routine.togglePlay() },
+                    modifier = Modifier
+                        .align(Alignment.CenterVertically)
+                        .padding(16.dp)
+                ) {
+                    val playIconSize = 70.dp // Adjust the size of the icon
+                    val playIcon = painterResource(R.drawable.screen_routines_icon)
+                    val playDescription = if (routine.isPlaying()) "Pause" else "Play"
+                    val playTint = if (routine.isPlaying()) Color(0xFF008000) else Color.Black
+
+                    Icon(
+                        painter = playIcon,
+                        contentDescription = playDescription,
+                        tint = playTint,
+                        modifier = Modifier
+                            .size(playIconSize)
+
                     )
                 }
             }
@@ -149,7 +226,7 @@ fun SmallRoutineTilesRow(
             modifier = modifier.fillMaxWidth()
         ) {
             items(items = smallRoutinesTileData) { item ->
-                SmallRoutineTile(
+                SmallRoutineTileExtended(
                     routine = item,
                     navigationViewModel = navigationViewModel,
                     onNavigateToConfigScreen = onNavigateToConfigScreen
@@ -189,12 +266,25 @@ fun SmallRoutineTilePreview() {
     }
 }
 
+@Preview(showBackground = false)
+@Composable
+fun SmallRoutineTileExtendedPreview() {
+    LocalConfiguration.current.orientation = Configuration.ORIENTATION_LANDSCAPE
+    SmartHouse_tp3Theme {
+        SmallRoutineTileExtended(
+            routine = routine1,
+            modifier = Modifier.padding(8.dp),
+            onNavigateToConfigScreen = {},
+            navigationViewModel = NavigationViewModel()
+        )
+    }
+}
+
 @Preview
 @Composable
 fun SmallRoutineTileRowPreview() {
     SmallRoutineTilesRow(
-        onNavigateToConfigScreen = {},
-        navigationViewModel = NavigationViewModel()
+        onNavigateToConfigScreen = {}, navigationViewModel = NavigationViewModel()
     )
 }
 
@@ -211,5 +301,5 @@ val routine1 = Routine("Afternoon Routine", listOf(routineDevice1, routineDevice
 
 
 val smallRoutinesTileData = listOf(
-    routine1
+    routine1, routine1
 )
