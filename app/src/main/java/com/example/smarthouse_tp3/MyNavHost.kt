@@ -64,6 +64,7 @@ fun MyNavHost(
 
         composable(favouritesScreen) {
             FavoritesScreen(
+                navigationViewModel = navigationViewModel,
                 modifier = bottomPadding
             ) { navController.navigate(deviceConfigurationScreen) }
         }

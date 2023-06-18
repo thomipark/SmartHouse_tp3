@@ -30,20 +30,23 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.smarthouse_tp3.ui.NavigationViewModel
 import com.example.smarthouse_tp3.ui.theme.SmartHouse_tp3Theme
 
 @Composable
 fun FavoritesScreen(
     modifier: Modifier = Modifier,
-    onNavigateToConfigScreen: (Type) -> Unit
+    navigationViewModel: NavigationViewModel,
+    onNavigateToConfigScreen: () -> Unit
 ) {
     Column(
         modifier = modifier.padding(0.dp, 8.dp,0.dp,0.dp)
     ) {
         FavoritesSmallTileRow(
             favoriteSmallTileData = favoriteSmallTileData,
-            onNavigateToConfigScreen = onNavigateToConfigScreen
-        )
+            onNavigateToConfigScreen = onNavigateToConfigScreen,
+            navigationViewModel = navigationViewModel,
+            )
     }
 }
 
@@ -52,7 +55,8 @@ fun FavoritesScreen(
 fun FavoriteSmallTile(
     modifier: Modifier = Modifier,
     device: Device,
-    onNavigateToConfigScreen: (Type) -> Unit
+    navigationViewModel: NavigationViewModel,
+    onNavigateToConfigScreen: () -> Unit
 ) {
     Surface(
         shape = MaterialTheme.shapes.small,
@@ -61,7 +65,10 @@ fun FavoriteSmallTile(
         Card(
             modifier = Modifier.fillMaxWidth(),
             backgroundColor = Color.LightGray,
-            onClick = { onNavigateToConfigScreen(device.deviceType) }
+            onClick = {
+                navigationViewModel.selectNewDevice(device)
+                onNavigateToConfigScreen()
+            }
         ) {
             Box(
                 modifier = Modifier
@@ -119,7 +126,8 @@ fun FavoriteSmallTile(
 fun FavoritesSmallTileRow(
     modifier: Modifier = Modifier,
     favoriteSmallTileData: List<Device>,
-    onNavigateToConfigScreen: (Type) -> Unit
+    navigationViewModel: NavigationViewModel,
+    onNavigateToConfigScreen: () -> Unit
 ) {
     Column(modifier = modifier) {
         if (favoriteSmallTileData.isNotEmpty()) {
@@ -131,6 +139,7 @@ fun FavoritesSmallTileRow(
                 items(items = favoriteSmallTileData) { item ->
                     FavoriteSmallTile(
                         device = item,
+                        navigationViewModel = navigationViewModel,
                         onNavigateToConfigScreen = onNavigateToConfigScreen
                     )
                 }
@@ -179,7 +188,8 @@ fun FavoriteSmallTilePreview() {
         FavoriteSmallTile(
             device = DeviceOven("thomi Oven"),
             modifier = Modifier.padding(8.dp),
-            onNavigateToConfigScreen = {}
+            onNavigateToConfigScreen = {},
+            navigationViewModel = NavigationViewModel()
         )
     }
 }
