@@ -1,7 +1,5 @@
 package com.example.smarthouse_tp3.ui
 
-import androidx.compose.runtime.currentComposer
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -29,7 +27,7 @@ abstract class DeviceViewModel : ViewModel() {
     //     uiState.value.device?.id?.let { fetchDevice(it) }
     // }
 
-    open fun fetchDevice(deviceId : String) {
+    open fun fetchDevice(deviceId: String) {
         fetchJob?.cancel()
         fetchJob = viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
@@ -47,10 +45,11 @@ abstract class DeviceViewModel : ViewModel() {
                     meta = response.body()?.device?.meta,
                 ) }
             }.onFailure { e ->
-                _uiState.update { it.copy(
-                    message = e.message,
-                    isLoading = false
-                )
+                _uiState.update {
+                    it.copy(
+                        message = e.message,
+                        isLoading = false
+                    )
                 }
             }
         }
@@ -65,17 +64,18 @@ abstract class DeviceViewModel : ViewModel() {
                 apiService.executeAction(deviceId, actionName, params)
             }.onSuccess {
                 uiState.value.id?.let { it1 -> fetchDevice(it1) }
-                 }
             }
-            // .onFailure { e ->
-            //     _uiState.update { it.copy(
-            //         message = e.message,
-            //         isLoading = false
-            //     )
-            //     }
-            // }
+        }
+        // .onFailure { e ->
+        //     _uiState.update { it.copy(
+        //         message = e.message,
+        //         isLoading = false
+        //     )
+        //     }
+        // }
         // }
     }
+
     open fun changeSwitchState() {
         _uiState.update { currentState->
                 currentState.copy(
@@ -89,21 +89,22 @@ abstract class DeviceViewModel : ViewModel() {
      * para darle valor inicial cuando la lea de la api. Por ahora esta funcion
      * no tiene uso en NetworkDevice.kt
      */
-    fun setSwitchState(state: Boolean){
-        _uiState.update { currentState->
+    fun setSwitchState(state: Boolean) {
+        _uiState.update { currentState ->
             currentState.copy(
                 switchState = state
-            ) }
+            )
+        }
 
     }
 
-    fun changeDeviceIconColor(newColor : Color) {
-        _uiState.update { currentState->
+    fun changeDeviceIconColor(newColor: Color) {
+        _uiState.update { currentState ->
             currentState.copy(
                 deviceIconColor = newColor
-            ) }
+            )
+        }
     }
-
 
 
 }

@@ -1,13 +1,11 @@
 package com.example.smarthouse_tp3.ui
 
 import androidx.compose.ui.graphics.Color
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.smarthouse_tp3.R
-import com.example.smarthouse_tp3.data.network.model.NetworkDeviceRoom
 import com.example.smarthouse_tp3.data.network.model.NetworkDeviceState
 import kotlinx.coroutines.flow.update
 
-class FaucetViewModel: DeviceViewModel() {
+class FaucetViewModel : DeviceViewModel() {
     override fun fetchDevice(deviceId: String) {
         super.fetchDevice(deviceId)
         _uiState.update {
@@ -50,7 +48,7 @@ class FaucetViewModel: DeviceViewModel() {
     fun updateUiState(
         status: String? = uiState.value.state?.status
     ) {
-        _uiState.update { currentState->
+        _uiState.update { currentState ->
             currentState.copy(
                 state = NetworkDeviceState(
                     status = status,
@@ -60,28 +58,29 @@ class FaucetViewModel: DeviceViewModel() {
     }
 
 
-    fun dispense(quantity : Float, unit : String) {
+    fun dispense(quantity: Float, unit: String) {
         val state = uiState.value.state
-         if (state != null) {
-             updateUiState(status = "opened")
+        if (state != null) {
+            updateUiState(status = "opened")
 
-             uiState.value.id?.let {
-                 executeAction(
-                     it, "dispense",
-                     arrayOf(quantity.toString(), unit)
-                 )
-             }
-             uiState.value.id?.let { fetchDevice(it) }
-         }
+            uiState.value.id?.let {
+                executeAction(
+                    it, "dispense",
+                    arrayOf(quantity.toString(), unit)
+                )
+            }
+            uiState.value.id?.let { fetchDevice(it) }
+        }
     }
 
 
-    private fun setAction(action : String) {
+    private fun setAction(action: String) {
         val state = uiState.value.state
-        val newStatus : String = when (action) {
+        val newStatus: String = when (action) {
             "open" -> {
                 "opened"
             }
+
             else -> {
                 "closed"
             }

@@ -247,7 +247,7 @@ fun AirConditionerConfigScreen(viewModel : AirConditionerViewModel) {
 
 @Preview(showBackground = true)
 @Composable
-fun OvenConfigScreenPreview() {
+fun AirConditionerScreenPreview() {
 
     val viewModel: DeviceViewModel= viewModel()
     viewModel.fetchDevice("d495cc0b87d1e918")

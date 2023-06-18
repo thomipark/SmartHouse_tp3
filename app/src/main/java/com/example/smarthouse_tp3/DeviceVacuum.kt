@@ -9,18 +9,18 @@ class DeviceVacuum(name: String) : Device(name) {
     //    var temperature = mutableStateOf(1)
     //    var grillMode = mutableStateof()
     override var deviceType: Type = Type.VACUUM
-    override var deviceIcon : Int = R.drawable.device_vacuum
+    override var deviceIcon: Int = R.drawable.device_vacuum
     private var battery = mutableStateOf(60)
     private var currentRoom = mutableStateOf("Kitchen")
-    private var dockingRoom : String = "Living Room"
+    private var dockingRoom: String = "Living Room"
 
     private var mode = mutableStateOf(com.example.smarthouse_tp3.ui.VacuumMode.VACUUM)
 
-    fun getBattery() : MutableState<Int> {
+    fun getBattery(): MutableState<Int> {
         return battery
     }
 
-    fun getMode() : MutableState<com.example.smarthouse_tp3.ui.VacuumMode> {
+    fun getMode(): MutableState<com.example.smarthouse_tp3.ui.VacuumMode> {
         return mode
     }
 
@@ -28,8 +28,7 @@ class DeviceVacuum(name: String) : Device(name) {
         super.changeSwitchState()
         if (getSwitchState()) {
             changeDeviceIconColor(Color.Blue)
-        }
-        else {
+        } else {
             changeDeviceIconColor(Color.Black)
         }
     }
@@ -52,7 +51,7 @@ class DeviceVacuum(name: String) : Device(name) {
             return R.drawable.baseline_battery_1_bar_24
         } else if (battery.value < 37.5) {
             return R.drawable.baseline_battery_2_bar_24
-         } else if (battery.value < 50) {
+        } else if (battery.value < 50) {
             return R.drawable.baseline_battery_3_bar_24
         } else if (battery.value < 62.5) {
             return R.drawable.baseline_battery_4_bar_24
@@ -78,11 +77,11 @@ class DeviceVacuum(name: String) : Device(name) {
         mode.value = com.example.smarthouse_tp3.ui.VacuumMode.VACUUM
     }
 
-    fun getCurrentRoom() :MutableState<String> {
+    fun getCurrentRoom(): MutableState<String> {
         return currentRoom
     }
 
-    fun changeCurrentRoom(newRoom : String) {
+    fun changeCurrentRoom(newRoom: String) {
         currentRoom.value = newRoom
     }
 }

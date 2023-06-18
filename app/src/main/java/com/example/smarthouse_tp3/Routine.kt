@@ -1,9 +1,9 @@
-package com.example.smarthouse_tp3.com.example.smarthouse_tp3
+package com.example.smarthouse_tp3
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.Color
 
-class Routine(name: String, devices: List<RoutineDevice> ?= null) {
+class Routine(name: String, devices: List<RoutineDevice>? = null) {
     private var name: String
     private var routineDevices: List<RoutineDevice>
     private var switchState = mutableStateOf(true)
@@ -45,7 +45,7 @@ class Routine(name: String, devices: List<RoutineDevice> ?= null) {
     }
 }
 
-class RoutineDevice(name: String, actions: List<Action> ?= null) {
+class RoutineDevice(name: String, actions: List<Action>? = null) {
     private var name: String
     private var actions: List<Action>
 

@@ -36,7 +36,7 @@ import okhttp3.internal.parseCookie
 
 
 @Composable
-fun LightConfigScreen (
+fun LightConfigScreen(
     viewModel: LightViewModel
     //changeColor: (String) -> Unit
 ) {
@@ -52,7 +52,6 @@ fun LightConfigScreen (
 
     var brightness = (controller.selectedColor.value.alpha * 100).toLong()
     var newBrightness = uiState.state?.brightness
-
 
     var red = newHexCode?.substring(0, 2)?.toInt(16)?.toFloat()?.div(255)
     var green = newHexCode?.substring(2, 4)?.toInt(16)?.toFloat()?.plus(1)?.div(255)
@@ -89,8 +88,6 @@ fun LightConfigScreen (
                     color = colorEnvelope.color // ARGB color value.
                     //viewModel.changeColor(controller.selectedColor.value.toArgb().toString().substring(3)) // Color hex code, which represents clor value.
                     // viewModel.changeBrightness(controller.selectedColor.value.alpha * 100)
-
-
                     // Log.d("HELLO", (controller.selectedColor.value.alpha * 100.toLong()).toLong().toString())
 
                     newHexCode = Integer.toHexString(controller.selectedColor.value.toArgb())
@@ -144,6 +141,6 @@ fun LightConfigScreenPreview() {
     val viewModel: LightViewModel = viewModel()
     viewModel.fetchDevice("4d842b03d28e19bc")
 
-    LightConfigScreen (viewModel = viewModel)
+    LightConfigScreen(viewModel = viewModel)
 
 }

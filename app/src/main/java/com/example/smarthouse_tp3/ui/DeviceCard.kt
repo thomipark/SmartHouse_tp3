@@ -12,25 +12,24 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.smarthouse_tp3.data.network.model.NetworkDevice
 import com.example.smarthouse_tp3.data.network.model.NetworkRoutine
 
 @Composable
 fun DeviceCard(
-    data : NetworkRoutine
+    data: NetworkRoutine
 ) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(10.dp)
-            .clickable{ },
+            .clickable { },
         elevation = 5.dp
     ) {
-        Row (
+        Row(
             modifier = Modifier.padding(5.dp)
         ) {
 
-            Column (
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 10.dp)
@@ -41,7 +40,7 @@ fun DeviceCard(
                     fontSize = 16.sp
                 )
                 Text(
-                    text = data.name?: "",
+                    text = data.name ?: "",
                     fontSize = 16.sp
                 )
             }

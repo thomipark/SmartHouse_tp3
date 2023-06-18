@@ -1,6 +1,5 @@
 package com.example.smarthouse_tp3
 
-
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -39,18 +38,14 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.example.smarthouse_tp3.ui.NavigationViewModel
 
-/***
- * Pantalla dedicada a Devices.
- */
 @Composable
 fun DeviceScreen(
     modifier: Modifier = Modifier,
     navigationViewModel: NavigationViewModel,
     onNavigateToConfigScreen: () -> Unit
-){
+) {
     Column(
-        modifier
-            .padding(8.dp)
+        modifier = modifier
     ) {
         DevicesSmallTileRow(
             navigationViewModel = navigationViewModel,
@@ -59,11 +54,6 @@ fun DeviceScreen(
     }
 }
 
-
-/**
- * Genera un small tile de device alargado horizontalmente.
- * Se puede apagar y prender y en funcion de eso cambia la imagen o no
- */
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun DeviceSmallTile(
@@ -71,20 +61,19 @@ fun DeviceSmallTile(
     device: Device,
     navigationViewModel: NavigationViewModel,
     onNavigateToConfigScreen: () -> Unit
-){
+) {
     Surface(
         shape = MaterialTheme.shapes.small,
         modifier = modifier
     ) {
-        Card (
-            modifier = Modifier
-                .fillMaxWidth(),
+        Card(
+            modifier = Modifier.fillMaxWidth(),
             backgroundColor = Color.LightGray,
             onClick = {
                 navigationViewModel.selectNewDevice(device)
                 onNavigateToConfigScreen()
             }
-        ){
+        ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceEvenly,
@@ -118,7 +107,7 @@ fun DeviceSmallTile(
                             style = MaterialTheme.typography.h6,
                             textAlign = TextAlign.Center,
                             maxLines = 1,
-                            overflow = TextOverflow.Ellipsis, // Display the text in a single line
+                            overflow = TextOverflow.Ellipsis,
                         )
                     }
                     Row(
@@ -128,7 +117,7 @@ fun DeviceSmallTile(
                             .fillMaxSize()
                             .padding(horizontal = 8.dp, vertical = 4.dp)
                     ) {
-                        if (device.getSwitchState()){
+                        if (device.getSwitchState()) {
                             SmallIconsList(imageList = device.getSmallIconsList())
                         }
                     }
@@ -136,7 +125,7 @@ fun DeviceSmallTile(
 
                 Switch(
                     checked = device.getSwitchState(),
-                    onCheckedChange = {device.changeSwitchState()},
+                    onCheckedChange = { device.changeSwitchState() },
                     colors = SwitchDefaults.colors(
                         checkedThumbColor = Color.Green,
                     ),
@@ -144,9 +133,7 @@ fun DeviceSmallTile(
                         .weight(0.2f) // 30% of the available width
                         .fillMaxWidth()
                 )
-
             }
-
         }
     }
 }
@@ -167,21 +154,43 @@ fun DevicesSmallTileRow(
                 selectedCategory = category
             }
         )
-        LazyColumn(
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-            contentPadding = PaddingValues(horizontal = 16.dp),
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            items(items = getFilteredDevices(selectedCategory)) { item ->
-                DeviceSmallTile(
-                    device = item,
-                    navigationViewModel = navigationViewModel,
-                    onNavigateToConfigScreen = onNavigateToConfigScreen
+        val filteredDevices = getFilteredDevices(selectedCategory)
+        if (filteredDevices.isEmpty()) {
+            val noDevicesText = when (selectedCategory) {
+                DeviceCategory.All -> "No devices added"
+                else -> "No devices of this type"
+            }
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = noDevicesText,
+                    style = MaterialTheme.typography.body1,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(16.dp)
                 )
+            }
+        } else {
+            LazyColumn(
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+                contentPadding = PaddingValues(horizontal = 16.dp),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                items(items = filteredDevices) { item ->
+                    DeviceSmallTile(
+                        device = item,
+                        navigationViewModel = navigationViewModel,
+                        onNavigateToConfigScreen = onNavigateToConfigScreen
+                    )
+                }
             }
         }
     }
 }
+
 
 @Composable
 fun SlideGroup(
@@ -223,12 +232,26 @@ fun CategoryItem(
     }
 }
 
-
-
 fun getFilteredDevices(category: DeviceCategory): List<Device> {
     return when (category) {
         DeviceCategory.All -> smallTileData
-        else -> smallTileData.filter { it.deviceType.name == category.name }
+        else -> smallTileData.filter { it.getType().name == category.name }
+    }
+}
+
+@Composable
+fun SmallIconsList(imageList: List<Int>) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        imageList.forEach { id ->
+            Image(
+                painter = painterResource(id),
+                contentDescription = null,
+                modifier = Modifier
+                    .padding(horizontal = 4.dp)
+                    .width(32.dp)
+                    .height(32.dp)
+            )
+        }
     }
 }
 
@@ -236,53 +259,7 @@ enum class DeviceCategory {
     All, OVEN, AC, FAUCET, VACUUM, LIGHT
 }
 
-@Composable
-fun SmallIconsList(imageList: List<Int>){
-    imageList.forEach(){ id ->
-        Image(
-            painter = painterResource(id),
-            contentDescription = null,
-            modifier = Modifier
-                .padding(horizontal = 4.dp)
-                .width(32.dp)
-                .height(32.dp)
-        )
-    }
-}
-
-
-//-------- A PARTIR DE ACA ESTAN LAS PREVIEW ------------------
-/*
-@Preview (showBackground = false)
-@Composable
-fun SmallTilePreview(){
-    SmartHouse_tp3Theme() {
-        DeviceSmallTile(
-            device = DeviceOven("thomi Oven"),
-            modifier = Modifier.padding(8.dp),
-            onNavigateToConfigScreen = {}
-        )
-    }
-}
-
-
-@Preview
-@Composable
-fun DevicesSmallTileRowPreview(){
-    DevicesSmallTileRow(onNavigateToConfigScreen = {})
-}
-
-
-//@Preview (showBackground = true)
-@Composable
-fun DevicesScreenPreview () {
-    SmartHouse_tp3Theme() {
-
-    }
-}
-*/
-
-val smallTileData = listOf<Device>(
+val smallTileData = listOf(
     DeviceAirConditioner("thomi AC"),
     DeviceOven("pepe oven"),
     DeviceOven("marcelo gallardo al horno"),

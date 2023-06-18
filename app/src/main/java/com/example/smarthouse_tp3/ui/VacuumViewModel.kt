@@ -1,4 +1,5 @@
 package com.example.smarthouse_tp3.ui
+
 import android.widget.ImageSwitcher
 import androidx.compose.ui.graphics.Color
 import com.example.smarthouse_tp3.R
@@ -6,7 +7,7 @@ import com.example.smarthouse_tp3.data.network.model.NetworkDeviceRoom
 import com.example.smarthouse_tp3.data.network.model.NetworkDeviceState
 import kotlinx.coroutines.flow.update
 
-class VacuumViewModel: DeviceViewModel() {
+class VacuumViewModel : DeviceViewModel() {
     override fun fetchDevice(deviceId: String) {
         super.fetchDevice(deviceId)
         val status = uiState.value.state?.status
@@ -26,9 +27,7 @@ class VacuumViewModel: DeviceViewModel() {
     }
 
     fun getBatteryIcon() : Int {
-
         val batteryLevel = uiState.value.state?.batteryLevel
-
         if (uiState.value.state?.status == "docked") {
             return R.drawable.baseline_battery_charging_full_24
         } else if (batteryLevel != null) {
@@ -81,7 +80,7 @@ class VacuumViewModel: DeviceViewModel() {
         batteryLevel: Long? = uiState.value.state?.batteryLevel,
         location: NetworkDeviceRoom? = uiState.value.state?.location
     ) {
-        _uiState.update { currentState->
+        _uiState.update { currentState ->
             currentState.copy(
                 switchState = switchState,
                 state = NetworkDeviceState(
@@ -106,15 +105,17 @@ class VacuumViewModel: DeviceViewModel() {
         setAction("start")
     }
 
-    private fun setAction(action : String) {
+    private fun setAction(action: String) {
         val state = uiState.value.state
-        val newStatus : String = when (action) {
+        val newStatus: String = when (action) {
             "dock" -> {
                 "docked"
             }
+
             "start" -> {
                 "active"
             }
+
             else -> {
                 "inactive"
             }
@@ -160,7 +161,7 @@ class VacuumViewModel: DeviceViewModel() {
         }
     }
 
-    fun setLocation(roomId : String) {
+    fun setLocation(roomId: String) {
         val state = uiState.value.state
         if (state != null) {
             // updateUiState(location = RoomViewModel.getFromId())
@@ -182,7 +183,7 @@ enum class VacuumMode(val index: Int, val stringValue: String) {
     DOCKED(2, "docked");
 
     companion object {
-        fun fromIndex(value: Int): com.example.smarthouse_tp3.ui.VacuumMode {
+        fun fromIndex(value: Int): VacuumMode {
             return values().find { it.index == value } ?: VACUUM
         }
         fun fromString(value: String): VacuumMode {

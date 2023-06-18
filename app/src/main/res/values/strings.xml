@@ -7,7 +7,9 @@
     <string name="loading">Loading</string>
     <string name="places_screen">Places</string>
     <string name="routines_screen">Routines</string>
-    <string name="favourites_screen">Favourites</string>
+    <string name="favorites_screen">Favorites</string>
+    <string name="device_configuration_screen">Device configuration Screen</string>
+    <string name="routine_configuration_screen">Routine configuration Screen</string>
 
     <string name="config_oven_screen">Oven configuration</string>
     <string name="config_faucet_screen">Faucet configuration</string>

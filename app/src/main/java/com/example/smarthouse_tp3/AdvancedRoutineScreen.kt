@@ -1,24 +1,20 @@
 package com.example.smarthouse_tp3
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Card
 import androidx.compose.material.Divider
+import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
@@ -28,13 +24,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.example.smarthouse_tp3.com.example.smarthouse_tp3.Action
-import com.example.smarthouse_tp3.com.example.smarthouse_tp3.Routine
-import com.example.smarthouse_tp3.com.example.smarthouse_tp3.RoutineDevice
 
 @Composable
 fun RoutineConfigScreen(routine: Routine) {
@@ -42,12 +34,13 @@ fun RoutineConfigScreen(routine: Routine) {
         topBar = {
             RoutineTopBar(routine)
         },
-        content = {it
+        content = {
+            it
             Column(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(horizontal = 8.dp)
-            ){
+            ) {
                 RoutineBody(routine)
             }
         }
@@ -67,25 +60,9 @@ fun RoutineTopBar(routine: Routine) {
             Text(
                 text = routine.getRoutineName(),
                 style = MaterialTheme.typography.h5,
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
+                textAlign = TextAlign.Center
             )
-            IconButton(
-                onClick = { routine.togglePlay() },
-                modifier = Modifier
-                    .padding(horizontal = 20.dp)
-            ) {
-                val playIconSize = 40.dp // Adjust the size of the icon
-                val playIcon = painterResource(if (routine.isPlaying()) R.drawable.screen_routines_icon else R.drawable.screen_routines_icon)
-                val playDescription = if (routine.isPlaying()) "Pause" else "Play"
-                val playTint = if (routine.isPlaying()) Color(0xFF008000) else Color.Black
-
-                Icon(
-                    painter = playIcon,
-                    contentDescription = playDescription,
-                    tint = playTint,
-                    modifier = Modifier.size(playIconSize)
-                )
-            }
         }
         Divider(
             color = Color.Gray,
@@ -94,6 +71,7 @@ fun RoutineTopBar(routine: Routine) {
         )
     }
 }
+
 
 @Composable
 fun AdvancedRoutineDeviceTile(
@@ -151,22 +129,72 @@ fun AdvancedRoutineDeviceTile(
 fun RoutineBody(
     routine: Routine,
     modifier: Modifier = Modifier
-    ) {
+) {
     LazyColumn(
         contentPadding = PaddingValues(horizontal = 16.dp),
         modifier = modifier.fillMaxWidth()
     ) {
-        items(items = routine.getRoutineDevices()) { item ->
-            AdvancedRoutineDeviceTile(item)
+        if (routine.getRoutineDevices().isEmpty()) {
+            item {
+                Box(
+                    modifier = Modifier
+                        .padding(horizontal = 8.dp, vertical = 256.dp)
+                        .fillMaxWidth(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = "No devices linked to routine",
+                        style = MaterialTheme.typography.body1,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(8.dp)
+                    )
+                }
+            }
+        } else {
+            items(items = routine.getRoutineDevices()) { item ->
+                AdvancedRoutineDeviceTile(item)
+            }
+        }
+    }
+    if (routine.getRoutineDevices().isNotEmpty()) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(20.dp),
+            contentAlignment = Alignment.BottomEnd
+        ) {
+            FloatingActionButton(
+                onClick = { routine.togglePlay() },
+                modifier = Modifier
+                    .size(128.dp)
+                    .padding(4.dp),
+                backgroundColor = Color.White
+            ) {
+                val playIconSize = 128.dp // Adjust the size of the icon
+                val playIcon =
+                    painterResource(if (routine.isPlaying()) R.drawable.screen_routines_icon else R.drawable.screen_routines_icon)
+                val playDescription = if (routine.isPlaying()) "Pause" else "Play"
+                val playTint = if (routine.isPlaying()) Color(0xFF008000) else Color.Black
+
+                Icon(
+                    painter = playIcon,
+                    contentDescription = playDescription,
+                    tint = playTint,
+                    modifier = Modifier.size(playIconSize)
+                )
+            }
         }
     }
 }
 
+
+/*
 @Preview
 @Composable
 fun AdvancedRoutinePreview() {
     RoutineConfigScreen(routine1)
 }
+
 
 val routineDevice1Action1 = Action("turn on")
 val routineDevice1Action2 = Action("set temperature to 220 C")
@@ -176,5 +204,5 @@ val routineDevice2Action1 = Action("turn on")
 val routineDevice2Action2 = Action("set color to RED")
 val routineDevice2 = RoutineDevice("Light", listOf(routineDevice2Action1, routineDevice2Action2))
 
-val routine1 = Routine("Afternoon Routine", listOf(routineDevice1, routineDevice2))
-
+val routine1 = Routine("Afternoon Routine", emptyList())//listOf(routineDevice1, routineDevice2))
+ */
