@@ -37,17 +37,21 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.example.smarthouse_tp3.ui.NavigationViewModel
-import java.util.Locale
 
 @Composable
 fun DeviceScreen(
+    modifier: Modifier = Modifier,
     navigationViewModel: NavigationViewModel,
     onNavigateToConfigScreen: () -> Unit
 ) {
-    DevicesSmallTileRow(
-        navigationViewModel = navigationViewModel,
-        onNavigateToConfigScreen = onNavigateToConfigScreen
-    )
+    Column(
+        modifier = modifier
+    ) {
+        DevicesSmallTileRow(
+            navigationViewModel = navigationViewModel,
+            onNavigateToConfigScreen = onNavigateToConfigScreen
+        )
+    }
 }
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -208,14 +212,6 @@ fun CategoryItem(
     isSelected: Boolean,
     onCategorySelected: (DeviceCategory) -> Unit
 ) {
-
-    val categoryName = when (category) {
-        DeviceCategory.All -> category.name
-        DeviceCategory.AC -> category.name + "s" // Append 's' without modifying the case
-        else -> category.name.lowercase()
-            .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() } + "s" // Convert to lowercase, capitalize first letter, and add 's'
-    }
-
     Box(
         modifier = Modifier
             .padding(horizontal = 8.dp, vertical = 4.dp)
@@ -223,7 +219,7 @@ fun CategoryItem(
             .background(if (isSelected) Color.LightGray else Color.Transparent)
     ) {
         Text(
-            text = categoryName,
+            text = category.name,
             style = MaterialTheme.typography.body1,
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(8.dp)

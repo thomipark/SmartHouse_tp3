@@ -54,6 +54,7 @@ fun PlacesScreen(
 
     var selectedPlace by rememberSaveable { mutableStateOf(devicePlaces[0]) }
 
+
     DevicesSmallTileRowPlaces(
         modifier = modifier,
         devicePlaces = devicePlaces,
