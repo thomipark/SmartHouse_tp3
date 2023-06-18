@@ -43,7 +43,8 @@ class MainActivity : ComponentActivity() {
                 val configOvenScreen = stringResource(id = R.string.config_oven_screen)
                 val configFaucetScreen = stringResource(id = R.string.config_faucet_screen)
                 val configACScreen = stringResource(id = R.string.config_ac_screen)
-                val configCurtainScreen = stringResource(id = R.string.config_curtain_screen)
+                val configCurtainScreen =
+                    stringResource(id = R.string.config_curtain_screen)
                 val configLightScreen = stringResource(id = R.string.config_light_screen)
                 val configVacuumScreen = stringResource(id = R.string.config_vacuum_screen)
 
