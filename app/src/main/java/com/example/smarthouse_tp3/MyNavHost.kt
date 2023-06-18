@@ -35,9 +35,6 @@ fun MyNavHost(
     val configVacuumScreen = stringResource(id = R.string.config_light_screen)
      */
 
-
-
-
     NavHost(
         navController = navController,
         startDestination = startDestination,
@@ -51,9 +48,8 @@ fun MyNavHost(
 
         composable(deviceScreen) {
             DeviceScreen(
-                navigationViewModel = navigationViewModel,
-                onNavigateToConfigScreen = { navController.navigate("Configuration Screen") }
-            )
+                navigationViewModel = navigationViewModel
+            ) { navController.navigate("Configuration Screen") }
         }
 
         composable(favouritesScreen) {
