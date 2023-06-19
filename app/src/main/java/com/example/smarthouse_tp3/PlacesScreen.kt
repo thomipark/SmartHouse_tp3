@@ -2,6 +2,7 @@ package com.example.smarthouse_tp3
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -211,14 +212,16 @@ fun PlaceItem(
 ) {
     Box(
         modifier = Modifier
-            .padding(horizontal = 8.dp, vertical = 4.dp)
-            .clickable { onPlaceSelected() }
-            .background(if (isSelected) Color.LightGray else Color.Transparent)
+            .padding(horizontal = 8.dp, vertical = 0.dp)
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null // Disable click indication
+            ) { onPlaceSelected() }
     ) {
         Text(
             text = place,
-            style = MaterialTheme.typography.body1,
-            fontWeight = FontWeight.Bold,
+            style = MaterialTheme.typography.h6,
+            fontWeight = (if (isSelected) FontWeight.ExtraBold else FontWeight.Light),
             modifier = Modifier.padding(8.dp)
         )
     }
