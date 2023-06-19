@@ -27,6 +27,7 @@ import androidx.compose.material.Switch
 import androidx.compose.material.SwitchDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -36,111 +37,40 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.smarthouse_tp3.data.network.model.NetworkDevice
+import com.example.smarthouse_tp3.ui.AirConditionerViewModel
+import com.example.smarthouse_tp3.ui.DeviceViewModel
+import com.example.smarthouse_tp3.ui.DevicesViewModel
+import com.example.smarthouse_tp3.ui.FaucetViewModel
+import com.example.smarthouse_tp3.ui.LightViewModel
 import com.example.smarthouse_tp3.ui.NavigationViewModel
+import com.example.smarthouse_tp3.ui.OvenViewModel
+import com.example.smarthouse_tp3.ui.VacuumViewModel
 import java.util.Locale
 
 @Composable
 fun DeviceScreen(
     modifier: Modifier = Modifier,
     navigationViewModel: NavigationViewModel,
+    devicesViewModel: DevicesViewModel,
     onNavigateToConfigScreen: () -> Unit
 ) {
+
     Column(
         modifier = modifier
     ) {
         DevicesSmallTileRow(
             navigationViewModel = navigationViewModel,
-            onNavigateToConfigScreen = onNavigateToConfigScreen
+            onNavigateToConfigScreen = onNavigateToConfigScreen,
+            devicesViewModel = devicesViewModel,
         )
-    }
-}
-
-@OptIn(ExperimentalMaterialApi::class)
-@Composable
-fun DeviceSmallTile(
-    modifier: Modifier = Modifier,
-    device: Device,
-    navigationViewModel: NavigationViewModel,
-    onNavigateToConfigScreen: () -> Unit
-) {
-    Surface(
-        shape = MaterialTheme.shapes.small.copy(CornerSize(8.dp)),
-        modifier = modifier
-    ) {
-        Card(
-            modifier = Modifier.fillMaxWidth(),
-            backgroundColor = MaterialTheme.colors.primaryVariant,
-            onClick = {
-                navigationViewModel.selectNewDevice(device)
-                onNavigateToConfigScreen()
-            }
-        ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceEvenly,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(100.dp)
-            ) {
-                Image(
-                    painter = painterResource(device.getIcon()),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .weight(0.25f) // 40% of the available width
-                        .width(48.dp)
-                        .height(48.dp)
-                )
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center,
-                    modifier = Modifier
-                        .weight(0.7f),
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .padding(horizontal = 8.dp)
-                            .fillMaxSize()
-                            .weight(0.45f),
-                        contentAlignment = Alignment.BottomCenter
-                    ) {
-                        Text(
-                            text = device.getName(),
-                            style = MaterialTheme.typography.h6,
-                            textAlign = TextAlign.Center,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                        )
-                    }
-                    Row(
-                        horizontalArrangement = Arrangement.SpaceEvenly,
-                        modifier = Modifier
-                            .weight(0.30f)
-                            .fillMaxSize()
-                            .padding(horizontal = 8.dp, vertical = 4.dp)
-                    ) {
-                        if (device.getSwitchState()) {
-                            SmallIconsList(imageList = device.getSmallIconsList())
-                        }
-                    }
-                }
-
-                Switch(
-                    checked = device.getSwitchState(),
-                    onCheckedChange = { device.changeSwitchState() },
-                    colors = SwitchDefaults.colors(
-                        checkedThumbColor = Color.Green,
-                    ),
-                    modifier = Modifier
-                        .weight(0.25f) // 30% of the available width
-                        .fillMaxWidth()
-                )
-            }
-        }
     }
 }
 
@@ -148,8 +78,12 @@ fun DeviceSmallTile(
 fun DevicesSmallTileRow(
     modifier: Modifier = Modifier,
     navigationViewModel: NavigationViewModel,
+    devicesViewModel: DevicesViewModel,
     onNavigateToConfigScreen: () -> Unit
 ) {
+    val devicesUiState by devicesViewModel.uiState.collectAsState()
+    val devicesList = devicesUiState.devices?.devices
+
     var selectedCategory by rememberSaveable { mutableStateOf(DeviceCategory.All) }
 
     Column(modifier = modifier) {
@@ -160,7 +94,11 @@ fun DevicesSmallTileRow(
                 selectedCategory = category
             }
         )
-        val filteredDevices = getFilteredDevices(selectedCategory)
+
+        var filteredDevices : List<NetworkDevice> = emptyList()
+        if (devicesList != null) {
+            filteredDevices = getFilteredDevices(selectedCategory, devicesList)
+        }
         if (filteredDevices.isEmpty()) {
             val noDevicesText = when (selectedCategory) {
                 DeviceCategory.All -> "No devices added"
@@ -186,8 +124,10 @@ fun DevicesSmallTileRow(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 items(items = filteredDevices) { item ->
+                    val myDevice : DeviceViewModel = deviceViewModelMaker(typeName = item.type?.name)
+                    item.id?.let { myDevice.fetchDevice(it) }
                     DeviceSmallTile(
-                        device = item,
+                        deviceViewModel = myDevice,
                         navigationViewModel = navigationViewModel,
                         onNavigateToConfigScreen = onNavigateToConfigScreen
                     )
@@ -196,6 +136,99 @@ fun DevicesSmallTileRow(
         }
     }
 }
+
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+fun DeviceSmallTile(
+    modifier: Modifier = Modifier,
+    deviceViewModel : DeviceViewModel = viewModel(),
+    navigationViewModel: NavigationViewModel,
+    onNavigateToConfigScreen: () -> Unit
+) {
+    val deviceUiState by deviceViewModel.uiState.collectAsState()
+
+
+    Surface(
+        shape = MaterialTheme.shapes.small.copy(CornerSize(8.dp)),
+        modifier = modifier
+    ) {
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            backgroundColor = MaterialTheme.colors.primaryVariant,
+            onClick = {
+                navigationViewModel.selectNewDeviceViewModel(deviceViewModel)
+                onNavigateToConfigScreen()
+            }
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceEvenly,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(100.dp)
+            ) {
+                deviceUiState.deviceIcon?.let { painterResource(it) }?.let {
+                    Image(
+                        painter = it,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .weight(0.25f) // 40% of the available width
+                            .width(48.dp)
+                            .height(48.dp),
+                        colorFilter = ColorFilter.tint(color = deviceUiState.deviceIconColor) // Para cambiar el color del icono
+                    )
+                }
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center,
+                    modifier = Modifier
+                        .weight(0.7f),
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .padding(horizontal = 8.dp)
+                            .fillMaxSize()
+                            .weight(0.45f),
+                        contentAlignment = Alignment.BottomCenter
+                    ) {
+                        deviceUiState.name?.let {
+                            Text(
+                                text = it,
+                                style = MaterialTheme.typography.h6,
+                                textAlign = TextAlign.Center,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
+                            )
+                        }
+                    }
+                    Row(
+                        horizontalArrangement = Arrangement.SpaceEvenly,
+                        modifier = Modifier
+                            .weight(0.30f)
+                            .fillMaxSize()
+                            .padding(horizontal = 8.dp, vertical = 4.dp)
+                    ) {
+                        if (deviceUiState.switchState) {
+                            SmallIconsList(imageList = deviceViewModel.getSmallIconsList())
+                        }
+                    }
+                }
+
+                Switch(
+                    checked = deviceUiState.switchState,
+                    onCheckedChange = { deviceViewModel.changeSwitchState() },
+                    colors = SwitchDefaults.colors(
+                        checkedThumbColor = Color.Green,
+                    ),
+                    modifier = Modifier
+                        .weight(0.25f) // 30% of the available width
+                        .fillMaxWidth()
+                )
+            }
+        }
+    }
+}
+
 
 
 @Composable
@@ -254,10 +287,10 @@ fun CategoryItem(
     }
 }
 
-fun getFilteredDevices(category: DeviceCategory): List<Device> {
+fun getFilteredDevices(category: DeviceCategory, deviceList : List<NetworkDevice>): List<NetworkDevice> {
     return when (category) {
-        DeviceCategory.All -> smallTileData
-        else -> smallTileData.filter { it.getType().name == category.name }
+        DeviceCategory.All -> deviceList
+        else -> deviceList.filter { it.type?.name == category.stringValue }
     }
 }
 
@@ -277,10 +310,14 @@ fun SmallIconsList(imageList: List<Int>) {
     }
 }
 
-enum class DeviceCategory {
-    All, OVEN, AC, FAUCET, VACUUM, LIGHT
+enum class DeviceCategory(val stringValue: String) {
+    All("All"),
+    OVEN("oven"),
+    AC("ac"),
+    FAUCET("faucet"),
+    VACUUM("vacuum"),
+    LIGHT("lamp")
 }
-
 val smallTileData = listOf(
     DeviceAirConditioner("thomi AC"),
     DeviceOven("pepe oven"),
@@ -292,3 +329,21 @@ val smallTileData = listOf(
     DeviceOven("martin oven"),
     DeviceAirConditioner("federico AC"),
 )
+
+
+@Composable
+fun deviceViewModelMaker(typeName : String?) : DeviceViewModel{
+    if (typeName == "lamp") {
+        return viewModel<LightViewModel>()
+    } else if (typeName == "oven") {
+        return viewModel<OvenViewModel>()
+    } else if (typeName == "vacuum") {
+        return viewModel<VacuumViewModel>()
+    } else if (typeName == "ac") {
+        return viewModel<AirConditionerViewModel>()
+    } else if (typeName == "faucet") {
+        return viewModel<FaucetViewModel>()
+    } else {
+        return viewModel<LightViewModel>()
+    }
+}

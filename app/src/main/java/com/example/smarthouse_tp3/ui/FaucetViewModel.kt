@@ -27,7 +27,7 @@ class FaucetViewModel : DeviceViewModel() {
     override fun changeSwitchState() {
         super.changeSwitchState()
         if (uiState.value.switchState) {
-            changeDeviceIconColor(Color.Yellow)
+            changeDeviceIconColor(Color.Blue)
             uiState.value.id?.let { executeAction(it, "open", arrayOf()) }
         } else {
             changeDeviceIconColor(Color.Black)

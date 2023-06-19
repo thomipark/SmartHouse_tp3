@@ -69,15 +69,20 @@ import com.example.smarthouse_tp3.DeviceVacuum
 import com.example.smarthouse_tp3.ui.AirConditionerViewModel
 import com.example.smarthouse_tp3.ui.DeviceViewModel
 import com.example.smarthouse_tp3.ui.LightViewModel
+import com.example.smarthouse_tp3.ui.NavigationViewModel
 import com.example.smarthouse_tp3.ui.VacuumViewModel
 
 @Composable
-fun DeviceConfigScreen(device : Device, deviceId : String? = "1fdadb82ef594f00") {
+fun DeviceConfigScreen(navigationViewModel : NavigationViewModel) {
 
-    val viewModel: LightViewModel = viewModel()
-    if (deviceId != null) {
-        viewModel.fetchDevice(deviceId)
-    }
+    val navUiState by navigationViewModel.uiState.collectAsState()
+    val viewModel = navUiState.selectedDeviceViewModel ?: return
+
+    val uiState by viewModel.uiState.collectAsState()
+
+    Log.d("MiLog", uiState.toString())
+
+    // uiState.id?.let { viewModel.fetchDevice(it) }
 
     Scaffold(
         topBar = {
@@ -85,6 +90,7 @@ fun DeviceConfigScreen(device : Device, deviceId : String? = "1fdadb82ef594f00")
         },
         content = {it
             DeviceBody(viewModel)
+
         }
     )
 }
@@ -120,6 +126,7 @@ fun DeviceTopBar(viewModel: DeviceViewModel) {
                     modifier = Modifier.weight(1f)
                 )
             }
+            //Text(text = uiState.switchState.toString())
             Switch(
                 checked = uiState.switchState,
                 onCheckedChange = { viewModel.changeSwitchState() },
@@ -315,5 +322,5 @@ fun DeviceTopBarPreview() {
     val lampId = "4d842b03d28e19bc"
     val vacId  = "985376562da43a64"
 
-    DeviceConfigScreen(device = device, deviceId = vacId)
+    // DeviceConfigScreen(device = device, deviceId = lampId)
 }

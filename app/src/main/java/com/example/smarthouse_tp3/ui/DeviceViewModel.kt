@@ -1,5 +1,6 @@
 package com.example.smarthouse_tp3.ui
 
+import android.util.Log
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -55,6 +56,7 @@ open class DeviceViewModel : ViewModel() {
                 }
             }
         }
+        Log.d("MYDEVICE", uiState.value.toString())
     }
 
     fun executeAction(deviceId: String, actionName: String, params: Array<String>) {

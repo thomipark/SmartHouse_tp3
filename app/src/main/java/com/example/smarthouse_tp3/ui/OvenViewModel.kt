@@ -28,7 +28,7 @@ class OvenViewModel : DeviceViewModel() {
     override fun changeSwitchState() {
         super.changeSwitchState()
         if (uiState.value.switchState) {
-            changeDeviceIconColor(Color.Yellow)
+            changeDeviceIconColor(Color.Red)
             uiState.value.id?.let { executeAction(it, "turnOn", arrayOf()) }
         } else {
             changeDeviceIconColor(Color.Black)

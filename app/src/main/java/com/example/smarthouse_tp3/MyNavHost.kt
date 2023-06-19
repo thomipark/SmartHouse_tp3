@@ -52,7 +52,8 @@ fun MyNavHost(
         composable(deviceScreen) {
             DeviceScreen(
                 navigationViewModel = navigationViewModel,
-                modifier = bottomPadding
+                modifier = bottomPadding,
+                devicesViewModel = devicesViewModel
             ) { navController.navigate(deviceConfigurationScreen) }
         }
 
@@ -67,14 +68,15 @@ fun MyNavHost(
         composable(placesScreen) {
             PlacesScreen(
                 navigationViewModel = navigationViewModel,
-                modifier = bottomPadding
+                modifier = bottomPadding,
+                devicesViewModel = devicesViewModel
             ) { navController.navigate(deviceConfigurationScreen) }
         }
 
 
         //SCREEEN DE DEVICE CONFIG
         composable(deviceConfigurationScreen) {
-            navigationUiState.selectedDevice?.let { it1 -> DeviceConfigScreen(it1) }
+            navigationUiState.selectedDeviceViewModel?.let { DeviceConfigScreen(navigationViewModel) }
         }
 
         //SCREEN DE ADVANCED ROUTINES
