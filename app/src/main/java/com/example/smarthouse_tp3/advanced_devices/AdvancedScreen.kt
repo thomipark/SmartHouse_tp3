@@ -82,7 +82,7 @@ fun DeviceConfigScreen(navigationViewModel : NavigationViewModel) {
 
     Log.d("MiLog", uiState.toString())
 
-    uiState.id?.let { viewModel.fetchDevice(it) }
+    // uiState.id?.let { viewModel.fetchDevice(it) }
 
     Scaffold(
         topBar = {

@@ -76,7 +76,7 @@ fun MyNavHost(
 
         //SCREEEN DE DEVICE CONFIG
         composable(deviceConfigurationScreen) {
-            navigationUiState.selectedDevice?.let { DeviceConfigScreen(navigationViewModel) }
+            navigationUiState.selectedDeviceViewModel?.let { DeviceConfigScreen(navigationViewModel) }
         }
 
         //SCREEN DE ADVANCED ROUTINES

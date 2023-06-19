@@ -101,8 +101,8 @@ fun AirConditionerConfigScreen(viewModel : AirConditionerViewModel) {
 
 
         val iconModeIds = listOf(
-            R.drawable.snowflake,
             R.drawable.weather_sunny,
+            R.drawable.snowflake,
             R.drawable.fan
         )
 
@@ -249,10 +249,10 @@ fun AirConditionerConfigScreen(viewModel : AirConditionerViewModel) {
 @Composable
 fun AirConditionerScreenPreview() {
 
-    val viewModel: DeviceViewModel= viewModel()
+    val viewModel: AirConditionerViewModel= viewModel()
     viewModel.fetchDevice("d495cc0b87d1e918")
 
 
-    AirConditionerConfigScreen(viewModel = viewModel as AirConditionerViewModel)
+    AirConditionerConfigScreen(viewModel = viewModel)
 
 }
