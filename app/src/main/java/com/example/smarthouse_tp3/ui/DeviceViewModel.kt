@@ -42,7 +42,7 @@ abstract class DeviceViewModel : ViewModel() {
                     type = response.body()?.device?.type,
                     state = response.body()?.device?.state,
                     room = response.body()?.device?.room,
-                    meta = response.body()?.device?.meta,
+                    meta = response.body()?.device?.meta
                 ) }
             }.onFailure { e ->
                 _uiState.update {
@@ -81,7 +81,6 @@ abstract class DeviceViewModel : ViewModel() {
                 currentState.copy(
                   switchState = !uiState.value.switchState
                 ) }
-
     }
 
     /**

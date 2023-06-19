@@ -138,6 +138,7 @@ fun SmallRoutineTileExtended(
         shape = MaterialTheme.shapes.medium, modifier = modifier
     ) {
         Card(modifier = Modifier
+            .padding(vertical = 10.dp)
             .fillMaxWidth()
             .height(128.dp),
             backgroundColor = Color.LightGray, onClick = {
@@ -301,5 +302,5 @@ val routine1 = Routine("Afternoon Routine", listOf(routineDevice1, routineDevice
 
 
 val smallRoutinesTileData = listOf(
-    routine1, routine1
+    routine1, routine1, routine1, routine1, routine1, routine1, routine1, routine1
 )

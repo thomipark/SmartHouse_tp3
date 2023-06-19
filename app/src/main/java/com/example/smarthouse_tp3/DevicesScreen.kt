@@ -19,7 +19,6 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CornerSize
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
@@ -43,6 +42,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.example.smarthouse_tp3.ui.NavigationViewModel
+import java.util.Locale
 
 @Composable
 fun DeviceScreen(
@@ -230,6 +230,13 @@ fun CategoryItem(
     isSelected: Boolean,
     onCategorySelected: (DeviceCategory) -> Unit
 ) {
+    val categoryName = when (category) {
+        DeviceCategory.All -> category.name
+        DeviceCategory.AC -> category.name + "s" // Append 's' without modifying the case
+        else -> category.name.lowercase()
+            .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() } + "s" // Convert to lowercase, capitalize first letter, and add 's'
+    }
+
     Box(
         modifier = Modifier
             .padding(horizontal = 8.dp, vertical = 0.dp)
@@ -239,7 +246,7 @@ fun CategoryItem(
             ) { onCategorySelected(category) }
     ) {
         Text(
-            text = category.name,
+            text = categoryName,
             style = MaterialTheme.typography.h6,
             fontWeight = (if (isSelected) FontWeight.ExtraBold else FontWeight.Light),
             modifier = Modifier.padding(8.dp)
