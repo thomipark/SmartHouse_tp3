@@ -318,6 +318,7 @@ enum class DeviceCategory(val stringValue: String) {
     VACUUM("vacuum"),
     LIGHT("lamp")
 }
+/*
 val smallTileData = listOf(
     DeviceAirConditioner("thomi AC"),
     DeviceOven("pepe oven"),
@@ -329,7 +330,7 @@ val smallTileData = listOf(
     DeviceOven("martin oven"),
     DeviceAirConditioner("federico AC"),
 )
-
+*/
 
 @Composable
 fun deviceViewModelMaker(typeName : String?) : DeviceViewModel{

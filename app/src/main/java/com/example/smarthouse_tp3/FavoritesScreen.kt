@@ -34,14 +34,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.smarthouse_tp3.data.network.model.NetworkDevice
-import com.example.smarthouse_tp3.ui.AirConditionerViewModel
 import com.example.smarthouse_tp3.ui.DeviceViewModel
 import com.example.smarthouse_tp3.ui.DevicesViewModel
-import com.example.smarthouse_tp3.ui.FaucetViewModel
 import com.example.smarthouse_tp3.ui.LightViewModel
 import com.example.smarthouse_tp3.ui.NavigationViewModel
-import com.example.smarthouse_tp3.ui.OvenViewModel
-import com.example.smarthouse_tp3.ui.VacuumViewModel
 import com.example.smarthouse_tp3.ui.theme.SmartHouse_tp3Theme
 
 @Composable
@@ -70,8 +66,8 @@ fun FavoritesScreen(
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun FavoriteSmallTile(
-    deviceViewModel: DeviceViewModel = viewModel(),
     modifier: Modifier = Modifier,
+    deviceViewModel: DeviceViewModel = viewModel(),
     device: NetworkDevice = NetworkDevice(),
     navigationViewModel: NavigationViewModel,
     onNavigateToConfigScreen: () -> Unit
