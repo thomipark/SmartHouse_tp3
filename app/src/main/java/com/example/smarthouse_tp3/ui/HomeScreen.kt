@@ -112,7 +112,7 @@ fun LightScreen(
         Row() {
             Button(
                 onClick = {
-                    viewModel.changeBrightness(100.toLong())
+                    viewModel.changeBrightness(100.toString())
                 },
                 modifier = Modifier
                     .fillMaxWidth()

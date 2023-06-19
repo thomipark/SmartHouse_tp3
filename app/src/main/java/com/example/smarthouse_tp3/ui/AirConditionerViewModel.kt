@@ -32,8 +32,10 @@ class AirConditionerViewModel: DeviceViewModel() {
         super.changeSwitchState()
         if (uiState.value.switchState) {
             changeDeviceIconColor(Color.Blue)
+            uiState.value.id?.let { executeAction(it, "turnOn", arrayOf()) }
         } else {
             changeDeviceIconColor(Color.Black)
+            uiState.value.id?.let { executeAction(it, "turnOff", arrayOf()) }
         }
     }
 

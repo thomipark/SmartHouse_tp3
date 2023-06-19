@@ -74,7 +74,7 @@ import com.example.smarthouse_tp3.ui.VacuumViewModel
 @Composable
 fun DeviceConfigScreen(device : Device, deviceId : String? = "4d842b03d28e19bc") {
 
-    val viewModel: VacuumViewModel = viewModel()
+    val viewModel: LightViewModel = viewModel()
     if (deviceId != null) {
         viewModel.fetchDevice(deviceId)
     }
@@ -120,6 +120,7 @@ fun DeviceTopBar(viewModel: DeviceViewModel) {
                     modifier = Modifier.weight(1f)
                 )
             }
+            //Text(text = uiState.switchState.toString())
             Switch(
                 checked = uiState.switchState,
                 onCheckedChange = { viewModel.changeSwitchState() },
@@ -315,5 +316,5 @@ fun DeviceTopBarPreview() {
     val lampId = "4d842b03d28e19bc"
     val vacId  = "985376562da43a64"
 
-    DeviceConfigScreen(device = device, deviceId = vacId)
+    DeviceConfigScreen(device = device, deviceId = lampId)
 }

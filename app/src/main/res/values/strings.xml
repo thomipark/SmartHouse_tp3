@@ -22,6 +22,10 @@
     <string name="mode">MODE</string>
     <string name="fan_speed_text">Fan Speed:\n%s</string>
     <string name="return_to_dock">RETURN TO CHARGING STATION</string>
+    <string name="brightness_text">Brightness:</string>
+    <string name="change_color">Change Color</string>
+    <string name="select_color">Select a Color:</string>
+    <string name="save_color">Save</string>
 
 
 </resources>

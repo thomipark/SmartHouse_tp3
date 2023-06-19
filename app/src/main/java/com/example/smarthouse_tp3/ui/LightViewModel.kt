@@ -25,6 +25,9 @@ class LightViewModel : DeviceViewModel() {
     }
 
     fun changeColor(hexCode: String) {
+        if (hexCode == uiState.value.state!!.color) {
+            return
+        }
         uiState.value.id?.let { executeAction(it, "setColor", arrayOf(hexCode)) }
         _uiState.value.state?.color = hexCode
 
@@ -42,8 +45,11 @@ class LightViewModel : DeviceViewModel() {
 
     }
 
-    fun changeBrightness(percent: Long) {
-        uiState.value.id?.let { executeAction(it, "setBrightness", arrayOf(percent.toString())) }
+    fun changeBrightness(percent: String) {
+        if (percent == uiState.value.state!!.brightness) {
+            return
+        }
+        uiState.value.id?.let { executeAction(it, "setBrightness", arrayOf(percent)) }
         val device = uiState.value
         _uiState.update { currentState ->
             currentState.copy(
