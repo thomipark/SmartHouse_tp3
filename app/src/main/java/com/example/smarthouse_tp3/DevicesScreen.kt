@@ -18,6 +18,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.CornerSize
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
@@ -67,7 +69,7 @@ fun DeviceSmallTile(
     onNavigateToConfigScreen: () -> Unit
 ) {
     Surface(
-        shape = MaterialTheme.shapes.small,
+        shape = MaterialTheme.shapes.small.copy(CornerSize(8.dp)),
         modifier = modifier
     ) {
         Card(
@@ -89,7 +91,7 @@ fun DeviceSmallTile(
                     painter = painterResource(device.getIcon()),
                     contentDescription = null,
                     modifier = Modifier
-                        .weight(0.3f) // 40% of the available width
+                        .weight(0.25f) // 40% of the available width
                         .width(48.dp)
                         .height(48.dp)
                 )
@@ -97,7 +99,7 @@ fun DeviceSmallTile(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center,
                     modifier = Modifier
-                        .weight(0.5f),
+                        .weight(0.7f),
                 ) {
                     Box(
                         modifier = Modifier
@@ -134,7 +136,7 @@ fun DeviceSmallTile(
                         checkedThumbColor = Color.Green,
                     ),
                     modifier = Modifier
-                        .weight(0.2f) // 30% of the available width
+                        .weight(0.25f) // 30% of the available width
                         .fillMaxWidth()
                 )
             }
@@ -179,7 +181,7 @@ fun DevicesSmallTileRow(
             }
         } else {
             LazyColumn(
-                verticalArrangement = Arrangement.spacedBy(8.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
                 contentPadding = PaddingValues(horizontal = 16.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {

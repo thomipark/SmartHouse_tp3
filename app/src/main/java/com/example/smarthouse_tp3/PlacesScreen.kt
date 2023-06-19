@@ -101,7 +101,7 @@ fun DevicesSmallTileRowPlaces(
 
         if (filteredDevices.isNotEmpty()) {
             LazyColumn(
-                verticalArrangement = Arrangement.spacedBy(8.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
                 contentPadding = PaddingValues(horizontal = 16.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
