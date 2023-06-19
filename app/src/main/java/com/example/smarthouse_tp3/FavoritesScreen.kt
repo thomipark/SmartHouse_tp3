@@ -55,7 +55,7 @@ fun FavoritesScreen(
         modifier = modifier.padding(0.dp, 8.dp,0.dp,0.dp)
     ) {
         FavoritesSmallTileRow(
-            favoriteSmallTileData = favoriteSmallTileData,
+            favoriteSmallTileData = emptyList(),//favoriteSmallTileData,
             onNavigateToConfigScreen = onNavigateToConfigScreen,
             navigationViewModel = navigationViewModel,
             devicesList = devicesList
@@ -226,8 +226,8 @@ fun FavoriteSmallTilePreview() {
     }
 }
 
-//val favoriteSmallTileData = emptyList<Device>()
-
+/*
+val favoriteSmallTileData = emptyList<Device>()
 
 val favoriteSmallTileData = listOf(
     DeviceAirConditioner("FAVORITE thomi AC"),
@@ -236,4 +236,4 @@ val favoriteSmallTileData = listOf(
     DeviceOven("FAVORITE martin oven"),
     DeviceAirConditioner("FAVORITE federico AC"),
 )
-
+*/
