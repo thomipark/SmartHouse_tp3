@@ -2,7 +2,8 @@ package com.example.smarthouse_tp3.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val Purple200 = Color(0xFFBB86FC)
-val Purple500 = Color(0xFF6200EE)
-val Purple700 = Color(0xFF3700B3)
-val Teal200 = Color(0xFF03DAC5)
+val Blue_200 = Color(0xFF64B5F6)
+val Blue_500 = Color(0xFF1565C0)
+val Blue_700 = Color(0xFF0D47A1)
+val Teal_200 = Color(0xFF03DAC5)
+val Teal_700 = Color(0xFF018786)

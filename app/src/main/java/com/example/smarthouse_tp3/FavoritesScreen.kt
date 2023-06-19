@@ -87,7 +87,7 @@ fun FavoriteSmallTile(
     ) {
         Card(
             modifier = Modifier.fillMaxWidth(),
-            backgroundColor = Color.LightGray,
+            backgroundColor = MaterialTheme.colors.primaryVariant,
             onClick = {
                 navigationViewModel.selectNewDeviceViewModel(deviceViewModel)
                 onNavigateToConfigScreen()

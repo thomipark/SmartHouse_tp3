@@ -39,7 +39,7 @@ fun MyNavHost(
         startDestination = startDestination,
         modifier = modifier
     ) {
-        val bottomPadding = Modifier.padding(0.dp, 0.dp, 0.dp, 58.dp)
+        val bottomPadding = Modifier.padding(0.dp, 0.dp, 0.dp, 56.dp)
 
         //MAIN SCREENS
         composable(routinesScreen) {

@@ -9,6 +9,9 @@ import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
+import androidx.compose.material.LocalContentAlpha
+import androidx.compose.material.LocalContentColor
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
@@ -80,15 +83,25 @@ fun BottomBar(
         MainScreen.DevicesScreen
     )
 
-    BottomNavigation {
+    BottomNavigation (
+        backgroundColor = MaterialTheme.colors.primary
+            ){
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navBackStackEntry?.destination?.route
         items.forEach { item ->
             BottomNavigationItem(
+                selectedContentColor = MaterialTheme.colors.secondary,
+                unselectedContentColor = MaterialTheme.colors.surface,
                 icon = {
+                    val tint = if (currentRoute == item.route) {
+                        MaterialTheme.colors.secondary
+                    } else {
+                        LocalContentColor.current.copy(alpha = LocalContentAlpha.current)
+                    }
                     Icon(
                         imageVector = ImageVector.vectorResource(id = item.icon),
-                        contentDescription = item.title
+                        contentDescription = item.title,
+                        tint = tint
                     )
                 },
                 label = { Text(text = item.title) },
@@ -110,7 +123,8 @@ fun BottomBar(
     }
 }
 
-@Composable
+
+    @Composable
 fun TopBar(
     navController: NavController,
     navigationViewModel: NavigationViewModel = viewModel()
@@ -122,6 +136,7 @@ fun TopBar(
 
 
     TopAppBar(
+        backgroundColor = MaterialTheme.colors.primary,
         navigationIcon = if (!hideBackIcon) {
             {
                 IconButton(onClick = { navController.navigateUp() }) {

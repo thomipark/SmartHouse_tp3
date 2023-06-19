@@ -74,7 +74,7 @@ fun DeviceSmallTile(
     ) {
         Card(
             modifier = Modifier.fillMaxWidth(),
-            backgroundColor = Color.LightGray,
+            backgroundColor = MaterialTheme.colors.primaryVariant,
             onClick = {
                 navigationViewModel.selectNewDevice(device)
                 onNavigateToConfigScreen()

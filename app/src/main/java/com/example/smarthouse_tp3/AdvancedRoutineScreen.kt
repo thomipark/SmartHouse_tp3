@@ -66,7 +66,7 @@ fun RoutineTopBar(routine: Routine) {
                 )
             }
             Divider(
-                color = Color.Gray,
+                color = if(MaterialTheme.colors.surface == Color.Black) Color.White else Color.Black,
                 thickness = 1.dp,
                 modifier = Modifier.padding(top = 16.dp)
             )
@@ -89,7 +89,7 @@ fun AdvancedRoutineDeviceTile(
                 .fillMaxWidth()
                 .padding(8.dp),
             elevation = 4.dp,
-            backgroundColor = Color.LightGray
+            backgroundColor = MaterialTheme.colors.primaryVariant
         ) {
             Column(
                 modifier = Modifier.padding(16.dp)
@@ -176,7 +176,7 @@ fun RoutineBody(
                 val playIcon =
                     painterResource(if (routine.isPlaying()) R.drawable.screen_routines_icon else R.drawable.screen_routines_icon)
                 val playDescription = if (routine.isPlaying()) "Pause" else "Play"
-                val playTint = if (routine.isPlaying()) Color(0xFF008000) else Color.Black
+                val playTint = if (routine.isPlaying()) MaterialTheme.colors.secondary else Color.Black
 
                 Icon(
                     painter = playIcon,

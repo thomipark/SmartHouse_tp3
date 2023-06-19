@@ -71,7 +71,7 @@ fun SmallRoutineTile(
     Surface(
         shape = MaterialTheme.shapes.small, modifier = modifier
     ) {
-        Card(modifier = Modifier.fillMaxWidth(), backgroundColor = Color.LightGray, onClick = {
+        Card(modifier = Modifier.fillMaxWidth(), backgroundColor = MaterialTheme.colors.primaryVariant, onClick = {
             navigationViewModel.selectNewRoutine(routine)
             onNavigateToConfigScreen()
         }) {
@@ -111,7 +111,7 @@ fun SmallRoutineTile(
                     val playIconSize = 40.dp // Adjust the size of the icon
                     val playIcon = painterResource(R.drawable.screen_routines_icon)
                     val playDescription = if (routine.isPlaying()) "Pause" else "Play"
-                    val playTint = if (routine.isPlaying()) Color(0xFF008000) else Color.Black
+                    val playTint = if (routine.isPlaying()) MaterialTheme.colors.secondary else Color.Black
 
                     Icon(
                         painter = playIcon,
@@ -141,7 +141,7 @@ fun SmallRoutineTileExtended(
             .padding(vertical = 10.dp)
             .fillMaxWidth()
             .height(128.dp),
-            backgroundColor = Color.LightGray, onClick = {
+            backgroundColor = MaterialTheme.colors.primaryVariant, onClick = {
             navigationViewModel.selectNewRoutine(routine)
             onNavigateToConfigScreen()
         }) {
@@ -194,7 +194,7 @@ fun SmallRoutineTileExtended(
                     val playIconSize = 70.dp // Adjust the size of the icon
                     val playIcon = painterResource(R.drawable.screen_routines_icon)
                     val playDescription = if (routine.isPlaying()) "Pause" else "Play"
-                    val playTint = if (routine.isPlaying()) Color(0xFF008000) else Color.Black
+                    val playTint = if (routine.isPlaying()) MaterialTheme.colors.secondary else Color.Black
 
                     Icon(
                         painter = playIcon,
