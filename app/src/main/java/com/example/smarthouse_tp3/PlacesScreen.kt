@@ -36,7 +36,10 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.smarthouse_tp3.data.network.model.NetworkDevice
 import com.example.smarthouse_tp3.data.network.model.NetworkRoomList
+import com.example.smarthouse_tp3.ui.DeviceViewModel
+import com.example.smarthouse_tp3.ui.DevicesViewModel
 import com.example.smarthouse_tp3.ui.NavigationViewModel
 import com.example.smarthouse_tp3.ui.RoomsViewModel
 
@@ -44,6 +47,7 @@ import com.example.smarthouse_tp3.ui.RoomsViewModel
 fun PlacesScreen(
     modifier: Modifier = Modifier,
     navigationViewModel: NavigationViewModel,
+    devicesViewModel: DevicesViewModel,
     onNavigateToConfigScreen: () -> Unit
 ) {
     val viewModel: RoomsViewModel = viewModel()
@@ -72,6 +76,7 @@ fun PlacesScreen(
             }
         },
         navigationViewModel = navigationViewModel,
+        devicesViewModel = devicesViewModel,
         onNavigateToConfigScreen = onNavigateToConfigScreen
     )
 }
@@ -88,9 +93,17 @@ fun DevicesSmallTileRowPlaces(
     selectedPlace: String?,
     onPlaceSelected: (String?) -> Unit,
     navigationViewModel: NavigationViewModel,
+    devicesViewModel : DevicesViewModel,
     onNavigateToConfigScreen: () -> Unit
 ) {
-    val filteredDevices = getFilteredDevices(selectedPlace)
+
+    val devicesUiState by devicesViewModel.uiState.collectAsState()
+    val devicesList = devicesUiState.devices?.devices
+
+    var filteredDevices : List<NetworkDevice> = emptyList()
+    if (devicesList != null) {
+        filteredDevices = getFilteredDevices(selectedPlace, devicesList)
+    }
 
     Column(modifier = modifier) {
         SlideGroupPlaces(
@@ -106,8 +119,10 @@ fun DevicesSmallTileRowPlaces(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 items(items = filteredDevices) { item ->
+                    val myDevice : DeviceViewModel = deviceViewModelMaker(typeName = item.type?.name)
+                    item.id?.let { myDevice.fetchDevice(it) }
                     DeviceSmallTile(
-                        device = item,
+                        deviceViewModel = myDevice,
                         navigationViewModel = navigationViewModel,
                         onNavigateToConfigScreen = onNavigateToConfigScreen
                     )
@@ -168,15 +183,15 @@ fun Modifier.fadingEdges(lazyListState: LazyListState, themeColor: Color): Modif
             val gradientColorsInverted = listOf(themeColor, Color.Transparent)
 
             if (lazyListState.canScrollBackward) {
-                if(lazyListState.firstVisibleItemIndex != 0) {
-                drawRect(
-                    brush = Brush.horizontalGradient(
-                        colors = gradientColors,
-                        startX = 8f,
-                        endX = 128f
-                    ),
-                    blendMode = BlendMode.DstIn
-                )
+                if (lazyListState.firstVisibleItemIndex != 0) {
+                    drawRect(
+                        brush = Brush.horizontalGradient(
+                            colors = gradientColors,
+                            startX = 8f,
+                            endX = 128f
+                        ),
+                        blendMode = BlendMode.DstIn
+                    )
                 } else {
                     drawRect(
                         brush = Brush.horizontalGradient(
@@ -227,7 +242,7 @@ fun PlaceItem(
     }
 }
 
-fun getFilteredDevices(place: String?): List<Device> {
-    return if (place == "All") smallTileData
-    else smallTileData.filter { it.getRoom() == place }
+fun getFilteredDevices(place: String?, devicesList : List<NetworkDevice>): List<NetworkDevice> {
+    return if (place == "All") devicesList
+    else devicesList.filter { it.room?.name == place }
 }

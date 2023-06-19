@@ -148,22 +148,7 @@ fun FavoriteSmallTile(
         }
     }
 }
-@Composable
-private fun deviceViewModelMaker(typeName : String?) : DeviceViewModel{
-    if (typeName == "lamp") {
-        return viewModel<LightViewModel>()
-    } else if (typeName == "oven") {
-        return viewModel<OvenViewModel>()
-    } else if (typeName == "vacuum") {
-        return viewModel<VacuumViewModel>()
-    } else if (typeName == "ac") {
-        return viewModel<AirConditionerViewModel>()
-    } else if (typeName == "faucet") {
-        return viewModel<FaucetViewModel>()
-    } else {
-        return viewModel<LightViewModel>()
-    }
-}
+
 @Composable
 fun FavoritesSmallTileRow(
     modifier: Modifier = Modifier,
