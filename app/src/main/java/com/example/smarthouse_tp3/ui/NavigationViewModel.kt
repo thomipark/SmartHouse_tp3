@@ -28,4 +28,12 @@ class NavigationViewModel : ViewModel() {
             )
         }
     }
+
+    fun selectNewDeviceViewModel(deviceVM: DeviceViewModel) {
+        _uiState.update { currentState ->
+            currentState.copy(
+                selectedDeviceViewModel = deviceVM
+            )
+        }
+    }
 }

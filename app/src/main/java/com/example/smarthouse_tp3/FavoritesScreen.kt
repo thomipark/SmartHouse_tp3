@@ -21,6 +21,8 @@ import androidx.compose.material.Switch
 import androidx.compose.material.SwitchDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -30,15 +32,29 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.smarthouse_tp3.data.network.model.NetworkDevice
+import com.example.smarthouse_tp3.ui.AirConditionerViewModel
+import com.example.smarthouse_tp3.ui.DeviceViewModel
+import com.example.smarthouse_tp3.ui.DevicesViewModel
+import com.example.smarthouse_tp3.ui.FaucetViewModel
+import com.example.smarthouse_tp3.ui.LightViewModel
 import com.example.smarthouse_tp3.ui.NavigationViewModel
+import com.example.smarthouse_tp3.ui.OvenViewModel
+import com.example.smarthouse_tp3.ui.VacuumViewModel
 import com.example.smarthouse_tp3.ui.theme.SmartHouse_tp3Theme
 
 @Composable
 fun FavoritesScreen(
     modifier: Modifier = Modifier,
     navigationViewModel: NavigationViewModel,
+    devicesViewModel: DevicesViewModel,
     onNavigateToConfigScreen: () -> Unit
 ) {
+    val devicesUiState by devicesViewModel.uiState.collectAsState()
+    val devicesList = devicesUiState.devices?.devices
+
+
     Column(
         modifier = modifier.padding(0.dp, 8.dp,0.dp,0.dp)
     ) {
@@ -46,18 +62,25 @@ fun FavoritesScreen(
             favoriteSmallTileData = favoriteSmallTileData,
             onNavigateToConfigScreen = onNavigateToConfigScreen,
             navigationViewModel = navigationViewModel,
-            )
+            devicesList = devicesList
+        )
     }
 }
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun FavoriteSmallTile(
+    deviceViewModel: DeviceViewModel = viewModel(),
     modifier: Modifier = Modifier,
-    device: Device,
+    device: NetworkDevice = NetworkDevice(),
     navigationViewModel: NavigationViewModel,
     onNavigateToConfigScreen: () -> Unit
 ) {
+//    val deviceViewModel : DeviceViewModel = viewModel()
+    val deviceUiState by deviceViewModel.uiState.collectAsState()
+    device.id?.let { deviceViewModel.fetchDevice(it) }
+
+
     Surface(
         shape = MaterialTheme.shapes.small,
         modifier = modifier
@@ -66,7 +89,7 @@ fun FavoriteSmallTile(
             modifier = Modifier.fillMaxWidth(),
             backgroundColor = Color.LightGray,
             onClick = {
-                navigationViewModel.selectNewDevice(device)
+                navigationViewModel.selectNewDeviceViewModel(deviceViewModel)
                 onNavigateToConfigScreen()
             }
         ) {
@@ -82,35 +105,39 @@ fun FavoriteSmallTile(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Image(
-                        painter = painterResource(device.getIcon()),
-                        contentDescription = null,
-                        modifier = Modifier
-                            .width(48.dp)
-                            .height(48.dp)
-                    )
+                    deviceUiState.deviceIcon?.let { painterResource(it) }?.let {
+                        Image(
+                            painter = it,
+                            contentDescription = null,
+                            modifier = Modifier
+                                .width(48.dp)
+                                .height(48.dp)
+                        )
+                    }
 
                     Column(
                         modifier = Modifier.weight(1f),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Text(
-                            text = device.getName(),
-                            style = MaterialTheme.typography.h6,
-                            textAlign = TextAlign.Center,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                            modifier = Modifier.padding(horizontal = 8.dp)
-                        )
+                        deviceUiState.name?.let {
+                            Text(
+                                text = it,
+                                style = MaterialTheme.typography.h6,
+                                textAlign = TextAlign.Center,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
+                                modifier = Modifier.padding(horizontal = 8.dp)
+                            )
+                        }
 
-                        if (device.getSwitchState()) {
-                            FavoritesSmallIconsList(imageList = device.getSmallIconsList())
+                        if (deviceUiState.switchState) {
+                            FavoritesSmallIconsList(imageList = deviceViewModel.getSmallIconsList())
                         }
                     }
 
                     Switch(
-                        checked = device.getSwitchState(),
-                        onCheckedChange = { device.changeSwitchState() },
+                        checked = deviceUiState.switchState,
+                        onCheckedChange = { deviceViewModel.changeSwitchState() },
                         colors = SwitchDefaults.colors(
                             checkedThumbColor = Color.Green,
                         ),
@@ -121,12 +148,28 @@ fun FavoriteSmallTile(
         }
     }
 }
-
+@Composable
+private fun deviceViewModelMaker(typeName : String?) : DeviceViewModel{
+    if (typeName == "lamp") {
+        return viewModel<LightViewModel>()
+    } else if (typeName == "oven") {
+        return viewModel<OvenViewModel>()
+    } else if (typeName == "vacuum") {
+        return viewModel<VacuumViewModel>()
+    } else if (typeName == "ac") {
+        return viewModel<AirConditionerViewModel>()
+    } else if (typeName == "faucet") {
+        return viewModel<FaucetViewModel>()
+    } else {
+        return viewModel<LightViewModel>()
+    }
+}
 @Composable
 fun FavoritesSmallTileRow(
     modifier: Modifier = Modifier,
     favoriteSmallTileData: List<Device>,
     navigationViewModel: NavigationViewModel,
+    devicesList: List<NetworkDevice>?,
     onNavigateToConfigScreen: () -> Unit
 ) {
     Column(modifier = modifier) {
@@ -136,12 +179,18 @@ fun FavoritesSmallTileRow(
                 contentPadding = PaddingValues(horizontal = 16.dp),
                 modifier = modifier.fillMaxWidth()
             ) {
-                items(items = favoriteSmallTileData) { item ->
-                    FavoriteSmallTile(
-                        device = item,
-                        navigationViewModel = navigationViewModel,
-                        onNavigateToConfigScreen = onNavigateToConfigScreen
-                    )
+                if (devicesList != null) {
+                    items(items = devicesList) { item ->
+                        item.let {
+                            val myDevice : DeviceViewModel = deviceViewModelMaker(typeName = item.type?.name)
+                            FavoriteSmallTile(
+                                deviceViewModel = myDevice,
+                                device = it,
+                                navigationViewModel = navigationViewModel,
+                                onNavigateToConfigScreen = onNavigateToConfigScreen
+                            )
+                        }
+                    }
                 }
             }
         } else {
@@ -185,8 +234,10 @@ fun FavoritesSmallIconsList(imageList: List<Int>) {
 @Composable
 fun FavoriteSmallTilePreview() {
     SmartHouse_tp3Theme {
+        val light : LightViewModel = viewModel()
         FavoriteSmallTile(
-            device = DeviceOven("thomi Oven"),
+            deviceViewModel = light,
+            device = NetworkDevice(id = "1fdadb82ef594f00"),
             modifier = Modifier.padding(8.dp),
             onNavigateToConfigScreen = {},
             navigationViewModel = NavigationViewModel()

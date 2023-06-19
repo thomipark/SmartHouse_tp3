@@ -13,7 +13,13 @@ class FaucetViewModel : DeviceViewModel() {
         super.fetchDevice(deviceId)
         _uiState.update {
             it.copy(
-                deviceIcon = R.drawable.device_sprinkler_on
+                deviceIcon = R.drawable.device_sprinkler_on,
+                switchState = uiState.value.state?.status == "opened",
+                deviceIconColor = if (uiState.value.state?.status == "opened") {
+                    Color.Blue
+                } else {
+                    Color.Black
+                }
             )
         }
     }
@@ -21,9 +27,11 @@ class FaucetViewModel : DeviceViewModel() {
     override fun changeSwitchState() {
         super.changeSwitchState()
         if (uiState.value.switchState) {
-            changeDeviceIconColor(Color.Blue)
+            changeDeviceIconColor(Color.Yellow)
+            uiState.value.id?.let { executeAction(it, "open", arrayOf()) }
         } else {
             changeDeviceIconColor(Color.Black)
+            uiState.value.id?.let { executeAction(it, "close", arrayOf()) }
         }
     }
 

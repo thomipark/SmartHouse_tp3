@@ -13,6 +13,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.smarthouse_tp3.advanced_devices.DeviceConfigScreen
+import com.example.smarthouse_tp3.ui.DevicesViewModel
 import com.example.smarthouse_tp3.ui.NavigationViewModel
 
 @Composable
@@ -30,14 +31,8 @@ fun MyNavHost(
     val deviceConfigurationScreen = stringResource(id = R.string.device_configuration_screen)
     val routineConfigurationScreen = stringResource(id = R.string.routine_configuration_screen)
 
-    /*
-    val configOvenScreen = stringResource(id = R.string.config_oven_screen)
-    val configFaucetScreen = stringResource(id = R.string.config_faucet_screen)
-    val configACScreen = stringResource(id = R.string.config_ac_screen)
-    val configCurtainScreen = stringResource(id = R.string.config_curtain_screen)
-    val configLightScreen = stringResource(id = R.string.config_light_screen)
-    val configVacuumScreen = stringResource(id = R.string.config_light_screen)
-     */
+    val devicesViewModel: DevicesViewModel = viewModel()
+    devicesViewModel.fetchDevices()
 
     NavHost(
         navController = navController,
@@ -64,7 +59,8 @@ fun MyNavHost(
         composable(favouritesScreen) {
             FavoritesScreen(
                 navigationViewModel = navigationViewModel,
-                modifier = bottomPadding
+                modifier = bottomPadding,
+                devicesViewModel = devicesViewModel
             ) { navController.navigate(deviceConfigurationScreen) }
         }
 
@@ -80,7 +76,6 @@ fun MyNavHost(
         composable(deviceConfigurationScreen) {
             navigationUiState.selectedDevice?.let { it1 -> DeviceConfigScreen(it1) }
         }
-
 
         //SCREEN DE ADVANCED ROUTINES
         composable(routineConfigurationScreen) {
