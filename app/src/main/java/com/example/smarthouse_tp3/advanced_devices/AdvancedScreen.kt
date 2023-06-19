@@ -63,13 +63,16 @@ import com.github.skydoves.colorpicker.compose.rememberColorPickerController
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.*
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.smarthouse_tp3.DeviceVacuum
 import com.example.smarthouse_tp3.ui.AirConditionerViewModel
 import com.example.smarthouse_tp3.ui.DeviceViewModel
+import com.example.smarthouse_tp3.ui.FaucetViewModel
 import com.example.smarthouse_tp3.ui.LightViewModel
 import com.example.smarthouse_tp3.ui.NavigationViewModel
+import com.example.smarthouse_tp3.ui.OvenViewModel
 import com.example.smarthouse_tp3.ui.VacuumViewModel
 
 @Composable
@@ -149,163 +152,20 @@ fun DeviceTopBar(viewModel: DeviceViewModel) {
 @Composable
 fun DeviceBody(viewModel : DeviceViewModel) {
     val uiState by viewModel.uiState.collectAsState()
-    val deviceType = uiState.type?.name?.let { Type.fromString(it) }
-    Log.d("ERRORMIO1", uiState.toString())
 
     when (uiState.type?.name) {
-        // Type.OVEN -> OvenConfigScreen(device as DeviceOven)
         "ac"        -> AirConditionerConfigScreen(viewModel = viewModel as AirConditionerViewModel)
-        "lamp"      -> LightConfigScreen(viewModel = viewModel as LightViewModel)//, changeColor = { device.changeColor(it) }) // No se porque no anda esto
+        "lamp"      -> LightConfigScreen(viewModel = viewModel as LightViewModel)
         "vacuum"    -> VacuumConfigScreen(viewModel = viewModel as VacuumViewModel)
-        // Type.FAUCET -> FaucetConfigScreen(device as DeviceFaucet)
-        // Type.VACUUM -> VacuumConfigScreen(device = device as DeviceVacuum) }
+        "oven"      -> OvenConfigScreen(viewModel = viewModel as OvenViewModel)
+        "faucet"    -> FaucetConfigScreen(viewModel = viewModel as FaucetViewModel)
         else -> {
             Column() {
-                Text(text = uiState.toString())
-            }
-        }
-    }
-}
-
-
-@Composable
-fun OvenConfigScreen(device: DeviceOven) {
-    Card(
-        modifier = Modifier
-            .padding(16.dp)
-            .fillMaxWidth(),
-        elevation = 4.dp
-    ) {
-        Row(
-            modifier = Modifier.padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Column(
-                modifier = Modifier.weight(0.8f),
-
-                ) {
+                // Text(text = uiState.toString())
                 Text(
-                    text = "${device.getTemperature().value}°C",
-                    style = MaterialTheme.typography.h5,
-                    modifier = Modifier.padding(start = 30.dp, bottom = 8.dp),
-                    fontSize = 80.sp,
+                    text = stringResource(R.string.device_type_error)
                 )
             }
-            Column(
-                modifier = Modifier.weight(0.2f)
-            ) {
-                IconButton(
-                    onClick = { device.increaseTemperature() },
-                    modifier = Modifier.size(48.dp)
-                ) {
-                    Icon(
-                        Icons.Default.Add,
-                        contentDescription = "Increase Temperature"
-                    )
-                }
-                Spacer(modifier = Modifier.height(16.dp))
-                IconButton(
-                    onClick =
-                    { device.decreaseTemperature() },
-                    modifier = Modifier.size(48.dp)
-                ) {
-                    Icon(
-                        painter = painterResource(R.drawable.minus),
-                        contentDescription = "Decrease Temperature"
-                    )
-                }
-            }
-        }
-    }
-
-    val iconfanIds = listOf(
-        R.drawable.fan,
-        R.drawable.fan_off
-    )
-
-    val iconGrillIds = listOf(
-        R.drawable.grill,
-        R.drawable.grill_outline
-    )
-
-    Row(
-        modifier = Modifier.padding(16.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-
-        Column(
-            modifier = Modifier.weight(1f),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            IconButton(
-                onClick = {
-                    device.iterateFanMode()
-                }
-            ) {
-                Icon(
-                    painter = painterResource(iconfanIds[device.getFanMode().value.index]),
-                    contentDescription = "Icon",
-                    modifier = Modifier.size(100.dp)
-                )
-            }
-            Text(
-                text = "Fan: ${device.getFanMode().value.stringValue}",
-                style = MaterialTheme.typography.body1
-            )
-        }
-        Column(
-            modifier = Modifier.weight(1f),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            IconButton(
-                onClick = {
-                    device.iterateGrillMode()
-                }
-            ) {
-                Icon(
-                    painter = painterResource(iconGrillIds[device.getGrillMode().value.index]),
-                    contentDescription = "Icon",
-                    modifier = Modifier.size(100.dp)
-                )
-            }
-            Text(
-                text = "Grill: ${device.getGrillMode().value.stringValue}",
-                style = MaterialTheme.typography.body1,
-                textAlign = TextAlign.Center
-            )
-
-        }
-    }
-    val iconHeatIds = listOf(
-        R.drawable.border_bottom_variant,
-        R.drawable.border_top_variant,
-        R.drawable.border_top_bottom_variant
-    )
-
-    Row(
-        modifier = Modifier.padding(16.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-
-        Column(
-            modifier = Modifier.weight(1f),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            IconButton(
-                onClick = {
-                    device.iterateHeatMode()
-                }
-            ) {
-                Icon(
-                    painter = painterResource(iconHeatIds[device.getHeatMode().value.index]),
-                    contentDescription = "Icon",
-                    modifier = Modifier.size(100.dp)
-                )
-            }
-            Text(
-                text = "Heat: ${device.getHeatMode().value.stringValue}",
-                style = MaterialTheme.typography.body1
-            )
         }
     }
 }
