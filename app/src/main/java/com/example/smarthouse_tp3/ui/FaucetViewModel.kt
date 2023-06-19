@@ -1,5 +1,8 @@
 package com.example.smarthouse_tp3.ui
 
+import android.util.Log
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import com.example.smarthouse_tp3.R
 import com.example.smarthouse_tp3.data.network.model.NetworkDeviceState
@@ -10,7 +13,13 @@ class FaucetViewModel : DeviceViewModel() {
         super.fetchDevice(deviceId)
         _uiState.update {
             it.copy(
-                deviceIcon = R.drawable.device_sprinkler_on
+                deviceIcon = R.drawable.device_sprinkler_on,
+                switchState = uiState.value.state?.status == "opened",
+                deviceIconColor = if (uiState.value.state?.status == "opened") {
+                    Color.Blue
+                } else {
+                    Color.Black
+                }
             )
         }
     }
@@ -18,9 +27,11 @@ class FaucetViewModel : DeviceViewModel() {
     override fun changeSwitchState() {
         super.changeSwitchState()
         if (uiState.value.switchState) {
-            changeDeviceIconColor(Color.Blue)
+            changeDeviceIconColor(Color.Yellow)
+            uiState.value.id?.let { executeAction(it, "open", arrayOf()) }
         } else {
             changeDeviceIconColor(Color.Black)
+            uiState.value.id?.let { executeAction(it, "close", arrayOf()) }
         }
     }
 
@@ -62,14 +73,14 @@ class FaucetViewModel : DeviceViewModel() {
         val state = uiState.value.state
         if (state != null) {
             updateUiState(status = "opened")
-
             uiState.value.id?.let {
+                Log.d("Dispense", "Dispensing quantity: $quantity $unit")
                 executeAction(
                     it, "dispense",
                     arrayOf(quantity.toString(), unit)
                 )
             }
-            uiState.value.id?.let { fetchDevice(it) }
+            //uiState.value.id?.let { fetchDevice(it) }
         }
     }
 

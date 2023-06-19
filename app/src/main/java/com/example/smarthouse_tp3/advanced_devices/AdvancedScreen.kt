@@ -72,7 +72,7 @@ import com.example.smarthouse_tp3.ui.LightViewModel
 import com.example.smarthouse_tp3.ui.VacuumViewModel
 
 @Composable
-fun DeviceConfigScreen(device : Device, deviceId : String? = "4d842b03d28e19bc") {
+fun DeviceConfigScreen(device : Device, deviceId : String? = "1fdadb82ef594f00") {
 
     val viewModel: LightViewModel = viewModel()
     if (deviceId != null) {

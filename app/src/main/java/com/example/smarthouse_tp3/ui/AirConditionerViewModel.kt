@@ -10,7 +10,13 @@ class AirConditionerViewModel: DeviceViewModel() {
         super.fetchDevice(deviceId)
         _uiState.update {
             it.copy(
-                deviceIcon = R.drawable.device_air_conditioner_on
+                deviceIcon = R.drawable.device_air_conditioner_on,
+                switchState = uiState.value.state?.status == "on",
+                deviceIconColor = if (uiState.value.state?.status == "on") {
+                    Color.Blue
+                } else {
+                    Color.Black
+                }
             )
         }
     }

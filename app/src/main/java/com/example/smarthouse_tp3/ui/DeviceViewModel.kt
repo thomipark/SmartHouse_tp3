@@ -12,14 +12,16 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-abstract class DeviceViewModel : ViewModel() {
+open class DeviceViewModel : ViewModel() {
 
     protected val _uiState = MutableStateFlow(DeviceUiState())
     val uiState: StateFlow<DeviceUiState> = _uiState.asStateFlow()
 
     private var fetchJob: Job? = null
 
-    abstract fun getSmallIconsList(): List<Int>
+    open fun getSmallIconsList(): List<Int> {
+        return emptyList()
+    }
     fun dismissMessage() {
         _uiState.update { it.copy(message = null) }
     }
@@ -43,7 +45,7 @@ abstract class DeviceViewModel : ViewModel() {
                     type = response.body()?.device?.type,
                     state = response.body()?.device?.state,
                     room = response.body()?.device?.room,
-                    meta = response.body()?.device?.meta,
+                    meta = response.body()?.device?.meta
                 ) }
             }.onFailure { e ->
                 _uiState.update {
@@ -83,14 +85,9 @@ abstract class DeviceViewModel : ViewModel() {
                 currentState.copy(
                   switchState = !uiState.value.switchState
                 ) }
-
     }
 
-    /**
-     * Nose como declarar switch state sin definirla, asi que dejo esta funcion
-     * para darle valor inicial cuando la lea de la api. Por ahora esta funcion
-     * no tiene uso en NetworkDevice.kt
-     */
+
     fun setSwitchState(state: Boolean) {
         _uiState.update { currentState ->
             currentState.copy(

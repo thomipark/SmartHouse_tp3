@@ -21,7 +21,7 @@ class LightViewModel : DeviceViewModel() {
     }
 
     override fun getSmallIconsList(): List<Int> {
-        TODO("Not yet implemented")
+        return emptyList()
     }
 
     fun changeColor(hexCode: String) {

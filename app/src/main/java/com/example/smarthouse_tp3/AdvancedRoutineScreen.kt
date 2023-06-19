@@ -49,26 +49,28 @@ fun RoutineConfigScreen(routine: Routine) {
 
 @Composable
 fun RoutineTopBar(routine: Routine) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp)
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically
+    if (routine.getRoutineDevices().isNotEmpty()) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
         ) {
-            Text(
-                text = routine.getRoutineName(),
-                style = MaterialTheme.typography.h5,
-                modifier = Modifier.weight(1f),
-                textAlign = TextAlign.Center
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "Devices & Actions",
+                    style = MaterialTheme.typography.h5,
+                    modifier = Modifier.weight(1f),
+                    textAlign = TextAlign.Center
+                )
+            }
+            Divider(
+                color = Color.Gray,
+                thickness = 1.dp,
+                modifier = Modifier.padding(top = 16.dp)
             )
         }
-        Divider(
-            color = Color.Gray,
-            thickness = 1.dp,
-            modifier = Modifier.padding(top = 16.dp)
-        )
     }
 }
 
@@ -138,7 +140,7 @@ fun RoutineBody(
             item {
                 Box(
                     modifier = Modifier
-                        .padding(horizontal = 8.dp, vertical = 256.dp)
+                        .padding(horizontal = 8.dp, vertical = 325.dp)
                         .fillMaxWidth(),
                     contentAlignment = Alignment.Center
                 ) {

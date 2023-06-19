@@ -14,7 +14,12 @@ class VacuumViewModel : DeviceViewModel() {
         _uiState.update {
             it.copy(
                 deviceIcon = R.drawable.device_vacuum,
-                switchState = (status == "docked" || status == "inactive")
+                switchState = !(status == "docked" || status == "inactive"),
+                deviceIconColor = if (uiState.value.state?.status == "active") {
+                    Color.Blue
+                } else {
+                    Color.Black
+                }
             )
         }
     }

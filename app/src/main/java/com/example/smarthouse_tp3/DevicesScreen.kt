@@ -3,6 +3,7 @@ package com.example.smarthouse_tp3
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,6 +17,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material.Card
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
@@ -26,10 +29,12 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -37,6 +42,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.example.smarthouse_tp3.ui.NavigationViewModel
+import java.util.Locale
 
 @Composable
 fun DeviceScreen(
@@ -63,7 +69,7 @@ fun DeviceSmallTile(
     onNavigateToConfigScreen: () -> Unit
 ) {
     Surface(
-        shape = MaterialTheme.shapes.small,
+        shape = MaterialTheme.shapes.small.copy(CornerSize(8.dp)),
         modifier = modifier
     ) {
         Card(
@@ -85,7 +91,7 @@ fun DeviceSmallTile(
                     painter = painterResource(device.getIcon()),
                     contentDescription = null,
                     modifier = Modifier
-                        .weight(0.3f) // 40% of the available width
+                        .weight(0.25f) // 40% of the available width
                         .width(48.dp)
                         .height(48.dp)
                 )
@@ -93,7 +99,7 @@ fun DeviceSmallTile(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center,
                     modifier = Modifier
-                        .weight(0.5f),
+                        .weight(0.7f),
                 ) {
                     Box(
                         modifier = Modifier
@@ -130,7 +136,7 @@ fun DeviceSmallTile(
                         checkedThumbColor = Color.Green,
                     ),
                     modifier = Modifier
-                        .weight(0.2f) // 30% of the available width
+                        .weight(0.25f) // 30% of the available width
                         .fillMaxWidth()
                 )
             }
@@ -175,7 +181,7 @@ fun DevicesSmallTileRow(
             }
         } else {
             LazyColumn(
-                verticalArrangement = Arrangement.spacedBy(8.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
                 contentPadding = PaddingValues(horizontal = 16.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
@@ -198,8 +204,15 @@ fun SlideGroup(
     selectedCategory: DeviceCategory,
     onCategorySelected: (DeviceCategory) -> Unit
 ) {
+    val scrollState = rememberLazyListState()
+
     LazyRow(
-        modifier = Modifier.padding(16.dp)
+        modifier = Modifier
+            .padding(16.dp)
+            .fadingEdges(scrollState, MaterialTheme.colors.surface)
+            .background(MaterialTheme.colors.surface)
+            .clip(MaterialTheme.shapes.small),
+        state = scrollState
     ) {
         items(categories) { category ->
             CategoryItem(
@@ -217,16 +230,25 @@ fun CategoryItem(
     isSelected: Boolean,
     onCategorySelected: (DeviceCategory) -> Unit
 ) {
+    val categoryName = when (category) {
+        DeviceCategory.All -> category.name
+        DeviceCategory.AC -> category.name + "s" // Append 's' without modifying the case
+        else -> category.name.lowercase()
+            .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() } + "s" // Convert to lowercase, capitalize first letter, and add 's'
+    }
+
     Box(
         modifier = Modifier
-            .padding(horizontal = 8.dp, vertical = 4.dp)
-            .clickable { onCategorySelected(category) }
-            .background(if (isSelected) Color.LightGray else Color.Transparent)
+            .padding(horizontal = 8.dp, vertical = 0.dp)
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null // Disable click indication
+            ) { onCategorySelected(category) }
     ) {
         Text(
-            text = category.name,
-            style = MaterialTheme.typography.body1,
-            fontWeight = FontWeight.Bold,
+            text = categoryName,
+            style = MaterialTheme.typography.h6,
+            fontWeight = (if (isSelected) FontWeight.ExtraBold else FontWeight.Light),
             modifier = Modifier.padding(8.dp)
         )
     }

@@ -14,7 +14,13 @@ class OvenViewModel : DeviceViewModel() {
         super.fetchDevice(deviceId)
         _uiState.update {
             it.copy(
-                deviceIcon = R.drawable.device_oven_off
+                deviceIcon = R.drawable.device_oven_off,
+                switchState = uiState.value.state?.status == "on",
+                deviceIconColor = if (uiState.value.state?.status == "on") {
+                    Color.Red
+                } else {
+                    Color.Black
+                }
             )
         }
     }
@@ -22,9 +28,11 @@ class OvenViewModel : DeviceViewModel() {
     override fun changeSwitchState() {
         super.changeSwitchState()
         if (uiState.value.switchState) {
-            changeDeviceIconColor(Color.Red)
+            changeDeviceIconColor(Color.Yellow)
+            uiState.value.id?.let { executeAction(it, "turnOn", arrayOf()) }
         } else {
             changeDeviceIconColor(Color.Black)
+            uiState.value.id?.let { executeAction(it, "turnOff", arrayOf()) }
         }
     }
 
