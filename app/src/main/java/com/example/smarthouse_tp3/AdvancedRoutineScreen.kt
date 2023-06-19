@@ -3,8 +3,8 @@ package com.example.smarthouse_tp3
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.PaddingValue() -> Booleans
+iAnymport androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -26,6 +26,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @Composable
@@ -189,7 +190,6 @@ fun RoutineBody(
     }
 }
 
-
 /*
 @Preview
 @Composable
@@ -206,5 +206,5 @@ val routineDevice2Action1 = Action("turn on")
 val routineDevice2Action2 = Action("set color to RED")
 val routineDevice2 = RoutineDevice("Light", listOf(routineDevice2Action1, routineDevice2Action2))
 
-val routine1 = Routine("Afternoon Routine", emptyList())//listOf(routineDevice1, routineDevice2))
- */
+val routine1 = Routine("Afternoon Routine",listOf(routineDevice1, routineDevice2))
+*/

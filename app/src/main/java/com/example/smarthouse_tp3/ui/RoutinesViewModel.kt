@@ -1,7 +1,14 @@
 package com.example.smarthouse_tp3.ui
 
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.smarthouse_tp3.RoutineConfigScreen
 import com.example.smarthouse_tp3.data.network.RetrofitClient
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -46,3 +53,16 @@ class RoutinesViewModel : ViewModel() {
         }
     }
 }
+
+@Preview
+@Composable
+fun RoutinePreview() {
+    val routineViewModel : RoutinesViewModel = viewModel()
+    routineViewModel.fetchRoutines()
+    val uiState by routineViewModel.uiState.collectAsState()
+
+    Text(
+        text = uiState.toString()
+    )
+}
+

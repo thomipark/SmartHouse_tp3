@@ -45,4 +45,12 @@ class DevicesViewModel : ViewModel() {
             }
         }
     }
+
+    fun fetchNameByID(id: String): String {
+        return _uiState.value.devices?.devices?.find { it.id == id }?.name ?: "Unknown"
+    }
+
+    fun fetchTypeByID(id: String): String {
+        return _uiState.value.devices?.devices?.find { it.id == id }?.type?.name ?: "Unknown"
+    }
 }

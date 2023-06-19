@@ -253,7 +253,6 @@ fun SmallRoutineTilesRow(
 
 
 //-------- A PARTIR DE ACA ESTAN LAS PREVIEW ------------------
-
 @Preview(showBackground = false)
 @Composable
 fun SmallRoutineTilePreview() {
