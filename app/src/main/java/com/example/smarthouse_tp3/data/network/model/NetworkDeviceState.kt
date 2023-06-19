@@ -18,5 +18,5 @@ data class NetworkDeviceState (
     @SerializedName("fanSpeed"          ) var fanSpeed:             String?             = null,
     @SerializedName("quantity"          ) var quantity:             String?             = null,
     @SerializedName("unit"              ) var unit:                 String?             = null,
-    @SerializedName("dispensedQuantity" ) var dispensedQuantity:    Float?              = null
+    @SerializedName("dispensedQuantity" ) var dispensedQuantity:    Float?              = 0F
 )
