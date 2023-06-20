@@ -1,5 +1,7 @@
 package com.example.smarthouse_tp3.advanced_devices
 
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -8,7 +10,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
@@ -22,6 +26,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -50,25 +55,31 @@ fun OvenConfigScreen(
             modifier = Modifier
                 .padding(16.dp)
                 .fillMaxWidth(),
-            elevation = 4.dp
+            elevation = 4.dp,
+            border = BorderStroke(0.5.dp, Color.LightGray),
         ) {
             Row(
-                modifier = Modifier.padding(16.dp),
+                modifier = Modifier.padding(8.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Column(
                     modifier = Modifier.weight(0.8f),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
 
-                    ) {
+                ) {
                     Text(
                         text = "${uiState.state?.temperature?.toString()}°C",
+                        textAlign = TextAlign.Center,
                         style = MaterialTheme.typography.h5,
-                        modifier = Modifier.padding(start = 30.dp, bottom = 8.dp),
+                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
                         fontSize = 80.sp,
                     )
                 }
                 Column(
-                    modifier = Modifier.weight(0.2f)
+                    modifier = Modifier.weight(0.2f),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     IconButton(
                         onClick = { viewModel.increaseTemperature() },
@@ -76,86 +87,189 @@ fun OvenConfigScreen(
                     ) {
                         Icon(
                             Icons.Default.Add,
-                            contentDescription = "Increase Temperature"
+                            contentDescription = "Increase Temperature",
+                            modifier = Modifier.size(36.dp)
+
                         )
                     }
-                    Spacer(modifier = Modifier.height(16.dp))
+                    Spacer(modifier = Modifier.height(20.dp))
                     IconButton(
                         onClick =
                         { viewModel.decreaseTemperature() },
-                        modifier = Modifier.size(48.dp)
+                        modifier = Modifier.size(36.dp)
                     ) {
                         Icon(
                             painter = painterResource(R.drawable.minus),
-                            contentDescription = "Decrease Temperature"
+                            contentDescription = "Decrease Temperature",
+                            modifier = Modifier.size(48.dp)
                         )
                     }
                 }
             }
         }
 
-
         val iconFanIds = listOf(
             R.drawable.fan,
             R.drawable.fan_eco,
             R.drawable.fan_off
         )
+        val fanMode = OvenFanMode.fromString(uiState.state?.convection.toString())
 
         val iconGrillIds = listOf(
             R.drawable.grill,
             R.drawable.grill_eco,
             R.drawable.grill_outline
         )
+        val grillMode = OvenGrillMode.fromString(uiState.state?.grill.toString())
 
         Row(
-            modifier = Modifier.padding(16.dp),
+            modifier = Modifier
+                .padding(vertical = 18.dp, horizontal = 20.dp)
+                .height(120.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-
             Column(
-                modifier = Modifier.weight(1f),
-                horizontalAlignment = Alignment.CenterHorizontally
+                modifier = Modifier.weight(0.6f),
+                horizontalAlignment = Alignment.Start
             ) {
-
-                IconButton(
-                    onClick = {
-                        viewModel.iterateFanMode()
-                    }
+                Card(
+                    modifier = Modifier.width(180.dp),
+                    border = BorderStroke(0.5.dp, Color.LightGray),
+                    elevation = 0.dp
                 ) {
-                    val fanMode = OvenFanMode.fromString(uiState.state?.convection.toString())
-                    Icon(
-                        painter = painterResource(iconFanIds[fanMode.index]),
-                        contentDescription = "Icon",
-                        modifier = Modifier.size(100.dp)
+                    Text(
+                        text = "Convection",
+                        style = MaterialTheme.typography.h5,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.padding(16.dp)
                     )
                 }
-                Text(
-                    text = "Fan: ${uiState.state?.convection.toString()}",
-                    style = MaterialTheme.typography.body1
-                )
             }
+
+
             Column(
-                modifier = Modifier.weight(1f),
+                modifier = Modifier.weight(0.4f),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                IconButton(
-                    onClick = {
-                        viewModel.iterateGrillMode()
-                    }
+                Card(
+                    modifier = Modifier.size(150.dp),
+                    shape = RoundedCornerShape(30),
+                    elevation = 2.dp
                 ) {
-                    val GrillMode = OvenGrillMode.fromString(uiState.state?.grill.toString())
-                    Icon(
-                        painter = painterResource(iconGrillIds[GrillMode.index]),
-                        contentDescription = "Icon",
-                        modifier = Modifier.size(100.dp)
+
+                    IconButton(
+                        onClick = {
+                            viewModel.iterateFanMode()
+                        }
+                    ) {
+                        if (uiState.state?.convection.toString() == "eco") {
+                            Text(
+                                text = "ECO",
+                                style = MaterialTheme.typography.h6,
+                                fontSize = 14.sp,
+                                color =
+                                if(uiState.switchState)
+                                    Color.Green
+                                else if(MaterialTheme.colors.isLight)
+                                    Color.LightGray
+                                else
+                                    Color.DarkGray,
+                                modifier = Modifier.padding(top = 95.dp, start = 60.dp),
+                                )
+                        }
+                        Icon(
+                            painter = painterResource(iconFanIds[fanMode.index]),
+                            contentDescription = "Icon",
+                            tint =
+                            if (fanMode.index == 1 && uiState.switchState)
+                                Color.Green
+                            else if ((fanMode.index == 2 ||  !uiState.switchState) && MaterialTheme.colors.isLight)
+                                Color.LightGray
+                            else if ((fanMode.index == 2 ||  !uiState.switchState) && !MaterialTheme.colors.isLight)
+                                Color.DarkGray
+                            else if(MaterialTheme.colors.isLight)
+                                Color.Black
+                            else
+                                Color.White,
+                            modifier = Modifier.size(100.dp)
+                        )
+                    }
+                }
+            }
+        }
+
+        Row(
+            modifier = Modifier
+                .padding(vertical = 18.dp, horizontal = 20.dp)
+                .height(120.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Column(
+                modifier = Modifier.weight(0.6f),
+                horizontalAlignment = Alignment.Start
+            ) {
+                Card(
+                    modifier = Modifier.width(180.dp),
+                    border = BorderStroke(0.5.dp, Color.LightGray),
+                    elevation = 0.dp
+                ) {
+                    Text(
+                        text = "Grill mode",
+                        style = MaterialTheme.typography.h5,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.padding(16.dp)
                     )
                 }
-                Text(
-                    text = "Grill: ${uiState.state?.grill.toString()}",
-                    style = MaterialTheme.typography.body1,
-                    textAlign = TextAlign.Center
-                )
+            }
 
+            Column(
+                modifier = Modifier.weight(0.4f),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Card(
+                    modifier = Modifier.size(150.dp),
+                    shape = RoundedCornerShape(30),
+                    elevation = 2.dp
+                ) {
+                    IconButton(
+                        onClick = {
+                            viewModel.iterateGrillMode()
+                        }
+                    ) {
+                        if (uiState.state?.grill.toString() == "eco") {
+                            Text(
+                                text = "ECO",
+                                style = MaterialTheme.typography.h6,
+                                fontSize = 14.sp,
+                                color =
+                                if(uiState.switchState)
+                                    Color.Green
+                                else if(MaterialTheme.colors.isLight)
+                                    Color.LightGray
+                                else
+                                    Color.DarkGray,
+                                modifier = Modifier.padding(top = 98.dp, start = 60.dp),
+                            )
+                        }
+
+                        Icon(
+                            painter = painterResource(iconGrillIds[grillMode.index]),
+                            contentDescription = "Icon",
+                            tint =
+                            if (grillMode.index == 1 && uiState.switchState)
+                                Color.Green
+                            else if ((grillMode.index == 2 ||  !uiState.switchState) && MaterialTheme.colors.isLight)
+                                Color.LightGray
+                            else if ((grillMode.index == 2 ||  !uiState.switchState) && !MaterialTheme.colors.isLight)
+                                Color.DarkGray
+                            else if(MaterialTheme.colors.isLight)
+                                Color.Black
+                            else
+                                Color.White,
+                            modifier = Modifier.size(100.dp)
+                        )
+                    }
+                }
             }
         }
 
@@ -165,31 +279,65 @@ fun OvenConfigScreen(
             R.drawable.border_top_bottom_variant
         )
 
-        Row(
-            modifier = Modifier.padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-
-            Column(
-                modifier = Modifier.weight(1f),
-                horizontalAlignment = Alignment.CenterHorizontally
+            Row(
+                modifier = Modifier
+                    .padding(vertical = 18.dp, horizontal = 20.dp)
+                    .height(120.dp),
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                IconButton(
-                    onClick = {
-                        viewModel.iterateHeatMode()
-                    }
+                Column(
+                    modifier = Modifier.weight(0.6f),
+                    horizontalAlignment = Alignment.Start
                 ) {
-                    val HeatMode = OvenHeatMode.fromString(uiState.state?.heat.toString())
-                    Icon(
-                        painter = painterResource(iconHeatIds[HeatMode.index]),
-                        contentDescription = "Icon",
-                        modifier = Modifier.size(100.dp)
-                    )
+                    Card(
+                        modifier = Modifier.width(180.dp),
+                        border = BorderStroke(0.5.dp, Color.LightGray),
+                        elevation = 0.dp
+                    ) {
+                        Text(
+                            text = "Heat source",
+                            style = MaterialTheme.typography.h5,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.padding(16.dp)
+                        )
+                    }
                 }
-                Text(
-                    text = "Heat: ${uiState.state?.heat.toString()}",
-                    style = MaterialTheme.typography.body1
-                )
+
+                Column(
+                    modifier = Modifier.weight(0.4f),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Card(
+                        modifier = Modifier.size(150.dp),
+                        shape = RoundedCornerShape(30),
+                        elevation = 2.dp
+                    ) {
+                        IconButton(
+                            onClick = {
+                                viewModel.iterateHeatMode()
+                            }
+                        ) {
+                            val heatMode = OvenHeatMode.fromString(uiState.state?.heat.toString())
+                            Icon(
+                                painter = painterResource(iconHeatIds[heatMode.index]),
+                                contentDescription = "Icon",
+                                tint =
+                                if (!uiState.switchState && MaterialTheme.colors.isLight)
+                                    Color.LightGray
+                                else if (!uiState.switchState)
+                                    Color.DarkGray
+                                else if(MaterialTheme.colors.isLight)
+                                    Color.Black
+                                else
+                                    Color.White,
+                                modifier = if (heatMode.index != 2) Modifier.size(100.dp) else Modifier
+                                    .size(
+                                        101.dp
+                                    )
+                                    .padding(top = 5.dp, bottom = 4.dp)
+                            )
+                        }
+                    }
             }
         }
     }
@@ -203,7 +351,7 @@ fun OvenConfigScreenPreview() {
     val viewModel: OvenViewModel = viewModel()
     viewModel.fetchDevice("a38ad5a16c0cac8b")
 
-    OvenConfigScreen (viewModel = viewModel)
+    OvenConfigScreen(viewModel = viewModel)
 
 }
 

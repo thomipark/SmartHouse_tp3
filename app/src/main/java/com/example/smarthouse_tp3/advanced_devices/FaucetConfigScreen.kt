@@ -16,6 +16,7 @@ import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Slider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -78,9 +79,9 @@ fun FaucetConfigScreen(
             ) {
                 Text(
                     text = if (state?.status.toString() == "opened") {
-                        "Dispensed: $formattedValue ${state?.unit}"
+                        "Volume dispensed: $formattedValue ${state?.unit}"
                     } else {
-                        "To Dispense: $formattedValue ${selectedUnit.value}"
+                        "Select volume to dispense: $formattedValue ${selectedUnit.value}"
                     },
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold
@@ -118,85 +119,89 @@ fun FaucetConfigScreen(
 
         val isDropdownExpanded = remember { mutableStateOf(false) }
 
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 16.dp)
-        ) {
-            Button(
-                onClick = { isDropdownExpanded.value = true },
-                modifier = Modifier
-                    .clickable { isDropdownExpanded.value = true }
-                    .size(width = 200.dp, height = 48.dp)
-            ) {
-                Text(
-                    text = "Select Unit: ${selectedUnit.value}",
-                    fontWeight = FontWeight.Bold
-                )
-            }
-            DropdownMenu(
-                expanded = isDropdownExpanded.value,
-                onDismissRequest = { isDropdownExpanded.value = false },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(Color.White)
-            ) {
-                volumeUnits.forEach { unit ->
-                    DropdownMenuItem(onClick = {
-                        selectedUnit.value = unit
-                        isDropdownExpanded.value = false
-                    }) {
-                        Text(text = unit)
-                    }
-                }
-            }
-        }
-
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp)
-        ) {
-            Button(
-                onClick = {
-                          viewModel.dispense(sliderValue.value,selectedUnit.value)
-                },
-                modifier = Modifier.size(width = 200.dp, height = 48.dp)
-            ) {
-                Text(
-                    text = "Dispense",
-                    fontWeight = FontWeight.Bold
-                )
-            }
-        }
-
-        Row(
-            modifier = Modifier.padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Column(
-                modifier = Modifier.weight(1f),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
+        if (state?.status.toString() == "closed") {
             Box(
                 modifier = Modifier
-                    .size(width = 200.dp, height = 48.dp),
-                contentAlignment = Alignment.Center
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 16.dp)
             ) {
                 Button(
-                    onClick = { viewModel.close() },
-                    modifier = Modifier.fillMaxSize(),
-                    enabled = state?.status.toString() != "closed",
-                    colors = ButtonDefaults.buttonColors(
-                        backgroundColor = if (state?.status.toString() == "closed") Color.Gray else Color.White
-                    )
+                    onClick = { isDropdownExpanded.value = true },
+                    modifier = Modifier
+                        .clickable { isDropdownExpanded.value = true }
+                        .size(width = 200.dp, height = 48.dp)
                 ) {
                     Text(
-                        text = "Stop",
+                        text = "Select Unit: ${selectedUnit.value}",
                         fontWeight = FontWeight.Bold
                     )
                 }
+                DropdownMenu(
+                    expanded = isDropdownExpanded.value,
+                    onDismissRequest = { isDropdownExpanded.value = false },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(MaterialTheme.colors.primaryVariant)
+                ) {
+                    volumeUnits.forEach { unit ->
+                        DropdownMenuItem(onClick = {
+                            selectedUnit.value = unit
+                            isDropdownExpanded.value = false
+                        }) {
+                            Text(text = unit)
+                        }
+                    }
+                }
             }
+
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+            ) {
+                Button(
+                    onClick = {
+                        viewModel.dispense(sliderValue.value, selectedUnit.value)
+                    },
+                    modifier = Modifier.size(width = 200.dp, height = 48.dp)
+                ) {
+                    Text(
+                        text = "Dispense",
+                        fontWeight = FontWeight.ExtraBold
+                    )
+                }
+            }
+        }
+
+        if (state?.status.toString() != "closed") {
+            Row(
+                modifier = Modifier.padding(16.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Column(
+                    modifier = Modifier.weight(1f),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .size(width = 200.dp, height = 48.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Button(
+                            onClick = { viewModel.close() },
+                            modifier = Modifier.fillMaxSize(),
+                            enabled = state?.status.toString() != "closed",
+                            colors = ButtonDefaults.buttonColors(
+                                backgroundColor = if (state?.status.toString() == "closed") Color.Gray else Color.Red
+                            )
+                        ) {
+                            Text(
+                                text = "Stop",
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
+                    }
+                }
             }
         }
     }

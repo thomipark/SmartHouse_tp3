@@ -1,11 +1,7 @@
 package com.example.smarthouse_tp3.ui
 
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.smarthouse_tp3.R
-import com.example.smarthouse_tp3.advanced_devices.LightConfigScreen
 import com.example.smarthouse_tp3.data.network.model.NetworkDeviceState
 import kotlinx.coroutines.flow.update
 
@@ -70,7 +66,7 @@ class OvenViewModel : DeviceViewModel() {
     fun decreaseTemperature() {
         val state = uiState.value.state
         if (state != null) {
-            if ((uiState.value.state?.temperature?.toInt() ?: 180) > 180) {
+            if ((uiState.value.state?.temperature?.toInt() ?: 90) > 90) {
                 updateUiState(temperature = state.temperature?.let { it - 5L })
                 uiState.value.id?.let {
                     executeAction(
@@ -178,7 +174,7 @@ enum class OvenFanMode(val index: Int, val stringValue: String) {
 }
 
 enum class OvenGrillMode(val index: Int, val stringValue: String) {
-    LARGE(0, "large"),
+    FULL(0, "full"),
     ECO(1, "eco"),
     OFF(2, "off");
 

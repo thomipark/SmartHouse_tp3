@@ -75,9 +75,12 @@ fun DeviceTopBar(viewModel: DeviceViewModel) {
                     painter = it,
                     contentDescription = null,
                     modifier = Modifier
-                        .size(64.dp)
+                        .size(55.dp)
                         .weight(1f),
-                    colorFilter = ColorFilter.tint(color = uiState.deviceIconColor) // Para cambiar el color del icono
+                    // Para cambiar el color del icono
+                    colorFilter = ColorFilter.tint(color =
+                    if(uiState.deviceIconColor == Color.Black && !MaterialTheme.colors.isLight)
+                        Color.LightGray else uiState.deviceIconColor)
                 )
             }
             Spacer(modifier = Modifier.width(16.dp))
@@ -101,7 +104,7 @@ fun DeviceTopBar(viewModel: DeviceViewModel) {
             )
         }
         Divider(
-            color = Color.Gray,
+            color = if(!MaterialTheme.colors.isLight) Color.LightGray else Color.Black,
             thickness = 1.dp,
             modifier = Modifier.padding(top = 16.dp)
         )
@@ -119,7 +122,7 @@ fun DeviceBody(viewModel : DeviceViewModel) {
         "oven"      -> OvenConfigScreen(viewModel = viewModel as OvenViewModel)
         "faucet"    -> FaucetConfigScreen(viewModel = viewModel as FaucetViewModel)
         else -> {
-            Column() {
+            Column {
                 // Text(text = uiState.toString())
                 Text(
                     text = stringResource(R.string.device_type_error)

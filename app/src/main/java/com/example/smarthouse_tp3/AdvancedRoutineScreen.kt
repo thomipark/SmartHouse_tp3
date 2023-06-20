@@ -26,7 +26,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @Composable
@@ -67,7 +66,7 @@ fun RoutineTopBar(routine: Routine) {
                 )
             }
             Divider(
-                color = if(MaterialTheme.colors.surface == Color.Black) Color.White else Color.Black,
+                color = if(!MaterialTheme.colors.isLight) Color.LightGray else Color.Black,
                 thickness = 1.dp,
                 modifier = Modifier.padding(top = 16.dp)
             )
