@@ -136,7 +136,7 @@ fun DevicesSmallTileRowPlaces(
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = "No devices linked to this place",
+                    text = if(selectedPlace == "All") "No devices added" else "No devices linked to this place",
                     style = MaterialTheme.typography.body1,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.padding(16.dp)
