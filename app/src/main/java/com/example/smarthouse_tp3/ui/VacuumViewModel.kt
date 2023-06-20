@@ -8,7 +8,7 @@ import com.example.smarthouse_tp3.data.network.model.NetworkDeviceRoom
 import com.example.smarthouse_tp3.data.network.model.NetworkDeviceState
 import kotlinx.coroutines.flow.update
 
-class VacuumViewModel : DeviceViewModel() {
+class VacuumViewModel(deviceId : String) : DeviceViewModel(deviceId) {
     override fun fetchDevice(deviceId: String) {
 
         Log.d("MYDEVICEswitchVAC", uiState.value.toString())

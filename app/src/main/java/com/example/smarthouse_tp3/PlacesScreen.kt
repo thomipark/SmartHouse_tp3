@@ -38,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.smarthouse_tp3.data.network.model.NetworkDevice
 import com.example.smarthouse_tp3.data.network.model.NetworkRoomList
+import com.example.smarthouse_tp3.ui.DeviceMap
 import com.example.smarthouse_tp3.ui.DeviceViewModel
 import com.example.smarthouse_tp3.ui.DevicesViewModel
 import com.example.smarthouse_tp3.ui.NavigationViewModel
@@ -119,13 +120,21 @@ fun DevicesSmallTileRowPlaces(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 items(items = filteredDevices) { item ->
-                    val myDevice : DeviceViewModel = deviceViewModelMaker(typeName = item.type?.name)
-                    item.id?.let { myDevice.fetchDevice(it) }
-                    DeviceSmallTile(
-                        deviceViewModel = myDevice,
-                        navigationViewModel = navigationViewModel,
-                        onNavigateToConfigScreen = onNavigateToConfigScreen
-                    )
+                    var myDevice : DeviceViewModel? =
+                        item.id?.let { deviceViewModelMaker(id = it, typeName = item.type?.name) }
+                    if (myDevice != null) {
+                        myDevice = DeviceMap.map.getOrPut(item.id.toString()) {
+                            myDevice!!
+                        }
+                    }
+                    myDevice?.fetchDevice()
+                    if (myDevice != null) {
+                        DeviceSmallTile(
+                            deviceViewModel = myDevice,
+                            navigationViewModel = navigationViewModel,
+                            onNavigateToConfigScreen = onNavigateToConfigScreen
+                        )
+                    }
                 }
             }
         } else {

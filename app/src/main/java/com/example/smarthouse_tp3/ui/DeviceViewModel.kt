@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-open class DeviceViewModel : ViewModel() {
+open class DeviceViewModel(private var deviceId : String) : ViewModel() {
 
     protected val _uiState = MutableStateFlow(DeviceUiState())
     val uiState: StateFlow<DeviceUiState> = _uiState.asStateFlow()
@@ -32,6 +32,10 @@ open class DeviceViewModel : ViewModel() {
 
     fun isLoading() : Boolean {
         return uiState.value.isLoading
+    }
+
+    fun fetchDevice() {
+        fetchDevice(deviceId)
     }
 
     open fun fetchDevice(deviceId: String) {
@@ -113,6 +117,18 @@ open class DeviceViewModel : ViewModel() {
         return uiState.value.id
     }
 
+    fun copy(): DeviceViewModel {
+        val copiedViewModel = DeviceViewModel(deviceId)
 
+        // Copy the UI state
+        val originalUiState = this._uiState.value
+        copiedViewModel._uiState.value = originalUiState.copy()
+
+        // Copy other properties
+        // (Add any additional properties you want to copy)
+        copiedViewModel.fetchJob = this.fetchJob
+
+        return copiedViewModel
+    }
 }
 

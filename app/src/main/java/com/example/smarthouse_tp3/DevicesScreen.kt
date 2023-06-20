@@ -1,5 +1,6 @@
 package com.example.smarthouse_tp3
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -27,6 +28,7 @@ import androidx.compose.material.Switch
 import androidx.compose.material.SwitchDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -46,6 +48,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.smarthouse_tp3.data.network.model.NetworkDevice
 import com.example.smarthouse_tp3.ui.AirConditionerViewModel
+import com.example.smarthouse_tp3.ui.DeviceMap
 import com.example.smarthouse_tp3.ui.DeviceViewModel
 import com.example.smarthouse_tp3.ui.DevicesViewModel
 import com.example.smarthouse_tp3.ui.FaucetViewModel
@@ -53,6 +56,7 @@ import com.example.smarthouse_tp3.ui.LightViewModel
 import com.example.smarthouse_tp3.ui.NavigationViewModel
 import com.example.smarthouse_tp3.ui.OvenViewModel
 import com.example.smarthouse_tp3.ui.VacuumViewModel
+import kotlinx.coroutines.delay
 import java.util.Locale
 
 @Composable
@@ -73,6 +77,7 @@ fun DeviceScreen(
         )
     }
 }
+
 
 @Composable
 fun DevicesSmallTileRow(
@@ -123,13 +128,21 @@ fun DevicesSmallTileRow(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 items(items = filteredDevices) { item ->
-                    val myDevice : DeviceViewModel = deviceViewModelMaker(typeName = item.type?.name)
-                    item.id?.let { myDevice.fetchDevice(it) }
-                    DeviceSmallTile(
-                        deviceViewModel = myDevice,
-                        navigationViewModel = navigationViewModel,
-                        onNavigateToConfigScreen = onNavigateToConfigScreen
-                    )
+                    var myDevice : DeviceViewModel? =
+                        item.id?.let { deviceViewModelMaker(id = it, typeName = item.type?.name) }
+                    if (myDevice != null) {
+                        myDevice = DeviceMap.map.getOrPut(item.id.toString()) {
+                            myDevice!!
+                        }
+                    }
+                    myDevice?.fetchDevice()
+                    if (myDevice != null) {
+                        DeviceSmallTile(
+                            deviceViewModel = myDevice,
+                            navigationViewModel = navigationViewModel,
+                            onNavigateToConfigScreen = onNavigateToConfigScreen
+                        )
+                    }
                 }
             }
         }
@@ -145,6 +158,14 @@ fun DeviceSmallTile(
     onNavigateToConfigScreen: () -> Unit
 ) {
     val deviceUiState by deviceViewModel.uiState.collectAsState()
+    //deviceViewModel.fetchDevice()
+
+    deviceViewModel.fetchDevice()
+
+    LaunchedEffect(Unit) {
+        delay(1000)
+        deviceViewModel.fetchDevice()
+    }
 
 
     Surface(
@@ -325,18 +346,18 @@ enum class DeviceCategory(val stringValue: String) {
 
 
 @Composable
-fun deviceViewModelMaker(typeName : String?) : DeviceViewModel{
+fun deviceViewModelMaker(id : String = "", typeName : String?) : DeviceViewModel{
     if (typeName == "lamp") {
-        return viewModel<LightViewModel>()
+        return LightViewModel(deviceId = id)
     } else if (typeName == "oven") {
-        return viewModel<OvenViewModel>()
+        return OvenViewModel(deviceId = id)
     } else if (typeName == "vacuum") {
-        return viewModel<VacuumViewModel>()
+        return VacuumViewModel(id)
     } else if (typeName == "ac") {
-        return viewModel<AirConditionerViewModel>()
+        return AirConditionerViewModel(id)
     } else if (typeName == "faucet") {
-        return viewModel<FaucetViewModel>()
+        return FaucetViewModel(id)
     } else {
-        return viewModel<LightViewModel>()
+        return LightViewModel(id)
     }
 }

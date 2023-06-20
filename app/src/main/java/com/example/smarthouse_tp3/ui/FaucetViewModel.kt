@@ -8,7 +8,7 @@ import com.example.smarthouse_tp3.R
 import com.example.smarthouse_tp3.data.network.model.NetworkDeviceState
 import kotlinx.coroutines.flow.update
 
-class FaucetViewModel : DeviceViewModel() {
+class FaucetViewModel(deviceId: String) : DeviceViewModel(deviceId = deviceId) {
     override fun fetchDevice(deviceId: String) {
         super.fetchDevice(deviceId)
         _uiState.update {
