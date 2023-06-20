@@ -32,7 +32,6 @@ class DevicesViewModel : ViewModel() {
     }
 
     fun fetchDevices() {
-        Log.d("FetchingDevices", "FETCHING DEVICES")
         fetchJob?.cancel()
         fetchJob = viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
