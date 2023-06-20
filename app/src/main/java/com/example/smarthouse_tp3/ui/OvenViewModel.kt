@@ -30,9 +30,11 @@ class OvenViewModel : DeviceViewModel() {
         if (uiState.value.switchState) {
             changeDeviceIconColor(Color.Red)
             uiState.value.id?.let { executeAction(it, "turnOn", arrayOf()) }
+            updateUiState(status = "on")
         } else {
             changeDeviceIconColor(Color.Black)
             uiState.value.id?.let { executeAction(it, "turnOff", arrayOf()) }
+            updateUiState(status = "on")
         }
     }
 
@@ -54,18 +56,7 @@ class OvenViewModel : DeviceViewModel() {
         val state = uiState.value.state
         if (state != null) {
             if ((state.temperature?.toInt() ?: 230) < 230) {
-                _uiState.update { currentState ->
-                    currentState.copy(
-                        state = NetworkDeviceState(
-                            status = state.status,
-                            temperature = state.temperature?.let { it + 5L },
-                            heat = state.heat,
-                            grill = state.grill,
-                            convection = state.convection
-                        )
-                    )
-                }
-
+                updateUiState(temperature = state.temperature?.let { it + 5L })
                 uiState.value.id?.let {
                     executeAction(
                         it, "setTemperature",
@@ -80,18 +71,7 @@ class OvenViewModel : DeviceViewModel() {
         val state = uiState.value.state
         if (state != null) {
             if ((uiState.value.state?.temperature?.toInt() ?: 180) > 180) {
-                _uiState.update { currentState ->
-                    currentState.copy(
-                        state = NetworkDeviceState(
-                            status = state.status,
-                            temperature = state.temperature?.let { it - 5L },
-                            heat = state.heat,
-                            grill = state.grill,
-                            convection = state.convection
-                        )
-                    )
-                }
-
+                updateUiState(temperature = state.temperature?.let { it - 5L })
                 uiState.value.id?.let {
                     executeAction(
                         it, "setTemperature",
@@ -105,17 +85,7 @@ class OvenViewModel : DeviceViewModel() {
     fun iterateFanMode() {
         val state = uiState.value.state
         if (state != null) {
-            _uiState.update { currentState ->
-                currentState.copy(
-                    state = NetworkDeviceState(
-                        status = state.status,
-                        temperature = state.temperature,
-                        heat = state.heat,
-                        grill = state.grill,
-                        convection = state.convection?.let { OvenFanMode.getNextFromString(it).stringValue }
-                    )
-                )
-            }
+            updateUiState(convection = state.convection?.let { OvenFanMode.getNextFromString(it).stringValue })
         }
         uiState.value.id?.let {
             executeAction(
@@ -129,17 +99,7 @@ class OvenViewModel : DeviceViewModel() {
     fun iterateGrillMode() {
         val state = uiState.value.state
         if (state != null) {
-            _uiState.update { currentState ->
-                currentState.copy(
-                    state = NetworkDeviceState(
-                        status = state.status,
-                        temperature = state.temperature,
-                        heat = state.heat,
-                        grill = state.grill?.let { OvenGrillMode.getNextFromString(it).stringValue },
-                        convection = state.convection
-                    )
-                )
-            }
+            updateUiState(grill = state.grill?.let { OvenGrillMode.getNextFromString(it).stringValue })
         }
         uiState.value.id?.let {
             executeAction(
@@ -153,22 +113,36 @@ class OvenViewModel : DeviceViewModel() {
     fun iterateHeatMode() {
         val state = uiState.value.state
         if (state != null) {
-            _uiState.update { currentState ->
-                currentState.copy(
-                    state = NetworkDeviceState(
-                        status = state.status,
-                        temperature = state.temperature,
-                        heat = state.heat?.let { OvenHeatMode.getNextFromString(it).stringValue },
-                        grill = state.grill,
-                        convection = state.convection
-                    )
-                )
-            }
+            updateUiState(heat = state.heat?.let { OvenHeatMode.getNextFromString(it).stringValue })
         }
         uiState.value.id?.let {
             executeAction(
                 it, "setHeat",
                 arrayOf(uiState.value.state?.heat.toString())
+            )
+        }
+    }
+
+
+    private fun updateUiState(
+        switchState : Boolean = uiState.value.switchState,
+        status      : String? = uiState.value.state?.status,
+        temperature : Long? = uiState.value.state?.temperature,
+        heat        : String? =  uiState.value.state?.heat,
+        grill       : String? =  uiState.value.state?.grill,
+        convection  : String? =  uiState.value.state?.convection
+
+    ) {
+        _uiState.update { currentState ->
+            currentState.copy(
+                switchState = switchState,
+                state = NetworkDeviceState(
+                    status = status,
+                    temperature = temperature,
+                    heat = heat,
+                    grill = grill,
+                    convection = convection
+                )
             )
         }
     }

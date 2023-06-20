@@ -149,7 +149,7 @@ fun LightScreenPreview() {
     val viewModel: LightViewModel = viewModel()
     viewModel.fetchDevice("4d842b03d28e19bc")
 
-    LightScreen(viewModel = viewModel)
+    //LightScreen(viewModel = viewModel)
 
 }
 
@@ -160,5 +160,5 @@ fun HomeScreenPreview() {
     val viewModel: DeviceViewModel = viewModel()
     val uiState = viewModel.uiState
 
-    HomeScreen(viewModel = viewModel())
+    //HomeScreen(viewModel = viewModel())
 }

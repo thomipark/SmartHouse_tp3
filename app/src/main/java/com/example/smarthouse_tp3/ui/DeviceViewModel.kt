@@ -30,8 +30,12 @@ open class DeviceViewModel : ViewModel() {
     //     uiState.value.device?.id?.let { fetchDevice(it) }
     // }
 
+    fun isLoading() : Boolean {
+        return uiState.value.isLoading
+    }
+
     open fun fetchDevice(deviceId: String) {
-        fetchJob?.cancel()
+        //fetchJob?.cancel()
         fetchJob = viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
             runCatching {
@@ -103,6 +107,10 @@ open class DeviceViewModel : ViewModel() {
                 deviceIconColor = newColor
             )
         }
+    }
+
+    fun getDeviceId(): String? {
+        return uiState.value.id
     }
 
 

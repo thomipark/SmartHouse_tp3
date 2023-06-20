@@ -1,5 +1,6 @@
 package com.example.smarthouse_tp3.ui
 
+import android.util.Log
 import android.widget.ImageSwitcher
 import androidx.compose.ui.graphics.Color
 import com.example.smarthouse_tp3.R
@@ -9,6 +10,8 @@ import kotlinx.coroutines.flow.update
 
 class VacuumViewModel : DeviceViewModel() {
     override fun fetchDevice(deviceId: String) {
+
+        Log.d("MYDEVICEswitchVAC", uiState.value.toString())
         super.fetchDevice(deviceId)
         val status = uiState.value.state?.status
         _uiState.update {
@@ -17,6 +20,8 @@ class VacuumViewModel : DeviceViewModel() {
                 switchState = !(status == "docked" || status == "inactive"),
                 deviceIconColor = if (uiState.value.state?.status == "active") {
                     Color.Blue
+                } else if (uiState.value.state?.status == "docked") {
+                    Color.Green
                 } else {
                     Color.Black
                 }
@@ -61,25 +66,25 @@ class VacuumViewModel : DeviceViewModel() {
 
 
     override fun changeSwitchState() {
-        if (uiState.value.state?.status == "docked") {
-            return
-        }
         if (!uiState.value.switchState && uiState.value.state?.batteryLevel!! <= 5) {
             return
         }
         super.changeSwitchState()
         if (uiState.value.switchState) {
-            start()
             changeDeviceIconColor(Color.Blue)
+            uiState.value.id?.let { executeAction(it, "start", arrayOf()) }
+            updateUiState(status = "active")
         } else {
-            pause()
             changeDeviceIconColor(Color.Black)
+            uiState.value.id?.let { executeAction(it, "pause", arrayOf()) }
+            updateUiState(status = "inactive")
         }
     }
 
 
-    fun updateUiState(
+    private fun updateUiState(
         switchState : Boolean = uiState.value.switchState,
+        deviceIconColor : Color = uiState.value.deviceIconColor,
         status: String? = uiState.value.state?.status,
         mode: String? = uiState.value.state?.mode,
         batteryLevel: Long? = uiState.value.state?.batteryLevel,
@@ -88,6 +93,7 @@ class VacuumViewModel : DeviceViewModel() {
         _uiState.update { currentState ->
             currentState.copy(
                 switchState = switchState,
+                deviceIconColor = deviceIconColor,
                 state = NetworkDeviceState(
                     status = status,
                     mode = mode,
@@ -126,8 +132,14 @@ class VacuumViewModel : DeviceViewModel() {
             }
         }
 
-        if (state != null) {
-            updateUiState(status = newStatus,  switchState = !(newStatus == "docked" || newStatus == "inactive"))
+        if (state != null && state.status != newStatus) {
+            if (action == "dock") {
+                updateUiState(status = newStatus, switchState = false)
+                changeDeviceIconColor(Color.Green)
+            } else {
+                updateUiState(status = newStatus)
+            }
+
 
             uiState.value.id?.let {
                 executeAction(
@@ -140,9 +152,9 @@ class VacuumViewModel : DeviceViewModel() {
 
     fun changeModeMop() {
         val state = uiState.value.state
-        if (state != null) {
+        if (state != null && state.mode != "mop") {
             state.mode = VacuumMode.MOP.stringValue
-            updateUiState(status = "active", mode = state.mode, switchState = true)
+            updateUiState(mode = state.mode)
             uiState.value.id?.let {
                 executeAction(
                     it, "setMode",
@@ -154,9 +166,9 @@ class VacuumViewModel : DeviceViewModel() {
 
     fun changeModeVacuum() {
         val state = uiState.value.state
-        if (state != null) {
+        if (state != null && state.mode != "vacuum") {
             state.mode = VacuumMode.VACUUM.stringValue
-            updateUiState(status = "active", mode = state.mode, switchState = true)
+            updateUiState(mode = state.mode)
             uiState.value.id?.let {
                 executeAction(
                     it, "setMode",

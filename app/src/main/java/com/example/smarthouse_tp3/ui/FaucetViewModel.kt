@@ -29,9 +29,11 @@ class FaucetViewModel : DeviceViewModel() {
         if (uiState.value.switchState) {
             changeDeviceIconColor(Color.Blue)
             uiState.value.id?.let { executeAction(it, "open", arrayOf()) }
+            updateUiState(status = "opened")
         } else {
             changeDeviceIconColor(Color.Black)
             uiState.value.id?.let { executeAction(it, "close", arrayOf()) }
+            updateUiState(status = "closed")
         }
     }
 
@@ -56,7 +58,7 @@ class FaucetViewModel : DeviceViewModel() {
         setAction("close")
     }
 
-    fun updateUiState(
+    private fun updateUiState(
         status: String? = uiState.value.state?.status
     ) {
         _uiState.update { currentState ->
