@@ -4,20 +4,23 @@ import android.util.Log
 import androidx.compose.ui.graphics.Color
 import com.example.smarthouse_tp3.R
 import com.example.smarthouse_tp3.data.network.model.NetworkDeviceState
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 
 class LightViewModel : DeviceViewModel() {
     override fun fetchDevice(deviceId: String) {
         super.fetchDevice(deviceId)
-        _uiState.update { it.copy(
-            deviceIcon = R.drawable.device_lightbulb_on,
-            switchState = uiState.value.state?.status == "on",
-            deviceIconColor = if (uiState.value.state?.status == "on") {
-                Color.Yellow
-            } else {
-                Color.Black
-            }
-        ) }
+        _uiState.update {
+            it.copy(
+                deviceIcon = R.drawable.device_lightbulb_on,
+                switchState = uiState.value.state?.status == "on",
+                deviceIconColor = if (uiState.value.state?.status == "on") {
+                    Color.Yellow
+                } else {
+                    Color.Black
+                }
+            )
+        }
     }
 
     override fun getSmallIconsList(): List<Int> {
@@ -30,19 +33,7 @@ class LightViewModel : DeviceViewModel() {
         }
         uiState.value.id?.let { executeAction(it, "setColor", arrayOf(hexCode)) }
         _uiState.value.state?.color = hexCode
-
-        val device = uiState.value
-        _uiState.update { currentState ->
-            currentState.copy(
-                state = NetworkDeviceState(
-                    status = device.state?.status,
-                    color = hexCode,
-                    brightness = device.state?.brightness
-                )
-            )
-        }
-
-
+        updateUiState(color = hexCode)
     }
 
     fun changeBrightness(percent: String) {
@@ -50,16 +41,7 @@ class LightViewModel : DeviceViewModel() {
             return
         }
         uiState.value.id?.let { executeAction(it, "setBrightness", arrayOf(percent)) }
-        val device = uiState.value
-        _uiState.update { currentState ->
-            currentState.copy(
-                state = NetworkDeviceState(
-                    status = device.state?.status,
-                    color = device.state?.color,
-                    brightness = percent
-                )
-            )
-        }
+        updateUiState(brightness = percent)
     }
 
     override fun changeSwitchState() {
@@ -67,9 +49,31 @@ class LightViewModel : DeviceViewModel() {
         if (uiState.value.switchState) {
             changeDeviceIconColor(Color.Yellow)
             uiState.value.id?.let { executeAction(it, "turnOn", arrayOf()) }
+            updateUiState(status = "on")
         } else {
             changeDeviceIconColor(Color.Black)
             uiState.value.id?.let { executeAction(it, "turnOff", arrayOf()) }
+            updateUiState(status = "off")
         }
     }
+
+    private fun updateUiState(
+        switchState : Boolean = uiState.value.switchState,
+        status: String? = uiState.value.state?.status,
+        color: String? = uiState.value.state?.color,
+        brightness: String? = uiState.value.state?.brightness
+    ) {
+        _uiState.update { currentState ->
+            currentState.copy(
+                switchState = switchState,
+                state = NetworkDeviceState(
+                    status = status,
+                    color = color,
+                    brightness = brightness
+                )
+            )
+        }
+    }
+
+
 }

@@ -1,5 +1,6 @@
 package com.example.smarthouse_tp3.ui
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.smarthouse_tp3.data.network.RetrofitClient
@@ -44,5 +45,6 @@ class RoomsViewModel : ViewModel() {
                 }
             }
         }
+        Log.d("MYROOM", uiState.value.toString())
     }
 }

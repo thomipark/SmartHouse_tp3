@@ -1,8 +1,17 @@
 package com.example.smarthouse_tp3.ui
 
+import android.annotation.SuppressLint
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.smarthouse_tp3.data.network.RetrofitClient
+import com.example.smarthouse_tp3.deviceViewModelMaker
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -29,10 +38,11 @@ class DevicesViewModel : ViewModel() {
                 val apiService = RetrofitClient.getApiService()
                 apiService.getAllDevices()
             }.onSuccess { response ->
-                _uiState.update {
+                _uiState.update { it ->
                     it.copy(
                         devices = response.body(),
-                        isLoading = false
+                        isLoading = false,
+                        devicesId = response.body()?.devices?.map { it1 -> it1.id } as List<String>
                     )
                 }
             }.onFailure { e ->
@@ -44,6 +54,24 @@ class DevicesViewModel : ViewModel() {
                 }
             }
         }
+    }
+
+    @Composable
+    fun fetchDeviceById(deviceId: String) {
+        // var deviceViewModel : DeviceViewModel by remember { mutableStateOf() }
+
+        // LaunchedEffect(deviceId) {
+        //     val device = uiState.value.deviceList.find { it.getDeviceId() == deviceId }
+        //     if (device != null) {
+        //         deviceViewModel = device
+        //     } else {
+        //         val newDeviceViewModel :DeviceViewModel = viewModel()
+        //         newDeviceViewModel.fetchDevice(deviceId)
+        //         deviceViewModel = newDeviceViewModel
+        //     }
+        // }
+
+        // return deviceViewModel ?: throw IllegalStateException("DeviceViewModel is null")
     }
 
     fun fetchNameByID(id: String): String {

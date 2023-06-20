@@ -1,5 +1,6 @@
 package com.example.smarthouse_tp3.advanced_devices
 
+import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -49,24 +50,34 @@ fun VacuumConfigScreen(
     val uiState by viewModel.uiState.collectAsState()
 
     val roomViewModel: RoomsViewModel = viewModel()
-    roomViewModel.fetchRooms()
 
     val roomUiState by roomViewModel.uiState.collectAsState()
 
-    val mode = VacuumMode.fromString(uiState.state?.mode.toString())
+    var mode = VacuumMode.fromString(uiState.state?.mode.toString())
+    var currentMode by remember { mutableStateOf(uiState.state?.mode) }
+
+    val currentRoom by remember { mutableStateOf(uiState.room?.name) }
 
 
-    var mopColor : Color = Color.White
-    var vacColor : Color = Color.White
-    var dockColor : Color = Color.White
+    var mopColor : Color by remember { mutableStateOf(Color.White)}
+    var vacColor : Color by remember { mutableStateOf(Color.White)}
+
+    var dockColor : Color by remember { mutableStateOf(Color.White)}
 
     if (uiState.state?.status == "docked") {
         dockColor = Color.LightGray
-    } else if (mode == VacuumMode.MOP) {
-        mopColor = Color.LightGray
     }
-    else if (mode == VacuumMode.VACUUM) {
-        vacColor = Color.LightGray
+    else {
+        dockColor = Color.White
+    }
+    if (uiState.state != null) {
+        if (uiState.state!!.mode.toString() == VacuumMode.MOP.stringValue) {
+            mopColor = Color.LightGray
+            vacColor = Color.White
+        } else if (currentMode.toString() == VacuumMode.VACUUM.stringValue) {
+            vacColor = Color.LightGray
+            mopColor = Color.White
+        }
     }
 
     val batteryLevel: Long? = uiState.state!!.batteryLevel
@@ -122,6 +133,8 @@ fun VacuumConfigScreen(
                     IconButton(
                         onClick = {
                             viewModel.changeModeVacuum()
+                            vacColor = Color.LightGray
+                            mopColor = Color.White
                         }
                     ) {
                         Icon(
@@ -152,6 +165,8 @@ fun VacuumConfigScreen(
                     IconButton(
                         onClick = {
                             viewModel.changeModeMop()
+                            vacColor =  Color.White
+                            mopColor =  Color.LightGray
                         }
                     ) {
                         Icon(
@@ -189,7 +204,10 @@ fun VacuumConfigScreen(
 
                     Button(
                         onClick = {
-                            if (uiState.state!!.status != "docked") {viewModel.dock()}
+                            if (uiState.state!!.status != "docked") {
+                                viewModel.dock()
+                                dockColor = Color.LightGray
+                            }
                         },
                         colors = ButtonDefaults.buttonColors(
                             backgroundColor = Color.Transparent,
@@ -223,6 +241,7 @@ fun VacuumConfigScreen(
             Button(
                 onClick = {
                     showDropdown = !showDropdown
+                    roomViewModel.fetchRooms()
                 },
                 colors = ButtonDefaults.buttonColors(
                     backgroundColor = Color.Transparent,
@@ -234,11 +253,13 @@ fun VacuumConfigScreen(
 
 
 
-                Text(
-                    text = uiState.state!!.location?.name.toString(),
-                    modifier = Modifier.padding(start = 8.dp),
-                    style = MaterialTheme.typography.body1
-                )
+                currentRoom?.let {
+                    Text(
+                        text = it,
+                        modifier = Modifier.padding(start = 8.dp),
+                        style = MaterialTheme.typography.body1
+                    )
+                }
 
 
                 Spacer(modifier = Modifier.width(8.dp))
@@ -269,9 +290,7 @@ fun VacuumConfigScreen(
             }
 
         }
-        Row() {
-            Text (uiState.toString())
-        }
+        Log.d("MyDe:", uiState.toString())
     }
 }
 
@@ -280,9 +299,9 @@ fun VacuumConfigScreen(
 @Composable
 fun VacuumConfigScreenPreview() {
 
-    val viewModel: VacuumViewModel = viewModel()
-    viewModel.fetchDevice("985376562da43a64")
+    // val viewModel: VacuumViewModel = viewModel()
+    // viewModel.fetchDevice("985376562da43a64")
 
-    VacuumConfigScreen(viewModel = viewModel)
+    // VacuumConfigScreen(viewModel = viewModel)
 
 }
