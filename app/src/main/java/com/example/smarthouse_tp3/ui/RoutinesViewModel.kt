@@ -1,5 +1,6 @@
 package com.example.smarthouse_tp3.ui
 
+import android.util.Log
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -49,6 +50,19 @@ class RoutinesViewModel : ViewModel() {
                         isLoading = false
                     )
                 }
+            }
+        }
+    }
+
+    fun executeRoutine(routineId : String){
+        fetchJob?.cancel()
+        fetchJob = viewModelScope.launch {
+            _uiState.update { it.copy(isLoading = true) }
+            runCatching {
+                val apiService = RetrofitClient.getApiService()
+                apiService.executeRoutine(routineId)
+            }.onSuccess {
+
             }
         }
     }

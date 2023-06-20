@@ -2,6 +2,7 @@ package com.example.smarthouse_tp3
 
 
 import android.content.res.Configuration
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -26,6 +27,12 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -35,8 +42,15 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.smarthouse_tp3.data.network.model.NetworkRoutine
+import com.example.smarthouse_tp3.data.network.model.NetworkRoutineList
+import com.example.smarthouse_tp3.ui.DevicesViewModel
 import com.example.smarthouse_tp3.ui.NavigationViewModel
+import com.example.smarthouse_tp3.ui.RoutinesViewModel
 import com.example.smarthouse_tp3.ui.theme.SmartHouse_tp3Theme
+import kotlinx.coroutines.delay
+import okhttp3.internal.wait
 
 /***
  * Pantalla dedicada a Routines.
@@ -45,14 +59,20 @@ import com.example.smarthouse_tp3.ui.theme.SmartHouse_tp3Theme
 fun RoutinesScreen(
     modifier: Modifier = Modifier,
     navigationViewModel: NavigationViewModel,
+    devicesViewModel: DevicesViewModel,
+    routinesViewModel: RoutinesViewModel,
     onNavigateToConfigScreen: () -> Unit
 ) {
+
+    routinesViewModel.fetchRoutines()
     Column(
         modifier = modifier.padding(0.dp, 8.dp, 0.dp, 0.dp)
     ) {
         SmallRoutineTilesRow(
             navigationViewModel = navigationViewModel,
-            onNavigateToConfigScreen = onNavigateToConfigScreen
+            onNavigateToConfigScreen = onNavigateToConfigScreen,
+            routinesViewModel = routinesViewModel,
+            devicesViewModel = devicesViewModel
         )
     }
 }
@@ -64,16 +84,22 @@ fun RoutinesScreen(
 @Composable
 fun SmallRoutineTile(
     modifier: Modifier = Modifier,
-    routine: Routine,
+    routine: Routine = routine1,
+    networkRoutine: NetworkRoutine,
+    routinesViewModel: RoutinesViewModel,
     navigationViewModel: NavigationViewModel,
     onNavigateToConfigScreen: () -> Unit
 ) {
+
     Surface(
         shape = MaterialTheme.shapes.small, modifier = modifier
     ) {
-        Card(modifier = Modifier.fillMaxWidth(), backgroundColor = MaterialTheme.colors.primaryVariant, onClick = {
-            navigationViewModel.selectNewRoutine(routine)
-            onNavigateToConfigScreen()
+        Card(modifier = Modifier.fillMaxWidth(),
+            backgroundColor = MaterialTheme.colors.primaryVariant,
+            onClick = {
+                navigationViewModel.selectNewRoutine(routine)
+                navigationViewModel.selectNewNetworkRoutine(networkRoutine)
+                onNavigateToConfigScreen()
         }) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -95,28 +121,44 @@ fun SmallRoutineTile(
                             .weight(0.45f),
                         contentAlignment = Alignment.Center
                     ) {
-                        Text(
-                            text = routine.getRoutineName(),
-                            style = MaterialTheme.typography.h5,
-                            textAlign = TextAlign.Center,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis, // Display the text in a single line
-                        )
+                        networkRoutine.name?.let {
+                            Text(
+                                text = it,
+                                style = MaterialTheme.typography.h5,
+                                textAlign = TextAlign.Center,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis, // Display the text in a single line
+                            )
+                        }
                     }
                 }
+
+                var isClicked by remember { mutableStateOf(false) }
+
+                val tint by animateColorAsState(
+                    if (isClicked) MaterialTheme.colors.secondary else Color.Black
+                )
+                LaunchedEffect(isClicked) {
+                    if (isClicked) {
+                        delay(150)
+                        isClicked = false
+                    }
+                }
+
                 IconButton(
-                    onClick = { routine.togglePlay() },
+                    onClick = {
+                        isClicked = !isClicked
+                        networkRoutine.id?.let { routinesViewModel.executeRoutine(it) }
+                              },
                     modifier = Modifier.padding(horizontal = 20.dp)
                 ) {
                     val playIconSize = 40.dp // Adjust the size of the icon
                     val playIcon = painterResource(R.drawable.screen_routines_icon)
-                    val playDescription = if (routine.isPlaying()) "Pause" else "Play"
-                    val playTint = if (routine.isPlaying()) MaterialTheme.colors.secondary else Color.Black
 
                     Icon(
                         painter = playIcon,
-                        contentDescription = playDescription,
-                        tint = playTint,
+                        contentDescription = null,
+                        tint = tint,
                         modifier = Modifier.size(playIconSize)
                     )
                 }
@@ -132,6 +174,7 @@ fun SmallRoutineTileExtended(
     modifier: Modifier = Modifier,
     routine: Routine,
     navigationViewModel: NavigationViewModel,
+    routinesViewModel: RoutinesViewModel,
     onNavigateToConfigScreen: () -> Unit
 ) {
     Surface(
@@ -186,7 +229,9 @@ fun SmallRoutineTileExtended(
                     }
                 }
                 IconButton(
-                    onClick = { routine.togglePlay() },
+                    onClick = {
+//                        routinesViewModel.executeRoutine(rout)
+                              },
                     modifier = Modifier
                         .align(Alignment.CenterVertically)
                         .padding(16.dp)
@@ -215,9 +260,13 @@ fun SmallRoutineTileExtended(
 fun SmallRoutineTilesRow(
     modifier: Modifier = Modifier,
     navigationViewModel: NavigationViewModel,
+    routinesViewModel: RoutinesViewModel,
+    devicesViewModel: DevicesViewModel,
     onNavigateToConfigScreen: () -> Unit
 ) {
     val isHorizontal = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
+    val routinesUiState by routinesViewModel.uiState.collectAsState()
+
 
     if (isHorizontal) {
         LazyVerticalGrid(
@@ -230,7 +279,8 @@ fun SmallRoutineTilesRow(
                 SmallRoutineTileExtended(
                     routine = item,
                     navigationViewModel = navigationViewModel,
-                    onNavigateToConfigScreen = onNavigateToConfigScreen
+                    onNavigateToConfigScreen = onNavigateToConfigScreen,
+                    routinesViewModel = routinesViewModel
                 )
             }
         }
@@ -240,12 +290,15 @@ fun SmallRoutineTilesRow(
             contentPadding = PaddingValues(horizontal = 16.dp),
             modifier = modifier.fillMaxWidth()
         ) {
-            items(items = smallRoutinesTileData) { item ->
-                SmallRoutineTile(
-                    routine = item,
-                    navigationViewModel = navigationViewModel,
-                    onNavigateToConfigScreen = onNavigateToConfigScreen
-                )
+            routinesUiState.networkRoutineList?.let { routine ->
+                items(items = routine.routines) {
+                    SmallRoutineTile(
+                        navigationViewModel = navigationViewModel,
+                        networkRoutine = it,
+                        routinesViewModel = routinesViewModel,
+                        onNavigateToConfigScreen = onNavigateToConfigScreen
+                    )
+                }
             }
         }
     }
@@ -260,7 +313,9 @@ fun SmallRoutineTilePreview() {
         SmallRoutineTile(
             routine = Routine("Morning Routine"),
             modifier = Modifier.padding(8.dp),
+            routinesViewModel = viewModel(),
             onNavigateToConfigScreen = {},
+            networkRoutine = NetworkRoutine(),
             navigationViewModel = NavigationViewModel()
         )
     }
@@ -275,6 +330,7 @@ fun SmallRoutineTileExtendedPreview() {
             routine = routine1,
             modifier = Modifier.padding(8.dp),
             onNavigateToConfigScreen = {},
+            routinesViewModel = viewModel(),
             navigationViewModel = NavigationViewModel()
         )
     }
@@ -283,7 +339,10 @@ fun SmallRoutineTileExtendedPreview() {
 @Composable
 fun SmallRoutineTileRowPreview() {
     SmallRoutineTilesRow(
-        onNavigateToConfigScreen = {}, navigationViewModel = NavigationViewModel()
+        navigationViewModel = NavigationViewModel(),
+        onNavigateToConfigScreen = {},
+        routinesViewModel = RoutinesViewModel(),
+        devicesViewModel = DevicesViewModel()
     )
 }
 

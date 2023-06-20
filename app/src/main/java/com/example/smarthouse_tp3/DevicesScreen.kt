@@ -90,9 +90,8 @@ fun DevicesSmallTileRow(
         SlideGroup(
             categories = DeviceCategory.values(),
             selectedCategory = selectedCategory,
-            onCategorySelected = { category ->
-                selectedCategory = category
-            }
+            navigationViewModel = navigationViewModel,
+            onCategorySelected = { category -> selectedCategory = category }
         )
 
         var filteredDevices : List<NetworkDevice> = emptyList()
@@ -235,6 +234,7 @@ fun DeviceSmallTile(
 fun SlideGroup(
     categories: Array<DeviceCategory>,
     selectedCategory: DeviceCategory,
+    navigationViewModel: NavigationViewModel,
     onCategorySelected: (DeviceCategory) -> Unit
 ) {
     val scrollState = rememberLazyListState()
@@ -251,6 +251,7 @@ fun SlideGroup(
             CategoryItem(
                 category = category,
                 isSelected = category == selectedCategory,
+                navigationViewModel = navigationViewModel,
                 onCategorySelected = onCategorySelected
             )
         }
@@ -261,6 +262,7 @@ fun SlideGroup(
 fun CategoryItem(
     category: DeviceCategory,
     isSelected: Boolean,
+    navigationViewModel: NavigationViewModel,
     onCategorySelected: (DeviceCategory) -> Unit
 ) {
     val categoryName = when (category) {
@@ -276,7 +278,9 @@ fun CategoryItem(
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = null // Disable click indication
-            ) { onCategorySelected(category) }
+            ) {
+                onCategorySelected(category)
+            }
     ) {
         Text(
             text = categoryName,
@@ -318,19 +322,7 @@ enum class DeviceCategory(val stringValue: String) {
     VACUUM("vacuum"),
     LIGHT("lamp")
 }
-/*
-val smallTileData = listOf(
-    DeviceAirConditioner("thomi AC"),
-    DeviceOven("pepe oven"),
-    DeviceOven("marcelo gallardo al horno"),
-    DeviceAirConditioner("martin AC"),
-    DeviceOven("samuel umtiti light"),
-    DeviceOven("martin oven"),
-    DeviceAirConditioner("mbappe AC"),
-    DeviceOven("martin oven"),
-    DeviceAirConditioner("federico AC"),
-)
-*/
+
 
 @Composable
 fun deviceViewModelMaker(typeName : String?) : DeviceViewModel{

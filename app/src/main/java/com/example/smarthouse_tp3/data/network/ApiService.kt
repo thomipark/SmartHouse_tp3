@@ -30,4 +30,9 @@ interface ApiService {
 
     @GET("api/rooms")
     suspend fun getAllRooms(): Response<NetworkRoomList>
+
+    @PUT("api/routines/{routineId}/execute")
+    suspend fun executeRoutine(
+        @Path("routineId") routineId: String
+    ): Response<NetworkActionResult>
 }
