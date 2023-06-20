@@ -1,5 +1,6 @@
 package com.example.smarthouse_tp3
 
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,20 +21,38 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.smarthouse_tp3.data.network.model.NetworkAction
+import com.example.smarthouse_tp3.data.network.model.NetworkRoutine
+import com.example.smarthouse_tp3.ui.DeviceViewModel
+import com.example.smarthouse_tp3.ui.DevicesViewModel
+import com.example.smarthouse_tp3.ui.NavigationViewModel
+import com.example.smarthouse_tp3.ui.RoutinesViewModel
+import kotlinx.coroutines.delay
 
 @Composable
-fun RoutineConfigScreen(routine: Routine) {
+fun RoutineConfigScreen(
+    navigationViewModel: NavigationViewModel,
+    routinesViewModel: RoutinesViewModel,
+    devicesViewModel: DevicesViewModel
+) {
+    val navigationUiState by navigationViewModel.uiState.collectAsState()
+
     Scaffold(
         topBar = {
-            RoutineTopBar(routine)
+            navigationUiState.selectedNetworkRoutine?.let { RoutineTopBar(it) }
         },
         content = {
             it
@@ -42,15 +61,15 @@ fun RoutineConfigScreen(routine: Routine) {
                     .fillMaxSize()
                     .padding(horizontal = 8.dp)
             ) {
-                RoutineBody(routine)
+                navigationUiState.selectedNetworkRoutine?.let { it1 -> RoutineBody(it1,routinesViewModel) }
             }
         }
     )
 }
 
 @Composable
-fun RoutineTopBar(routine: Routine) {
-    if (routine.getRoutineDevices().isNotEmpty()) {
+fun RoutineTopBar(networkRoutine: NetworkRoutine) {
+    if (networkRoutine.actions.isNotEmpty()) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -78,7 +97,7 @@ fun RoutineTopBar(routine: Routine) {
 
 @Composable
 fun AdvancedRoutineDeviceTile(
-    routineDevice: RoutineDevice,
+    deviceRoutineNetwork: DeviceRoutineNetwork,
     modifier: Modifier = Modifier
 ) {
     Surface(
@@ -95,15 +114,17 @@ fun AdvancedRoutineDeviceTile(
             Column(
                 modifier = Modifier.padding(16.dp)
             ) {
-                Text(
-                    text = routineDevice.getDeviceName(),
-                    style = MaterialTheme.typography.h6,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(bottom = 8.dp)
-                )
+                deviceRoutineNetwork.networkDevice.name?.let {
+                    Text(
+                        text = it,   //getDeviceName
+                        style = MaterialTheme.typography.h6,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(bottom = 8.dp)
+                    )
+                }
 
-                if (routineDevice.getActions().isNotEmpty()) {
-                    for (action in routineDevice.getActions()) {
+                if (deviceRoutineNetwork.networkActionList.isNotEmpty()) {      //getACTIONS
+                    for (action in deviceRoutineNetwork.networkActionList) {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
                             modifier = Modifier.padding(vertical = 4.dp)
@@ -114,11 +135,13 @@ fun AdvancedRoutineDeviceTile(
                                     .background(Color.Black)
                             )
 
-                            Text(
-                                text = action.getActionName(),
-                                style = MaterialTheme.typography.body1,
-                                modifier = Modifier.padding(start = 8.dp)
-                            )
+                            action.actionName?.let {
+                                Text(
+                                    text = it,  //Action getName
+                                    style = MaterialTheme.typography.body1,
+                                    modifier = Modifier.padding(start = 8.dp)
+                                )
+                            }
                         }
                     }
                 }
@@ -130,14 +153,17 @@ fun AdvancedRoutineDeviceTile(
 
 @Composable
 fun RoutineBody(
-    routine: Routine,
+    networkRoutine: NetworkRoutine,
+    routinesViewModel: RoutinesViewModel,
     modifier: Modifier = Modifier
 ) {
+    val deviceRoutineNetworkList = createDeviceRoutineNetworks(networkRoutine)
+    
     LazyColumn(
         contentPadding = PaddingValues(horizontal = 16.dp),
         modifier = modifier.fillMaxWidth()
     ) {
-        if (routine.getRoutineDevices().isEmpty()) {
+        if (networkRoutine.actions.isEmpty()) {
             item {
                 Box(
                     modifier = Modifier
@@ -154,35 +180,48 @@ fun RoutineBody(
                 }
             }
         } else {
-            items(items = routine.getRoutineDevices()) { item ->
-                AdvancedRoutineDeviceTile(item)
+            items(items = deviceRoutineNetworkList) { item ->
+                AdvancedRoutineDeviceTile(deviceRoutineNetwork = item)
             }
         }
     }
-    if (routine.getRoutineDevices().isNotEmpty()) {
+
+    if (networkRoutine.actions.isNotEmpty()) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(20.dp),
             contentAlignment = Alignment.BottomEnd
         ) {
+            var isClicked by remember { mutableStateOf(false) }
+
+            val tint by animateColorAsState(
+                if (isClicked) MaterialTheme.colors.secondary else Color.Black
+            )
+            LaunchedEffect(isClicked) {
+                if (isClicked) {
+                    delay(150)
+                    isClicked = false
+                }
+            }
             FloatingActionButton(
-                onClick = { routine.togglePlay() },
+                onClick = {
+                    networkRoutine.id?.let { routinesViewModel.executeRoutine(it) }
+                    isClicked = !isClicked
+                          },
                 modifier = Modifier
                     .size(128.dp)
                     .padding(4.dp),
                 backgroundColor = Color.White
             ) {
                 val playIconSize = 128.dp // Adjust the size of the icon
-                val playIcon =
-                    painterResource(if (routine.isPlaying()) R.drawable.screen_routines_icon else R.drawable.screen_routines_icon)
-                val playDescription = if (routine.isPlaying()) "Pause" else "Play"
-                val playTint = if (routine.isPlaying()) MaterialTheme.colors.secondary else Color.Black
+                val playIcon = painterResource(R.drawable.screen_routines_icon)
+                val playDescription = "Play"
 
                 Icon(
                     painter = playIcon,
                     contentDescription = playDescription,
-                    tint = playTint,
+                    tint = tint,
                     modifier = Modifier.size(playIconSize)
                 )
             }
@@ -190,21 +229,24 @@ fun RoutineBody(
     }
 }
 
-/*
-@Preview
-@Composable
-fun AdvancedRoutinePreview() {
-    RoutineConfigScreen(routine1)
-}
 
-
-val routineDevice1Action1 = Action("turn on")
-val routineDevice1Action2 = Action("set temperature to 220 C")
-val routineDevice1 = RoutineDevice("Oven", listOf(routineDevice1Action1, routineDevice1Action2))
-
-val routineDevice2Action1 = Action("turn on")
-val routineDevice2Action2 = Action("set color to RED")
-val routineDevice2 = RoutineDevice("Light", listOf(routineDevice2Action1, routineDevice2Action2))
-
-val routine1 = Routine("Afternoon Routine",listOf(routineDevice1, routineDevice2))
+/**
+ * Creates a list of DeviceRoutineNetworks which contains a Device with its actions to execute
  */
+fun createDeviceRoutineNetworks(networkRoutines: NetworkRoutine): List<DeviceRoutineNetwork> {
+    val deviceActionMap = mutableMapOf<String,DeviceRoutineNetwork>()
+
+    for (action in networkRoutines.actions) {
+        action.device?.id?.let {
+            action.device?.let { DeviceRoutineNetwork(it) }?.let { it1 ->
+                deviceActionMap.putIfAbsent(
+                    it,
+                    it1
+                )
+            }
+        }
+        deviceActionMap[action.device?.id]?.addAction(action)
+    }
+
+    return deviceActionMap.values.toList()
+}

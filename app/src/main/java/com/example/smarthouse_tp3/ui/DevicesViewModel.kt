@@ -1,6 +1,7 @@
 package com.example.smarthouse_tp3.ui
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -31,6 +32,7 @@ class DevicesViewModel : ViewModel() {
     }
 
     fun fetchDevices() {
+        Log.d("FetchingDevices", "FETCHING DEVICES")
         fetchJob?.cancel()
         fetchJob = viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }

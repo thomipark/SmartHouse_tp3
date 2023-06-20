@@ -1,5 +1,6 @@
 package com.example.smarthouse_tp3
 
+import android.util.Log
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -15,6 +16,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.smarthouse_tp3.advanced_devices.DeviceConfigScreen
 import com.example.smarthouse_tp3.ui.DevicesViewModel
 import com.example.smarthouse_tp3.ui.NavigationViewModel
+import com.example.smarthouse_tp3.ui.RoutinesViewModel
 
 @Composable
 fun MyNavHost(
@@ -23,7 +25,6 @@ fun MyNavHost(
     startDestination: String = stringResource(id = R.string.device_screen),
     navigationViewModel: NavigationViewModel = viewModel()
 ) {
-    val navigationUiState by navigationViewModel.uiState.collectAsState()
     val deviceScreen = stringResource(id = R.string.device_screen)
     val placesScreen = stringResource(id = R.string.places_screen)
     val routinesScreen = stringResource(id = R.string.routines_screen)
@@ -34,6 +35,9 @@ fun MyNavHost(
     val devicesViewModel: DevicesViewModel = viewModel()
     devicesViewModel.fetchDevices()
 
+    val routinesViewModel: RoutinesViewModel = viewModel()
+
+
     NavHost(
         navController = navController,
         startDestination = startDestination,
@@ -41,11 +45,14 @@ fun MyNavHost(
     ) {
         val bottomPadding = Modifier.padding(0.dp, 0.dp, 0.dp, 56.dp)
 
+
         //MAIN SCREENS
         composable(routinesScreen) {
             RoutinesScreen(
                 navigationViewModel = navigationViewModel,
-                modifier = bottomPadding
+                modifier = bottomPadding,
+                devicesViewModel = devicesViewModel,
+                routinesViewModel = routinesViewModel
             ) { navController.navigate(routineConfigurationScreen) }
         }
 
@@ -76,12 +83,12 @@ fun MyNavHost(
 
         //SCREEEN DE DEVICE CONFIG
         composable(deviceConfigurationScreen) {
-            navigationUiState.selectedDeviceViewModel?.let { DeviceConfigScreen(navigationViewModel) }
+            DeviceConfigScreen(navigationViewModel = navigationViewModel)
         }
 
         //SCREEN DE ADVANCED ROUTINES
         composable(routineConfigurationScreen) {
-            navigationUiState.selectedRoutine?.let { it1 -> RoutineConfigScreen(it1) }
+            RoutineConfigScreen(navigationViewModel = navigationViewModel, routinesViewModel = routinesViewModel, devicesViewModel = devicesViewModel)
         }
     }
 }
