@@ -22,7 +22,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.referentialEqualityPolicy
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -33,10 +32,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.smarthouse_tp3.DeviceFaucet
 import com.example.smarthouse_tp3.ui.FaucetUnits
 import com.example.smarthouse_tp3.ui.FaucetViewModel
-import com.example.smarthouse_tp3.ui.OvenViewModel
 
 @Composable
 fun FaucetConfigScreen(
