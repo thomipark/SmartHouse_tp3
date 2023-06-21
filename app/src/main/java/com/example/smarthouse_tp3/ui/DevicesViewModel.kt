@@ -1,18 +1,10 @@
 package com.example.smarthouse_tp3.ui
 
-import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.smarthouse_tp3.data.network.RetrofitClient
-import com.example.smarthouse_tp3.deviceViewModelMaker
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -31,7 +23,8 @@ class DevicesViewModel : ViewModel() {
         _uiState.update { it.copy(message = null) }
     }
 
-    fun fetchDevices() {
+    fun fetchDevices(whereFrom: String) {
+        Log.d(whereFrom,"First Fetch")
         fetchJob?.cancel()
         fetchJob = viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
@@ -43,6 +36,7 @@ class DevicesViewModel : ViewModel() {
                     it.copy(
                         devices = response.body(),
                         isLoading = false,
+                        firstFetchDone = true,
                         devicesId = response.body()?.devices?.map { it1 -> it1.id } as List<String>
                     )
                 }

@@ -42,11 +42,9 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.smarthouse_tp3.ui.FaucetUnits
 import com.example.smarthouse_tp3.ui.FaucetViewModel
 
@@ -66,12 +64,10 @@ fun FaucetConfigScreen(
     val isDispensing = remember { mutableStateOf(false) }
     val isDropdownExpanded = remember { mutableStateOf(false) }
 
-
     if (state != null) {
         if (state.status.toString() == "closed") {
             sliderValue = rememberSaveable { mutableStateOf(0F) }
-        } else {
-            //sliderValue.value = state.dispensedQuantity!!
+            isDispensing.value = false
         }
     }
 
@@ -110,7 +106,7 @@ fun FaucetConfigScreen(
                         elevation = 0.dp
                     ) {
                         Text(
-                            text = "Select unit",
+                            text = "Unit",
                             style = MaterialTheme.typography.h5,
                             textAlign = TextAlign.Center,
                             modifier = Modifier.padding(16.dp)
@@ -140,6 +136,7 @@ fun FaucetConfigScreen(
                                 colors = ButtonDefaults.buttonColors(
                                     backgroundColor = MaterialTheme.colors.primaryVariant
                                 ),
+                                elevation = ButtonDefaults.elevation(5.dp),
                                 modifier = Modifier
                                     .clickable { isDropdownExpanded.value = true }
                                     .size(width = 170.dp, height = 100.dp)
@@ -188,27 +185,27 @@ fun FaucetConfigScreen(
             ) {
                 Column(
                     modifier = Modifier
-                        .weight(0.6f)
+                        .weight(0.5f)
                         .padding(end = 12.dp),
                     horizontalAlignment = Alignment.Start
                 ) {
                     Card(
-                        modifier = Modifier.width(190.dp),
+                        modifier = Modifier.width(160.dp),
                         border = BorderStroke(0.5.dp, Color.LightGray),
                         elevation = 0.dp
                     ) {
                         Text(
-                            text = "Select volume",
+                            text = "Volume",
                             style = MaterialTheme.typography.h5,
                             textAlign = TextAlign.Center,
-                            maxLines = 1,
-                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 16.dp)
+                            modifier = Modifier.padding(16.dp)
+
                         )
                     }
                 }
 
                 Column(
-                    modifier = Modifier.weight(0.4f),
+                    modifier = Modifier.weight(0.5f),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
                 ) {
@@ -217,10 +214,9 @@ fun FaucetConfigScreen(
 
                     Card(
                         modifier = Modifier
-                            .width(150.dp)
+                            .width(170.dp)
                             .height(70.dp),
-                        shape = RoundedCornerShape(10),
-                        elevation = 1.dp,
+                        shape = RoundedCornerShape(20),
                         border = BorderStroke(0.1.dp, Color.LightGray),
                         backgroundColor = MaterialTheme.colors.primaryVariant
                     ) {
@@ -232,6 +228,16 @@ fun FaucetConfigScreen(
                                 value = textFieldValue,
                                 onValueChange = { newValue: String ->
                                     textFieldValue = newValue
+                                    var inputValue = textFieldValue.toIntOrNull()
+
+                                    if (inputValue != null && inputValue > 100) {
+                                        inputValue = 100
+                                    }
+
+                                    if (inputValue == null || inputValue < 0) {
+                                        inputValue = 0
+                                    }
+                                    sliderValue.value = inputValue.toString().toFloat()
                                 },
                                 textStyle = TextStyle(textAlign = TextAlign.Center),
                                 modifier = Modifier.fillMaxSize(),
@@ -240,20 +246,16 @@ fun FaucetConfigScreen(
                                 enabled = isEnabled,
                                 keyboardActions = KeyboardActions(
                                     onDone = {
-                                        // Handle the user input here, e.g., validate and update the value
-                                        val inputValue = textFieldValue.toIntOrNull()
-                                        if (inputValue != null && inputValue in 1..100) {
-                                            // Update the value in your state or perform any other actions
-                                            sliderValue.value = inputValue.toString().toFloat()
-                                            isEnabled = false
-                                            textFieldValue = ""
-                                        }
+                                        isEnabled = false
+                                        textFieldValue = ""
                                     }
                                 ),
                             )
                             isEnabled = true
                             Box(
-                                modifier = Modifier.size(150.dp, 70.dp).background(MaterialTheme.colors.primaryVariant)
+                                modifier = Modifier
+                                    .size(170.dp, 70.dp)
+                                    .background(MaterialTheme.colors.primaryVariant)
                             )
 
                             Text(
@@ -269,7 +271,7 @@ fun FaucetConfigScreen(
         }
 
 
-        uiState.id?.let { viewModel.fetchDevice(it) }
+        //uiState.id?.let { viewModel.fetchDevice(it) }
         if (state?.status.toString() == "closed" || (state?.status.toString() == "opened" && isDispensing.value)) {
             if (state?.status.toString() == "opened") {
                 Row(
@@ -338,22 +340,21 @@ fun FaucetConfigScreen(
                     modifier = Modifier.weight(1f),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
+                    val aux = sliderValue.value
                     //uiState.id?.let { viewModel.fetchDevice(it) }
                     (if (state?.status.toString() == "closed") {
-                        if (isDispensing.value) {
-                            isDispensing.value = false
-                        }
                         sliderValue.value
-                    } else if (isDispensing.value) {
-                        state?.dispensedQuantity
                     } else {
-                        0f
+                        uiState.id?.let { viewModel.fetchDevice(it) }
+                        state?.dispensedQuantity
                     })?.let {
                         Box(
                             modifier = Modifier.width(270.dp)
                         ) {
                             Box(
-                                modifier = Modifier.width(40.dp).offset(x = (-46).dp, y = 8.dp)
+                                modifier = Modifier
+                                    .width(40.dp)
+                                    .offset(x = (-46).dp, y = 8.dp)
                             ) {
                                 Text(
                                     text = "0 ${selectedUnit.value}",
@@ -375,7 +376,9 @@ fun FaucetConfigScreen(
                                 valueRange = 0f..100f
                             )
                             Box(
-                                modifier = Modifier.width(70.dp).offset(x = (270).dp, y = 8.dp)
+                                modifier = Modifier
+                                    .width(70.dp)
+                                    .offset(x = (270).dp, y = 8.dp)
                             ) {
                                 Text(
                                     text = "100 ${selectedUnit.value}",
@@ -386,11 +389,14 @@ fun FaucetConfigScreen(
                             }
                         }
                     }
+                    if (state?.status.toString() != "closed" && isDispensing.value && aux != 0f && aux == state?.dispensedQuantity) {
+                        viewModel.changeSwitchState()
+                        isDispensing.value = false
+                    }
                 }
             }
-       }
+        }
 
-        //uiState.id?.let { viewModel.fetchDevice(it) }
         if (state?.status.toString() == "opened" && !isDispensing.value) {
             Row(
                 modifier = Modifier.padding(top = 100.dp),
@@ -430,19 +436,22 @@ fun FaucetConfigScreen(
                                 viewModel.dispense(
                                     sliderValue.value,
                                     selectedUnit.value
-                                ); isDispensing.value = true
+                                )
+                                isDispensing.value = true
                             },
                             colors = ButtonDefaults.buttonColors(
                                 backgroundColor = MaterialTheme.colors.primaryVariant,
                                 contentColor = Color.White
                             ),
+                            elevation = ButtonDefaults.elevation(5.dp),
                             modifier = Modifier.size(width = 250.dp, height = 100.dp)
                         ) {
                             Text(
                                 text = "Dispense",
                                 fontWeight = FontWeight.ExtraBold,
                                 fontSize = 30.sp,
-                                textAlign = TextAlign.Center
+                                textAlign = TextAlign.Center,
+                                color = if(MaterialTheme.colors.isLight) Color.White else Color.Black,
                             )
                         }
                     }
@@ -465,9 +474,10 @@ fun FaucetConfigScreen(
                         contentAlignment = Alignment.Center
                     ) {
                         Button(
-                            onClick = { viewModel.close(); viewModel.changeSwitchState() },
+                            onClick = { viewModel.changeSwitchState(); isDispensing.value = false},
                             modifier = Modifier.fillMaxSize(),
                             enabled = state?.status.toString() != "closed",
+                            elevation = ButtonDefaults.elevation(5.dp),
                             colors = ButtonDefaults.buttonColors(
                                 backgroundColor = MaterialTheme.colors.primaryVariant
                             )
@@ -486,6 +496,7 @@ fun FaucetConfigScreen(
     }
 }
 
+/*
 @Preview(showBackground = true)
 @Composable
 fun FaucetConfigScreenPreview() {
@@ -496,3 +507,4 @@ fun FaucetConfigScreenPreview() {
     FaucetConfigScreen(viewModel = viewModel)
 
 }
+*/

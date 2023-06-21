@@ -1,0 +1,31 @@
+
+<resources>
+    <string name="app_name">SmartHouse_tp3</string>
+    <string name="smallTile">small tile</string>
+    <string name="device_oven">Horno</string>
+    <string name="device_screen">Dispositivos</string>
+    <string name="load_devices">Cargar Dispositivos</string>
+    <string name="loading">Cargando</string>
+    <string name="places_screen">Lugares</string>
+    <string name="routines_screen">Rutinas</string>
+    <string name="favorites_screen">Favoritos</string>
+    <string name="device_configuration_screen">Configuración de Dispositivos</string>
+    <string name="routine_configuration_screen">Configuración de Rutinas</string>
+
+    <string name="config_oven_screen">Configuración de Horno</string>
+    <string name="config_faucet_screen">Configuración de Grifo</string>
+    <string name="config_ac_screen">Configuración de Aire Acondicionado</string>
+    <string name="config_curtain_screen">Configuración de Cortina</string>
+    <string name="config_light_screen">Configuración de Luz</string>
+    <string name="config_vacuum_screen">Configuración de Aspiradora</string>
+    <string name="intensity">Intensidad</string>
+    <string name="hue">Tono</string>
+    <string name="mode">MODO</string>
+    <string name="fan_speed_text">Velocidad del Ventilador:\n%s</string>
+    <string name="return_to_dock">REGRESAR A LA ESTACIÓN DE CARGA</string>
+    <string name="brightness_text">Brillo:</string>
+    <string name="change_color">Cambiar Color</string>
+    <string name="select_color">Seleccionar un Color:</string>
+    <string name="save_color">Guardar</string>
+    <string name="device_type_error">Error: No se pudo cargar el dispositivo. Tipo de dispositivo desconocido.</string>
+</resources>

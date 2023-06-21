@@ -2,7 +2,6 @@ package com.example.smarthouse_tp3.ui
 
 import androidx.lifecycle.ViewModel
 import com.example.smarthouse_tp3.Device
-import com.example.smarthouse_tp3.DeviceCategory
 import com.example.smarthouse_tp3.Routine
 import com.example.smarthouse_tp3.data.network.model.NetworkRoutine
 import kotlinx.coroutines.flow.MutableStateFlow

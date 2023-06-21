@@ -42,6 +42,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.smarthouse_tp3.screens.MainScreen
+import com.example.smarthouse_tp3.ui.DeviceViewModel
+import com.example.smarthouse_tp3.ui.DevicesViewModel
 import com.example.smarthouse_tp3.ui.NavigationViewModel
 import com.example.smarthouse_tp3.ui.theme.SmartHouse_tp3Theme
 
@@ -75,177 +78,10 @@ class MainActivity : ComponentActivity() {
                 ) {
                     MyNavHost(
                         navController = navController,
-                        navigationViewModel = navigationViewModel
+                        navigationViewModel = navigationViewModel,
                     )
                 }
             }
         }
     }
-}
-
-@Composable
-fun BottomBar(
-    navController: NavController
-) {
-    val items = listOf(
-        MainScreen.DevicesScreen,
-        MainScreen.PlacesScreen,
-        MainScreen.RoutinesScreen,
-        MainScreen.FavoritesScreen
-    )
-
-    BottomNavigation(
-        backgroundColor = MaterialTheme.colors.primary
-    ) {
-        val navBackStackEntry by navController.currentBackStackEntryAsState()
-        val currentRoute = navBackStackEntry?.destination?.route
-        items.forEach { item ->
-            BottomNavigationItem(
-                selectedContentColor = MaterialTheme.colors.secondary,
-                unselectedContentColor = MaterialTheme.colors.surface,
-                icon = {
-                    val tint = if (currentRoute == item.route) {
-                        MaterialTheme.colors.secondary
-                    } else {
-                        LocalContentColor.current.copy(alpha = LocalContentAlpha.current)
-                    }
-                    Icon(
-                        imageVector = ImageVector.vectorResource(id = item.icon),
-                        contentDescription = item.title,
-                        modifier = Modifier.size(25.dp),
-                        tint = tint
-                    )
-                },
-                label = { Text(text = item.title) },
-                alwaysShowLabel = true,
-                selected = currentRoute == item.route,
-                onClick = {
-                    navController.navigate(item.route) {
-                        navController.graph.startDestinationRoute?.let { screenRoute ->
-                            popUpTo(screenRoute) {
-                                saveState = true
-                            }
-                            launchSingleTop = true
-                            restoreState = true
-                        }
-                    }
-                }
-            )
-        }
-    }
-}
-
-
-@Composable
-fun TopBar(
-    navController: NavController,
-    navigationViewModel: NavigationViewModel = viewModel()
-) {
-    val currentRoute = navController.currentDestination?.route ?: ""
-    val hideBackIcon =
-        currentRoute == stringResource(id = R.string.device_screen) || currentRoute == stringResource(
-            id = R.string.favorites_screen
-        ) || currentRoute == stringResource(id = R.string.places_screen) || currentRoute == stringResource(
-            id = R.string.routines_screen
-        )
-    val navigationUiState by navigationViewModel.uiState.collectAsState()
-
-    val routeToIconMap = mapOf(
-        stringResource(id = R.string.device_screen) to R.drawable.screen_devices_icon,
-        stringResource(id = R.string.favorites_screen) to R.drawable.screen_favorites_icon,
-        stringResource(id = R.string.places_screen) to R.drawable.screen_places_icon,
-        stringResource(id = R.string.routines_screen) to R.drawable.screen_routines_icon,
-    )
-
-
-    if (!hideBackIcon) {
-        TopAppBar(
-            backgroundColor = MaterialTheme.colors.primary,
-            navigationIcon = {
-                IconButton(onClick = { navController.navigateUp() }) {
-                    Icon(
-                        imageVector = Icons.Filled.ArrowBack,
-                        contentDescription = "Back"
-                    )
-                }
-            },
-            title = {
-                when (currentRoute) {
-                    stringResource(id = R.string.routine_configuration_screen) -> {
-                        navigationUiState.selectedRoutine?.let {
-                            Text(
-                                text = it.getRoutineName(),
-                                textAlign = TextAlign.Start,
-                                modifier = Modifier.fillMaxWidth()
-                            )
-                        }
-                    }
-
-                    stringResource(id = R.string.device_configuration_screen) -> {
-                        navigationUiState.selectedDevice?.let {
-                            Text(
-                                text = it.getName(),
-                                textAlign = TextAlign.Start,
-                                modifier = Modifier.fillMaxWidth()
-                            )
-                        }
-                    }
-                }
-            },
-        )
-    } else {
-        Box(
-            modifier = Modifier
-                .height(56.dp)
-                .background(MaterialTheme.colors.primary)
-                .fillMaxWidth(),
-            contentAlignment = Alignment.Center
-        ) {
-            routeToIconMap[currentRoute]?.let { iconRes ->
-                val icon = ImageVector.vectorResource(iconRes)
-
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-
-                    Box(
-                        modifier = Modifier
-                            .padding(end = 8.dp),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Icon(
-                            imageVector = icon,
-                            contentDescription = currentRoute,
-                            tint = MaterialTheme.colors.secondary
-                        )
-                    }
-
-                    Box(
-                        contentAlignment = Alignment.Center
-                    ) {
-
-                    Text(
-                            text = currentRoute,
-                            textAlign = TextAlign.Left,
-                            style = MaterialTheme.typography.h6,
-                            color = MaterialTheme.colors.surface
-                        )
-                    }
-                }
-            }
-        }
-    }
-}
-
-/* --------------------- LAS PREVIEW EMPIEZAN ACA ------------------*/
-
-
-
-@Preview
-@Composable
-fun BottomBarPreview() {
-    val navController = rememberNavController()
-    BottomBar(navController = navController)
 }

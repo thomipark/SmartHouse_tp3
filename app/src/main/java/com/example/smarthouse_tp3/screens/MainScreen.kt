@@ -1,4 +1,6 @@
-package com.example.smarthouse_tp3
+package com.example.smarthouse_tp3.screens
+
+import com.example.smarthouse_tp3.R
 
 
 sealed class MainScreen(val title: String, val icon: Int, val route: String) {

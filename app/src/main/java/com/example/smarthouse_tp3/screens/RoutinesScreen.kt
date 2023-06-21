@@ -1,4 +1,4 @@
-package com.example.smarthouse_tp3
+package com.example.smarthouse_tp3.screens
 
 
 import android.content.res.Configuration
@@ -43,14 +43,17 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.smarthouse_tp3.Action
+import com.example.smarthouse_tp3.R
+import com.example.smarthouse_tp3.Routine
+import com.example.smarthouse_tp3.RoutineDevice
+import com.example.smarthouse_tp3.createDeviceRoutineNetworks
 import com.example.smarthouse_tp3.data.network.model.NetworkRoutine
-import com.example.smarthouse_tp3.data.network.model.NetworkRoutineList
 import com.example.smarthouse_tp3.ui.DevicesViewModel
 import com.example.smarthouse_tp3.ui.NavigationViewModel
 import com.example.smarthouse_tp3.ui.RoutinesViewModel
 import com.example.smarthouse_tp3.ui.theme.SmartHouse_tp3Theme
 import kotlinx.coroutines.delay
-import okhttp3.internal.wait
 
 /***
  * Pantalla dedicada a Routines.
@@ -132,36 +135,7 @@ fun SmallRoutineTile(
                         }
                     }
                 }
-
-                var isClicked by remember { mutableStateOf(false) }
-
-                val tint by animateColorAsState(
-                    if (isClicked) MaterialTheme.colors.secondary else Color.Black
-                )
-                LaunchedEffect(isClicked) {
-                    if (isClicked) {
-                        delay(150)
-                        isClicked = false
-                    }
-                }
-
-                IconButton(
-                    onClick = {
-                        isClicked = !isClicked
-                        networkRoutine.id?.let { routinesViewModel.executeRoutine(it) }
-                              },
-                    modifier = Modifier.padding(horizontal = 20.dp)
-                ) {
-                    val playIconSize = 40.dp // Adjust the size of the icon
-                    val playIcon = painterResource(R.drawable.screen_routines_icon)
-
-                    Icon(
-                        painter = playIcon,
-                        contentDescription = null,
-                        tint = tint,
-                        modifier = Modifier.size(playIconSize)
-                    )
-                }
+                playButton(networkRoutine = networkRoutine, routinesViewModel = routinesViewModel)
             }
         }
     }
@@ -172,7 +146,7 @@ fun SmallRoutineTile(
 @Composable
 fun SmallRoutineTileExtended(
     modifier: Modifier = Modifier,
-    routine: Routine,
+    networkRoutine: NetworkRoutine,
     navigationViewModel: NavigationViewModel,
     routinesViewModel: RoutinesViewModel,
     onNavigateToConfigScreen: () -> Unit
@@ -185,7 +159,7 @@ fun SmallRoutineTileExtended(
             .fillMaxWidth()
             .height(128.dp),
             backgroundColor = MaterialTheme.colors.primaryVariant, onClick = {
-            navigationViewModel.selectNewRoutine(routine)
+            navigationViewModel.selectNewNetworkRoutine(networkRoutine)
             onNavigateToConfigScreen()
         }) {
             Row(
@@ -194,17 +168,18 @@ fun SmallRoutineTileExtended(
                 Column(
                     modifier = Modifier.weight(1f)
                 ) {
-                    Text(
-                        text = routine.getRoutineName(),
-                        style = MaterialTheme.typography.h5,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = 16.dp)
-                    )
+                    networkRoutine.name?.let {
+                        Text(
+                            text = it,
+                            style = MaterialTheme.typography.h5,
+                            textAlign = TextAlign.Center,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis, // Display the text in a single line
+                        )
+                    }
+                    val deviceRoutineNetworkList = createDeviceRoutineNetworks(networkRoutine)
                     var deviceNames = ""
-                    routine.getRoutineDevices().forEach { deviceNames += it.getDeviceName() + ", " }
+                    deviceRoutineNetworkList.forEach { deviceNames += it.networkDevice.name + ", " }
                     deviceNames = deviceNames.dropLast(2) // Remove the last ", "
 
                     Row(
@@ -228,30 +203,44 @@ fun SmallRoutineTileExtended(
                         )
                     }
                 }
-                IconButton(
-                    onClick = {
-//                        routinesViewModel.executeRoutine(rout)
-                              },
-                    modifier = Modifier
-                        .align(Alignment.CenterVertically)
-                        .padding(16.dp)
-                ) {
-                    val playIconSize = 70.dp // Adjust the size of the icon
-                    val playIcon = painterResource(R.drawable.screen_routines_icon)
-                    val playDescription = if (routine.isPlaying()) "Pause" else "Play"
-                    val playTint = if (routine.isPlaying()) MaterialTheme.colors.secondary else Color.Black
-
-                    Icon(
-                        painter = playIcon,
-                        contentDescription = playDescription,
-                        tint = playTint,
-                        modifier = Modifier
-                            .size(playIconSize)
-
-                    )
-                }
+                playButton(networkRoutine = networkRoutine, routinesViewModel = routinesViewModel)
             }
         }
+    }
+}
+
+@Composable fun playButton(
+    networkRoutine: NetworkRoutine,
+    routinesViewModel: RoutinesViewModel
+){
+    var isClicked by remember { mutableStateOf(false) }
+
+    val tint by animateColorAsState(
+        if (isClicked) MaterialTheme.colors.secondary else Color.Black
+    )
+    LaunchedEffect(isClicked) {
+        if (isClicked) {
+            delay(150)
+            isClicked = false
+        }
+    }
+
+    IconButton(
+        onClick = {
+            isClicked = !isClicked
+            networkRoutine.id?.let { routinesViewModel.executeRoutine(it) }
+        },
+        modifier = Modifier.padding(horizontal = 20.dp)
+    ) {
+        val playIconSize = 40.dp // Adjust the size of the icon
+        val playIcon = painterResource(R.drawable.screen_routines_icon)
+
+        Icon(
+            painter = playIcon,
+            contentDescription = null,
+            tint = tint,
+            modifier = Modifier.size(playIconSize)
+        )
     }
 }
 
@@ -275,13 +264,15 @@ fun SmallRoutineTilesRow(
             horizontalArrangement = Arrangement.spacedBy(16.dp),
             modifier = modifier.fillMaxWidth()
         ) {
-            items(items = smallRoutinesTileData) { item ->
-                SmallRoutineTileExtended(
-                    routine = item,
-                    navigationViewModel = navigationViewModel,
-                    onNavigateToConfigScreen = onNavigateToConfigScreen,
-                    routinesViewModel = routinesViewModel
-                )
+            routinesUiState.networkRoutineList?.let { routine ->
+                items(items = routine.routines) {
+                    SmallRoutineTile(
+                        navigationViewModel = navigationViewModel,
+                        networkRoutine = it,
+                        routinesViewModel = routinesViewModel,
+                        onNavigateToConfigScreen = onNavigateToConfigScreen
+                    )
+                }
             }
         }
     } else {
@@ -327,7 +318,7 @@ fun SmallRoutineTileExtendedPreview() {
     LocalConfiguration.current.orientation = Configuration.ORIENTATION_LANDSCAPE
     SmartHouse_tp3Theme {
         SmallRoutineTileExtended(
-            routine = routine1,
+            networkRoutine = NetworkRoutine(),
             modifier = Modifier.padding(8.dp),
             onNavigateToConfigScreen = {},
             routinesViewModel = viewModel(),
