@@ -1,8 +1,6 @@
 package com.example.smarthouse_tp3.ui
 
 import android.util.Log
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import com.example.smarthouse_tp3.R
 import com.example.smarthouse_tp3.data.network.model.NetworkDeviceState
@@ -38,7 +36,6 @@ class FaucetViewModel(deviceId: String) : DeviceViewModel(deviceId = deviceId) {
     }
 
     override fun getSmallIconsList(): List<Int> {
-        val iconsList = mutableListOf<Int>()
         // if (uiState.value.state?.temperature > 100){
         //     iconsList.add(R.drawable.device_oven_on)
         // }
@@ -47,7 +44,7 @@ class FaucetViewModel(deviceId: String) : DeviceViewModel(deviceId = deviceId) {
         // }
 
         // iconsList.add(R.drawable.device_lightbulb_on)
-        return iconsList
+        return mutableListOf()
     }
 
     fun open() {
@@ -74,6 +71,8 @@ class FaucetViewModel(deviceId: String) : DeviceViewModel(deviceId = deviceId) {
     fun dispense(quantity: Float, unit: String) {
         val state = uiState.value.state
         if (state != null) {
+            changeDeviceIconColor(Color.Blue)
+            uiState.value.id?.let { executeAction(it, "open", arrayOf()) }
             updateUiState(status = "opened")
             uiState.value.id?.let {
                 Log.d("Dispense", "Dispensing quantity: $quantity $unit")
