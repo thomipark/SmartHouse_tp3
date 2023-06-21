@@ -28,5 +28,4 @@
     <string name="save_color">Save</string>
     <string name="device_type_error">Error: Device could not be loaded. Device type not known.</string>
 
-
 </resources>
