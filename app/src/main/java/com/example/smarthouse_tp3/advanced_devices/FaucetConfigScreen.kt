@@ -106,7 +106,7 @@ fun FaucetConfigScreen(
                         elevation = 0.dp
                     ) {
                         Text(
-                            text = "Select unit",
+                            text = "Unit",
                             style = MaterialTheme.typography.h5,
                             textAlign = TextAlign.Center,
                             modifier = Modifier.padding(16.dp)
@@ -136,6 +136,7 @@ fun FaucetConfigScreen(
                                 colors = ButtonDefaults.buttonColors(
                                     backgroundColor = MaterialTheme.colors.primaryVariant
                                 ),
+                                elevation = ButtonDefaults.elevation(5.dp),
                                 modifier = Modifier
                                     .clickable { isDropdownExpanded.value = true }
                                     .size(width = 170.dp, height = 100.dp)
@@ -184,27 +185,27 @@ fun FaucetConfigScreen(
             ) {
                 Column(
                     modifier = Modifier
-                        .weight(0.6f)
+                        .weight(0.5f)
                         .padding(end = 12.dp),
                     horizontalAlignment = Alignment.Start
                 ) {
                     Card(
-                        modifier = Modifier.width(190.dp),
+                        modifier = Modifier.width(160.dp),
                         border = BorderStroke(0.5.dp, Color.LightGray),
                         elevation = 0.dp
                     ) {
                         Text(
-                            text = "Select volume",
+                            text = "Volume",
                             style = MaterialTheme.typography.h5,
                             textAlign = TextAlign.Center,
-                            maxLines = 1,
-                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 16.dp)
+                            modifier = Modifier.padding(16.dp)
+
                         )
                     }
                 }
 
                 Column(
-                    modifier = Modifier.weight(0.4f),
+                    modifier = Modifier.weight(0.5f),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
                 ) {
@@ -213,10 +214,9 @@ fun FaucetConfigScreen(
 
                     Card(
                         modifier = Modifier
-                            .width(150.dp)
+                            .width(170.dp)
                             .height(70.dp),
-                        shape = RoundedCornerShape(10),
-                        elevation = 1.dp,
+                        shape = RoundedCornerShape(20),
                         border = BorderStroke(0.1.dp, Color.LightGray),
                         backgroundColor = MaterialTheme.colors.primaryVariant
                     ) {
@@ -247,14 +247,14 @@ fun FaucetConfigScreen(
                                 keyboardActions = KeyboardActions(
                                     onDone = {
                                         isEnabled = false
-                                        //textFieldValue = ""
+                                        textFieldValue = ""
                                     }
                                 ),
                             )
                             isEnabled = true
                             Box(
                                 modifier = Modifier
-                                    .size(150.dp, 70.dp)
+                                    .size(170.dp, 70.dp)
                                     .background(MaterialTheme.colors.primaryVariant)
                             )
 
@@ -397,10 +397,6 @@ fun FaucetConfigScreen(
             }
         }
 
-
-        if (state?.status.toString() != "opened")
-            uiState.id?.let { viewModel.fetchDevice(it) }
-
         if (state?.status.toString() == "opened" && !isDispensing.value) {
             Row(
                 modifier = Modifier.padding(top = 100.dp),
@@ -447,13 +443,15 @@ fun FaucetConfigScreen(
                                 backgroundColor = MaterialTheme.colors.primaryVariant,
                                 contentColor = Color.White
                             ),
+                            elevation = ButtonDefaults.elevation(5.dp),
                             modifier = Modifier.size(width = 250.dp, height = 100.dp)
                         ) {
                             Text(
                                 text = "Dispense",
                                 fontWeight = FontWeight.ExtraBold,
                                 fontSize = 30.sp,
-                                textAlign = TextAlign.Center
+                                textAlign = TextAlign.Center,
+                                color = if(MaterialTheme.colors.isLight) Color.White else Color.Black,
                             )
                         }
                     }
@@ -479,6 +477,7 @@ fun FaucetConfigScreen(
                             onClick = { viewModel.changeSwitchState(); isDispensing.value = false},
                             modifier = Modifier.fillMaxSize(),
                             enabled = state?.status.toString() != "closed",
+                            elevation = ButtonDefaults.elevation(5.dp),
                             colors = ButtonDefaults.buttonColors(
                                 backgroundColor = MaterialTheme.colors.primaryVariant
                             )
