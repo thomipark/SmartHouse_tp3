@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.sp
 import com.example.smarthouse_tp3.R
 import com.example.smarthouse_tp3.ui.VacuumMode
 import androidx.compose.runtime.*
+import androidx.compose.ui.layout.HorizontalAlignmentLine
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -54,9 +55,9 @@ fun VacuumConfigScreen(
     val roomUiState by roomViewModel.uiState.collectAsState()
 
     var mode = VacuumMode.fromString(uiState.state?.mode.toString())
-    var currentMode by remember { mutableStateOf(uiState.state?.mode) }
+    val currentMode by remember { mutableStateOf(uiState.state?.mode) }
 
-    val currentRoom by remember { mutableStateOf(uiState.room?.name) }
+    var currentRoom by remember { mutableStateOf(uiState.room?.name) }
 
 
     var mopColor : Color by remember { mutableStateOf(Color.White)}
@@ -207,6 +208,7 @@ fun VacuumConfigScreen(
                             if (uiState.state!!.status != "docked") {
                                 viewModel.dock()
                                 dockColor = Color.LightGray
+                                currentRoom = uiState.room?.name
                             }
                         },
                         colors = ButtonDefaults.buttonColors(
@@ -231,65 +233,91 @@ fun VacuumConfigScreen(
                 }
             }
         }
-        Row(
-            modifier = Modifier
-                .padding(16.dp)
-                .fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center
+
+Card (
+
+    modifier = Modifier
+        .padding(16.dp)
+        .fillMaxWidth(),
+    elevation = 4.dp
         ) {
-            Button(
-                onClick = {
-                    showDropdown = !showDropdown
-                    roomViewModel.fetchRooms()
-                },
-                colors = ButtonDefaults.buttonColors(
-                    backgroundColor = Color.Transparent,
-                ),
-                modifier = Modifier.fillMaxWidth(),
-                elevation = null,
-                border = null
-            ) {
+    Row(
+        horizontalArrangement = Arrangement.Start
+    ) {
+
+        Text(
+            text = stringResource(id = R.string.current_room),
+            textAlign = TextAlign.Start,
+            modifier = Modifier.padding(horizontal = 20.dp),
+            fontSize = 20.sp
+        )
+    }
+    Row(
+        modifier = Modifier
+            .padding(20.dp)
+            .fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center
+    ) {
+        Button(
+            onClick = {
+                showDropdown = !showDropdown
+                roomViewModel.fetchRooms()
+            },
+            colors = ButtonDefaults.buttonColors(
+                backgroundColor = Color.Transparent,
+            ),
+            modifier = Modifier.fillMaxWidth(),
+            elevation = null,
+            border = null
+        ) {
+            Column {
+
+                Row {
+                    currentRoom?.let {
+                        Text(
+                            text = it,
+                            modifier = Modifier.padding(start = 8.dp),
+                            style = MaterialTheme.typography.body1
+                        )
+                    }
 
 
-
-                currentRoom?.let {
-                    Text(
-                        text = it,
-                        modifier = Modifier.padding(start = 8.dp),
-                        style = MaterialTheme.typography.body1
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Icon(
+                        painter = painterResource(R.drawable.baseline_arrow_drop_down_24),
+                        contentDescription = "Dropdown Icon",
+                        modifier = Modifier.size(20.dp)
                     )
                 }
-
-
-                Spacer(modifier = Modifier.width(8.dp))
-                Icon(
-                    painter = painterResource(R.drawable.baseline_arrow_drop_down_24),
-                    contentDescription = "Dropdown Icon",
-                    modifier = Modifier.size(20.dp)
-                )
             }
-
-            DropdownMenu(
-                expanded = showDropdown,
-                onDismissRequest = { showDropdown = false },
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                roomUiState.rooms?.rooms?.let { rooms ->
-                    rooms.map { it.name }.forEach { option ->
-                        DropdownMenuItem(
-                            onClick = {
-                                viewModel.setLocation(option.toString())
-                                showDropdown = false
+        }
+        DropdownMenu(
+            expanded = showDropdown,
+            onDismissRequest = { showDropdown = false },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            roomUiState.rooms?.rooms?.let { rooms ->
+                rooms.map { it }.forEach { option ->
+                    DropdownMenuItem(
+                        onClick = {
+                            option.let { viewModel.setLocation(it) }
+                            currentRoom = option.name
+                            showDropdown = false
+                            if (dockColor == Color.LightGray) {
+                                viewModel.pause()
+                                dockColor = Color.White
                             }
-                        ) {
-                            Text(text = option.toString())
                         }
+                    ) {
+                        Text(text = option.name.toString())
                     }
                 }
             }
-
         }
+
+    }
+}
         Log.d("MyDe:", uiState.toString())
     }
 }

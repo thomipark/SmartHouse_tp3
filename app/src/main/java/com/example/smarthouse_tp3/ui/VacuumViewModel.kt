@@ -178,17 +178,15 @@ class VacuumViewModel(deviceId : String) : DeviceViewModel(deviceId) {
         }
     }
 
-    fun setLocation(roomId: String) {
-        val state = uiState.value.state
-        if (state != null) {
-            // updateUiState(location = RoomViewModel.getFromId())
+    fun setLocation(room : NetworkDeviceRoom) {
+        Log.d("MYROOM", room.toString())
+        updateUiState(location = room)
 
-            uiState.value.id?.let {
-                executeAction(
-                    it, "setLocation",
-                    arrayOf(roomId)
-                )
-            }
+        uiState.value.id?.let {
+            executeAction(
+                it, "setLocation",
+                arrayOf(room.id!!)
+            )
         }
     }
 }

@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.smarthouse_tp3.data.network.RetrofitClient
+import com.example.smarthouse_tp3.data.network.model.NetworkDeviceRoom
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -46,5 +47,10 @@ class RoomsViewModel : ViewModel() {
             }
         }
         Log.d("MYROOM", uiState.value.toString())
+    }
+
+    fun getRoomFromName(roomName: String): NetworkDeviceRoom {
+        return uiState.value.rooms?.rooms?.find { it.name == roomName }
+            ?: return NetworkDeviceRoom()
     }
 }
