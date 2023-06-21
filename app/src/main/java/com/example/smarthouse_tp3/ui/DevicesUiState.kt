@@ -7,7 +7,8 @@ data class DevicesUiState(
     val devicesId : List<String> = emptyList(),
     val deviceList : List<DeviceViewModel> = emptyList(),
     val isLoading: Boolean = false,
-    val message: String? = null
+    val message: String? = null,
+    val firstFetchDone: Boolean = false
 )
 
 val DevicesUiState.hasError: Boolean get() = message != null

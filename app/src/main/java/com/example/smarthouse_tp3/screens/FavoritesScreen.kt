@@ -1,4 +1,4 @@
-package com.example.smarthouse_tp3
+package com.example.smarthouse_tp3.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -33,6 +33,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.smarthouse_tp3.Device
 import com.example.smarthouse_tp3.data.network.model.NetworkDevice
 import com.example.smarthouse_tp3.ui.DeviceViewModel
 import com.example.smarthouse_tp3.ui.DevicesViewModel
@@ -163,7 +164,7 @@ fun FavoritesSmallTileRow(
                 if (devicesList != null) {
                     items(items = devicesList) { item ->
                         item.let {
-                            val myDevice : DeviceViewModel = deviceViewModelMaker(typeName = item.type?.name)
+                            val myDevice: DeviceViewModel = deviceViewModelMaker(typeName = item.type?.name)
                             FavoriteSmallTile(
                                 deviceViewModel = myDevice,
                                 device = it,

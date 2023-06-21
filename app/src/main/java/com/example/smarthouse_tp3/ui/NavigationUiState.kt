@@ -1,7 +1,6 @@
 package com.example.smarthouse_tp3.ui
 
 import com.example.smarthouse_tp3.Device
-import com.example.smarthouse_tp3.DeviceCategory
 import com.example.smarthouse_tp3.Routine
 import com.example.smarthouse_tp3.data.network.model.NetworkRoutine
 

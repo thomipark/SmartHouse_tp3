@@ -5,6 +5,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.smarthouse_tp3.data.network.RetrofitClient
+import com.example.smarthouse_tp3.data.network.model.NetworkDevice
+import com.example.smarthouse_tp3.data.network.model.NetworkDeviceType
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -93,6 +95,22 @@ open class DeviceViewModel(private var deviceId : String) : ViewModel() {
                 currentState.copy(
                   switchState = !uiState.value.switchState
                 ) }
+    }
+
+    fun fetchFromDevicesViewModel(networkDevice: NetworkDevice){
+        _uiState.update { it.copy(
+            isLoading = false,
+            id = networkDevice.id,
+            name = networkDevice.name,
+            type = networkDevice.type,
+            state = networkDevice.state,
+            room = networkDevice.room,
+            meta = networkDevice.meta
+        ) }
+    }
+
+    fun getType(): String? {
+        return _uiState.value.type?.name
     }
 
 
