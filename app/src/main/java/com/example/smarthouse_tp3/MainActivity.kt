@@ -2,10 +2,12 @@ package com.example.smarthouse_tp3
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.app.ActivityManager
 import android.content.Context
 import android.content.IntentFilter
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.material.Scaffold
@@ -33,6 +35,7 @@ import com.google.accompanist.permissions.rememberPermissionState
 
 class MainActivity : ComponentActivity() {
     private lateinit var receiver: SkipNotificationReceiver
+    private var shouldSkipNotification: Boolean = true
 
 
     @OptIn(ExperimentalPermissionsApi::class)
@@ -48,11 +51,14 @@ class MainActivity : ComponentActivity() {
                 val deviceConfigScreen = stringResource(id = R.string.device_configuration_screen)
                 val routineConfigScreen = stringResource(id = R.string.routine_configuration_screen)
 
+                val navigationUiState by navigationViewModel.uiState.collectAsState()
+
                 showBottomBar = when (navBackStackEntry?.destination?.route) {
                     deviceConfigScreen -> false
                     routineConfigScreen -> false
                     else -> true // in all other cases, show the bottom bar
                 }
+
 
                 Scaffold(
                     bottomBar = { if (showBottomBar) BottomBar(navController = navController) },
@@ -74,22 +80,43 @@ class MainActivity : ComponentActivity() {
                         }
                     }
 
-                    val deviceId = intent?.getStringExtra(MyIntent.DEVICE_ID)
 
 
                     MyNavHost(
                         navController = navController,
-                        navigationViewModel = navigationViewModel,
-                        deviceId = deviceId
+                        navigationViewModel = navigationViewModel
                     )
+
+
                 }
+                val deviceId = intent?.getStringExtra(MyIntent.DEVICE_ID)
+                shouldSkipNotification = !navigationViewModel.containsNotification(deviceId)
+                Log.d("ServerEventReceiver",
+                    (!navigationViewModel.containsNotification(deviceId)).toString() + deviceId
+                )
             }
         }
+    }
+
+    /***
+     * Returns true if the app is in the foreground
+     */
+    private fun isAppInForeground(): Boolean {
+        val activityManager = getSystemService(Context.ACTIVITY_SERVICE) as? ActivityManager
+        val appProcesses = activityManager?.runningAppProcesses ?: return false
+
+        for (appProcess in appProcesses) {
+            if (appProcess.processName == packageName && appProcess.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
+                return true
+            }
+        }
+        return false
     }
     override fun onStart() {
         super.onStart()
 
-        receiver = SkipNotificationReceiver(DEVICE_ID)
+        val skip = isAppInForeground()
+        receiver = SkipNotificationReceiver(DEVICE_ID,skip)
         IntentFilter(MyIntent.SHOW_NOTIFICATION)
             .apply { priority = 1 }
             .also {

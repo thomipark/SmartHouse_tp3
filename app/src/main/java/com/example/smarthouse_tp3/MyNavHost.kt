@@ -1,6 +1,5 @@
 package com.example.smarthouse_tp3
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -18,17 +17,16 @@ import androidx.compose.material.LocalContentColor
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
@@ -149,15 +147,29 @@ fun TopBar(
     navigationViewModel: NavigationViewModel = viewModel()
 ) {
     val currentRoute = navController.currentDestination?.route ?: ""
-    val hideBackIcon =
-        currentRoute == stringResource(id = R.string.device_screen) || currentRoute == stringResource(
-            id = R.string.favorites_screen
-        ) || currentRoute == stringResource(id = R.string.places_screen) || currentRoute == stringResource(
-            id = R.string.routines_screen
-        )
-
     val showBackIcon = currentRoute == stringResource(id = R.string.device_configuration_screen) || currentRoute == stringResource(id = R.string.routine_configuration_screen)
     val navigationUiState by navigationViewModel.uiState.collectAsState()
+    val showNotificationIcon = currentRoute == stringResource(id = R.string.device_configuration_screen)
+
+    val notificationToggleState = remember { mutableStateOf(false) }
+
+    val notificationIcon = if (notificationToggleState.value) {
+        painterResource(R.drawable.notifications_on)
+    } else {
+        painterResource(R.drawable.notifications_off)
+    }
+
+    val notificationContentDescription = if (notificationToggleState.value) {
+        "Notification On"
+    } else {
+        "Notification Off"
+    }
+
+    val toggleNotification = {
+        notificationToggleState.value = !notificationToggleState.value
+        // Handle notification toggle logic here
+    }
+
 
     val routeToIconMap = mapOf(
         stringResource(id = R.string.device_screen) to R.drawable.screen_devices_icon,
@@ -169,38 +181,35 @@ fun TopBar(
 
     if (showBackIcon) {
         TopAppBar(
-            backgroundColor = MaterialTheme.colors.primary,
+            title = { /* Title content */ },
             navigationIcon = {
+
                 IconButton(onClick = { navController.navigateUp() }) {
                     Icon(
-                        imageVector = Icons.Filled.ArrowBack,
+                        painter = painterResource(R.drawable.backarrow),
                         contentDescription = "Back"
                     )
                 }
-            },
-            title = {
-                when (currentRoute) {
-                    stringResource(id = R.string.routine_configuration_screen) -> {
-                        navigationUiState.selectedRoutine?.let {
-                            Text(
-                                text = it.getRoutineName(),
-                                textAlign = TextAlign.Start,
-                                modifier = Modifier.fillMaxWidth()
-                            )
-                        }
-                    }
 
-                    stringResource(id = R.string.device_configuration_screen) -> {
-                        navigationUiState.selectedDevice?.let {
-                            Text(
-                                text = it.getName(),
-                                textAlign = TextAlign.Start,
-                                modifier = Modifier.fillMaxWidth()
-                            )
+            },
+            actions = {
+                if (showNotificationIcon) {
+                    IconButton(onClick = {
+                        toggleNotification()
+                        if (notificationToggleState.value) {
+                            navigationViewModel.removeDevicesNotificationList()
+                        } else {
+                            navigationViewModel.addDevicesNotificationList()
                         }
+
+                    }) {
+                        Icon(
+                            painter = notificationIcon,
+                            contentDescription = notificationContentDescription
+                        )
                     }
                 }
-            },
+            }
         )
     } else {
         Box(

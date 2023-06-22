@@ -24,6 +24,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.example.smarthouse_tp3.R
 import com.example.smarthouse_tp3.ui.AirConditionerViewModel
@@ -88,7 +89,9 @@ fun DeviceTopBar(viewModel: DeviceViewModel) {
                 Text(
                     text = it,
                     style = MaterialTheme.typography.h5,
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis
                 )
             }
             //Text(text = uiState.switchState.toString())

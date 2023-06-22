@@ -7,13 +7,8 @@ import android.content.Intent
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.smarthouse_tp3.MainActivity
 import com.example.smarthouse_tp3.R
-import com.example.smarthouse_tp3.data.network.RetrofitClient
-import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 
 class ShowNotificationReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
@@ -42,7 +37,7 @@ class ShowNotificationReceiver : BroadcastReceiver() {
         val deviceEvent: String? = intent.getStringExtra(MyIntent.EVENT)
 
         val builder = NotificationCompat.Builder(context, MyApplication.CHANNEL_ID)
-            .setSmallIcon(R.drawable.notifications)
+            .setSmallIcon(R.drawable.notifications_on)
             .setContentTitle(context.getString(R.string.notification_title))
             .setContentText(context.getString(R.string.notification_text))
             .setStyle(

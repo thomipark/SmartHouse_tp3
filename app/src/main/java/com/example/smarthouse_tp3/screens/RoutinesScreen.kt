@@ -38,6 +38,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -276,7 +277,8 @@ fun SmallRoutineTilesRow(
             }
         }
     } else {
-        LazyColumn(
+        if (routinesUiState.networkRoutineList != null) {
+            LazyColumn(
             verticalArrangement = Arrangement.spacedBy(8.dp),
             contentPadding = PaddingValues(horizontal = 16.dp),
             modifier = modifier.fillMaxWidth()
@@ -291,7 +293,22 @@ fun SmallRoutineTilesRow(
                     )
                 }
             }
+        } } else {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = "No routines added",
+                    style = MaterialTheme.typography.body1,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(16.dp)
+                )
+            }
         }
+
     }
 }
 

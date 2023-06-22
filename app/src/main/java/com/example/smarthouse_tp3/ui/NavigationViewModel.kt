@@ -45,4 +45,33 @@ class NavigationViewModel : ViewModel() {
             )
         }
     }
+
+    fun addDevicesNotificationList (){
+        val id = _uiState.value.selectedDeviceViewModel?.getDeviceId()
+        _uiState.update { currentState ->
+            val updatedList = currentState.devicesNotificationList.toMutableList()
+            if (id != null) {
+                updatedList.add(id)
+            }
+            currentState.copy(devicesNotificationList = updatedList)
+        }
+    }
+
+    fun removeDevicesNotificationList (){
+        val id = _uiState.value.selectedDeviceViewModel?.getDeviceId()
+        _uiState.update { currentState ->
+            val updatedList = currentState.devicesNotificationList.toMutableList()
+            if (id != null) {
+                updatedList.remove(id)
+            }
+            currentState.copy(devicesNotificationList = updatedList)
+        }
+    }
+
+    fun containsNotification (id : String?) : Boolean {
+        if (id == null){
+            return false
+        }
+        return uiState.value.devicesNotificationList.contains(id)
+    }
 }
