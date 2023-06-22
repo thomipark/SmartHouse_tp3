@@ -6,7 +6,7 @@ import com.example.smarthouse_tp3.data.network.model.NetworkDeviceState
 import kotlinx.coroutines.flow.update
 
 class AirConditionerViewModel(deviceId : String): DeviceViewModel(deviceId = deviceId) {
-    override fun fetchDevice(deviceId: String) {
+    override fun fetchDevice(deviceId: String): AirConditionerViewModel {
         super.fetchDevice(deviceId)
         _uiState.update {
             it.copy(
@@ -19,6 +19,7 @@ class AirConditionerViewModel(deviceId : String): DeviceViewModel(deviceId = dev
                 }
             )
         }
+        return this
     }
 
     override fun getSmallIconsList(): List<Int> {

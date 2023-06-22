@@ -19,6 +19,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -45,10 +46,13 @@ import com.example.smarthouse_tp3.screens.MainScreen
 import com.example.smarthouse_tp3.screens.PlacesScreen
 import com.example.smarthouse_tp3.screens.RoutinesScreen
 import com.example.smarthouse_tp3.screens.deviceViewModelMaker
+import com.example.smarthouse_tp3.ui.DeviceMap
 import com.example.smarthouse_tp3.ui.DeviceViewModel
 import com.example.smarthouse_tp3.ui.DevicesViewModel
 import com.example.smarthouse_tp3.ui.NavigationViewModel
+import com.example.smarthouse_tp3.ui.RoomsViewModel
 import com.example.smarthouse_tp3.ui.RoutinesViewModel
+import kotlinx.coroutines.delay
 
 @Composable
 fun MyNavHost(
@@ -66,7 +70,8 @@ fun MyNavHost(
     val routineConfigurationScreen = stringResource(id = R.string.routine_configuration_screen)
 
     val devicesViewModel: DevicesViewModel = viewModel()
-    devicesViewModel.fetchDevices("Nav Host")
+
+    // devicesViewModel.fetchDevices("Nav Host")
 
     val routinesViewModel: RoutinesViewModel = viewModel()
 
@@ -98,6 +103,25 @@ fun MyNavHost(
         }
 
         composable(deviceScreen) {
+
+            LaunchedEffect(Unit) {
+                devicesViewModel.fetchDevices()
+            }
+
+            val devicesUiState by devicesViewModel.uiState.collectAsState()
+            devicesUiState.devices?.devices?.forEach {
+                val myDevice = it.id?.let { item -> deviceViewModelMaker(id = item, typeName = it.type?.name) }
+                LaunchedEffect (Unit) {
+                    delay(100)
+                    myDevice?.fetchDevice()
+                }
+                if (myDevice != null) {
+                    DeviceMap.map.getOrPut(it.id.toString()) {
+                        myDevice.fetchDevice()
+                    }
+                }
+
+            }
             DeviceScreen(
                 navigationViewModel = navigationViewModel,
                 modifier = bottomPadding,
@@ -114,10 +138,31 @@ fun MyNavHost(
         }
 
         composable(placesScreen) {
+
+            LaunchedEffect(Unit) {
+                devicesViewModel.fetchDevices()
+            }
+            val devicesUiState by devicesViewModel.uiState.collectAsState()
+            devicesUiState.devices?.devices?.forEach {
+                val myDevice = it.id?.let { item -> deviceViewModelMaker(id = item, typeName = it.type?.name) }
+                LaunchedEffect (Unit) {
+                    delay(100)
+                    myDevice?.fetchDevice()
+                }
+                if (myDevice != null) {
+                    DeviceMap.map.getOrPut(it.id.toString()) {
+                        myDevice.fetchDevice()
+                    }
+                }
+
+            }
+            val roomsViewModel: RoomsViewModel = viewModel()
+            roomsViewModel.fetchRooms()
             PlacesScreen(
                 navigationViewModel = navigationViewModel,
                 modifier = bottomPadding,
-                devicesViewModel = devicesViewModel
+                devicesViewModel = devicesViewModel,
+                roomsViewModel = roomsViewModel
             ) { navController.navigate(deviceConfigurationScreen) }
         }
 

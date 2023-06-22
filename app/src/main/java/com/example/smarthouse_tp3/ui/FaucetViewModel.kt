@@ -7,7 +7,7 @@ import com.example.smarthouse_tp3.data.network.model.NetworkDeviceState
 import kotlinx.coroutines.flow.update
 
 class FaucetViewModel(deviceId: String) : DeviceViewModel(deviceId = deviceId) {
-    override fun fetchDevice(deviceId: String) {
+    override fun fetchDevice(deviceId: String): FaucetViewModel {
         super.fetchDevice(deviceId)
         _uiState.update {
             it.copy(
@@ -20,6 +20,7 @@ class FaucetViewModel(deviceId: String) : DeviceViewModel(deviceId = deviceId) {
                 }
             )
         }
+        return this
     }
 
     override fun changeSwitchState() {

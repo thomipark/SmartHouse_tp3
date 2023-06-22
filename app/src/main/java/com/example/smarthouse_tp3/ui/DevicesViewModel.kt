@@ -24,7 +24,7 @@ class DevicesViewModel : ViewModel() {
         _uiState.update { it.copy(message = null) }
     }
 
-    fun fetchDevices(whereFrom: String) {
+    fun fetchDevices(whereFrom: String = "none") {
         Log.d(whereFrom, "First Fetch")
         fetchJob?.cancel()
         fetchJob = viewModelScope.launch {

@@ -66,6 +66,7 @@ fun DeviceScreen(
     onNavigateToConfigScreen: () -> Unit
 ) {
 
+    val devicesUiState by devicesViewModel.uiState.collectAsState()
     Column(
         modifier = modifier
     ) {
@@ -87,6 +88,7 @@ fun DevicesSmallTileRow(
 ) {
     val devicesUiState by devicesViewModel.uiState.collectAsState()
     val devicesList = devicesUiState.devices?.devices
+
 
     var selectedCategory by rememberSaveable { mutableStateOf(DeviceCategory.All) }
 
@@ -127,14 +129,16 @@ fun DevicesSmallTileRow(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 items(items = filteredDevices) { item ->
-                    var myDevice : DeviceViewModel? =
-                        item.id?.let { deviceViewModelMaker(id = it, typeName = item.type?.name) }
-                    if (myDevice != null) {
-                        myDevice = DeviceMap.map.getOrPut(item.id.toString()) {
-                            myDevice!!
-                        }
-                    }
-                    myDevice?.fetchDevice()
+                    val myDevice = DeviceMap.map[item.id]
+                    // var myDevice : DeviceViewModel? =
+                    //     item.id?.let { deviceViewModelMaker(id = it, typeName = item.type?.name) }
+                    // if (myDevice != null) {
+                    //     DeviceMap.map.get()
+                    //     // myDevice = DeviceMap.map.getOrPut(item.id.toString()) {
+                    //     //     item.id?.let { deviceViewModelMaker(id = it, typeName = item.type?.name) }
+                    //     //         ?.fetchDevice()!!
+                    //     // }
+                    // }
                     if (myDevice != null) {
                         DeviceSmallTile(
                             deviceViewModel = myDevice,
@@ -159,12 +163,12 @@ fun DeviceSmallTile(
     val deviceUiState by deviceViewModel.uiState.collectAsState()
     //deviceViewModel.fetchDevice()
 
-    deviceViewModel.fetchDevice()
+    // deviceViewModel.fetchDevice()
 
-    LaunchedEffect(Unit) {
-        delay(1000)
-        deviceViewModel.fetchDevice()
-    }
+    // LaunchedEffect(Unit) {
+    //     delay(1000)
+    //     deviceViewModel.fetchDevice()
+    // }
 
 
     Surface(
