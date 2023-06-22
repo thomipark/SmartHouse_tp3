@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
     <application
-        android:enableOnBackInvokedCallback="true"
+        android:name=".notification.MyApplication"
         android:allowBackup="true"
         android:usesCleartextTraffic="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -13,10 +17,42 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.SmartHouse_tp3"
-        tools:targetApi="tiramisu">
+        tools:targetApi="31">
+
+        <receiver
+            android:name=".notification.BootCompletedReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+        <receiver
+            android:name=".notification.ServerEventReceiver"
+            android:enabled="true"
+            android:exported="false" />
+
+        <receiver
+            android:name=".notification.SkipNotificationReceiver"
+            android:enabled="true"
+            android:exported="false" />
+
+        <receiver
+            android:name=".notification.ShowNotificationReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter android:priority="0">
+                <action android:name="com.example.smarthouse_tp3.notification.SHOW_NOTIFICATION" />
+            </intent-filter>
+        </receiver>
+
+
+
         <activity
             android:name=".MainActivity"
             android:exported="true"
+            android:label="@string/app_name"
             android:theme="@style/Theme.SmartHouse_tp3">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

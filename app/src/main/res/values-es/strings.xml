@@ -28,4 +28,11 @@
     <string name="select_color">Seleccionar un Color:</string>
     <string name="save_color">Guardar</string>
     <string name="device_type_error">Error: No se pudo cargar el dispositivo. Tipo de dispositivo desconocido.</string>
+    <string name="current_room">Cuartio actual</string>
+    <string name="channel_name">Notifiacion de dispositivos</string>
+    <string name="channel_description">Notifiacion de dispositivos</string>
+    <string name="notification_title">Mi notificacion</string>
+    <string name="notification_text">texto limite para esto ver clase 22</string>
+    <string name="notification_text2">texto limite para esto ver clase 22</string>
+    <string name="message">Notificacion seleccionado para dispositivo id %1$s</string>
 </resources>

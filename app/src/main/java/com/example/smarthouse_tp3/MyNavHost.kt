@@ -1,5 +1,6 @@
 package com.example.smarthouse_tp3
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -20,8 +21,11 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -42,6 +46,8 @@ import com.example.smarthouse_tp3.screens.FavoritesScreen
 import com.example.smarthouse_tp3.screens.MainScreen
 import com.example.smarthouse_tp3.screens.PlacesScreen
 import com.example.smarthouse_tp3.screens.RoutinesScreen
+import com.example.smarthouse_tp3.screens.deviceViewModelMaker
+import com.example.smarthouse_tp3.ui.DeviceViewModel
 import com.example.smarthouse_tp3.ui.DevicesViewModel
 import com.example.smarthouse_tp3.ui.NavigationViewModel
 import com.example.smarthouse_tp3.ui.RoutinesViewModel
@@ -52,6 +58,7 @@ fun MyNavHost(
     navController: NavHostController = rememberNavController(),
     startDestination: String = stringResource(id = R.string.device_screen),
     navigationViewModel: NavigationViewModel = viewModel(),
+    deviceId: String? = null
 ) {
     val deviceScreen = stringResource(id = R.string.device_screen)
     val placesScreen = stringResource(id = R.string.places_screen)
@@ -65,6 +72,15 @@ fun MyNavHost(
 
     val routinesViewModel: RoutinesViewModel = viewModel()
 
+    if (deviceId != null) {
+        val networkDevice = devicesViewModel.getNetworkDeviceFromId(deviceId)
+        val myDevice: DeviceViewModel? = networkDevice?.let {
+            deviceViewModelMaker(typeName = it.type?.name, id = deviceId)
+        }
+        myDevice?.fetchDevice()
+        myDevice?.let { navigationViewModel.selectNewDeviceViewModel(it) }
+    }
+
 
     NavHost(
         navController = navController,
@@ -72,7 +88,6 @@ fun MyNavHost(
         modifier = modifier
     ) {
         val bottomPadding = Modifier.padding(0.dp, 0.dp, 0.dp, 56.dp)
-
 
         //MAIN SCREENS
         composable(routinesScreen) {
@@ -85,8 +100,6 @@ fun MyNavHost(
         }
 
         composable(deviceScreen) {
-
-
             DeviceScreen(
                 navigationViewModel = navigationViewModel,
                 modifier = bottomPadding,
@@ -121,6 +134,13 @@ fun MyNavHost(
             RoutineConfigScreen(navigationViewModel = navigationViewModel, routinesViewModel = routinesViewModel, devicesViewModel = devicesViewModel)
         }
     }
+
+    DisposableEffect(deviceId) {
+        if (deviceId != null) {
+            navController.navigate(deviceScreen)
+        }
+        onDispose { /* Cleanup logic if needed */ }
+    }
 }
 
 @Composable
@@ -135,6 +155,8 @@ fun TopBar(
         ) || currentRoute == stringResource(id = R.string.places_screen) || currentRoute == stringResource(
             id = R.string.routines_screen
         )
+
+    val showBackIcon = currentRoute == stringResource(id = R.string.device_configuration_screen) || currentRoute == stringResource(id = R.string.routine_configuration_screen)
     val navigationUiState by navigationViewModel.uiState.collectAsState()
 
     val routeToIconMap = mapOf(
@@ -145,7 +167,7 @@ fun TopBar(
     )
 
 
-    if (!hideBackIcon) {
+    if (showBackIcon) {
         TopAppBar(
             backgroundColor = MaterialTheme.colors.primary,
             navigationIcon = {

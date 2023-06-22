@@ -12,26 +12,26 @@ import retrofit2.http.PUT
 import retrofit2.http.Path
 
 interface ApiService {
-    @GET("api/devices")
+    @GET("devices")
     suspend fun getAllDevices(): Response<NetworkDeviceList>
 
-    @GET("api/devices/{deviceId}")
+    @GET("devices/{deviceId}")
     suspend fun getDevice(@Path("deviceId") deviceId: String): Response<NetworkDeviceResult>
 
-    @PUT("api/devices/{deviceId}/{actionName}")
+    @PUT("devices/{deviceId}/{actionName}")
     suspend fun executeAction(
         @Path("deviceId") deviceId: String,
         @Path("actionName") actionName: String,
         @Body body: Array<String>
     ): Response<NetworkActionResult>
 
-    @GET("api/routines")
+    @GET("routines")
     suspend fun getAllRoutines(): Response<NetworkRoutineList>
 
-    @GET("api/rooms")
+    @GET("rooms")
     suspend fun getAllRooms(): Response<NetworkRoomList>
 
-    @PUT("api/routines/{routineId}/execute")
+    @PUT("routines/{routineId}/execute")
     suspend fun executeRoutine(
         @Path("routineId") routineId: String
     ): Response<NetworkActionResult>

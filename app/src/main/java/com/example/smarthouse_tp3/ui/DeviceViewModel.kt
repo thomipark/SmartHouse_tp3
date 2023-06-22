@@ -148,5 +148,20 @@ open class DeviceViewModel(private var deviceId : String) : ViewModel() {
 
         return copiedViewModel
     }
+
+    fun setNotification(){
+        _uiState.update { currentState ->
+            currentState.copy(
+                notification = !uiState.value.notification
+            )
+        }
+    }
+    fun setFavourite(){
+        _uiState.update { currentState ->
+            currentState.copy(
+                favourite = !uiState.value.favourite
+            )
+        }
+    }
 }
 

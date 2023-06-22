@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.smarthouse_tp3.data.network.RetrofitClient
+import com.example.smarthouse_tp3.data.network.model.NetworkDevice
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -24,7 +25,7 @@ class DevicesViewModel : ViewModel() {
     }
 
     fun fetchDevices(whereFrom: String) {
-        Log.d(whereFrom,"First Fetch")
+        Log.d(whereFrom, "First Fetch")
         fetchJob?.cancel()
         fetchJob = viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
@@ -75,5 +76,17 @@ class DevicesViewModel : ViewModel() {
 
     fun fetchTypeByID(id: String): String {
         return _uiState.value.devices?.devices?.find { it.id == id }?.type?.name ?: "Unknown"
+    }
+
+    fun getNetworkDeviceFromId(id: String): NetworkDevice? {
+        val list = _uiState.value.devices?.devices
+        if (list != null) {
+            for (device in list){
+                if (device.id == id){
+                    return device
+                }
+            }
+        }
+        return null
     }
 }

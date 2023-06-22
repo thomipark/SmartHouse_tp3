@@ -8,6 +8,8 @@ import com.example.smarthouse_tp3.data.network.model.NetworkMeta
 
 data class DeviceUiState(
     //val device      : NetworkDevice?    = null,
+    val favourite: Boolean = false,
+    val notification: Boolean = false,
     val isLoading: Boolean = false,
     val message: String? = null,
     val switchState: Boolean = false,

@@ -24,10 +24,10 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            buildConfigField "String", "API_BASE_URL", "\"https://192.168.0.36:8080/\""
+            buildConfigField "String", "API_BASE_URL", "\"http://192.168.0.225:8080/api/\""
         }
         debug {
-            buildConfigField "String", "API_BASE_URL", "\"http:/192.168.0.36:8080/\""
+            buildConfigField "String", "API_BASE_URL", "\"http://192.168.0.225:8080/api/\""
         }
     }
     compileOptions {
@@ -58,6 +58,7 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.1'
     implementation 'androidx.activity:activity-compose:1.7.2'
     implementation "androidx.compose.ui:ui:$compose_ui_version"
+    implementation 'androidx.compose.ui:ui-graphics'
     implementation "androidx.compose.ui:ui-tooling-preview:$compose_ui_version"
     implementation 'androidx.compose.material:material:1.4.3'
     implementation "androidx.navigation:navigation-compose:$nav_version"
@@ -82,4 +83,7 @@ dependencies {
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
     implementation 'com.squareup.okhttp3:logging-interceptor:4.10.0'
 
+    //Notificactions
+    implementation 'com.google.accompanist:accompanist-permissions:0.23.1'
+    androidTestImplementation platform('androidx.compose:compose-bom:2022.10.00')
 }
