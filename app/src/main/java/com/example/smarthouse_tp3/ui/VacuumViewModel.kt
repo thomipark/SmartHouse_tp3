@@ -9,7 +9,7 @@ import com.example.smarthouse_tp3.data.network.model.NetworkDeviceState
 import kotlinx.coroutines.flow.update
 
 class VacuumViewModel(deviceId : String) : DeviceViewModel(deviceId) {
-    override fun fetchDevice(deviceId: String) {
+    override fun fetchDevice(deviceId: String): VacuumViewModel {
 
         Log.d("MYDEVICEswitchVAC", uiState.value.toString())
         super.fetchDevice(deviceId)
@@ -27,6 +27,7 @@ class VacuumViewModel(deviceId : String) : DeviceViewModel(deviceId) {
                 }
             )
         }
+        return this
     }
 
     override fun getSmallIconsList(): List<Int> {

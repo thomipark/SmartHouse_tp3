@@ -53,6 +53,11 @@ class MainActivity : ComponentActivity() {
 
                 val navigationUiState by navigationViewModel.uiState.collectAsState()
 
+
+
+
+
+
                 showBottomBar = when (navBackStackEntry?.destination?.route) {
                     deviceConfigScreen -> false
                     routineConfigScreen -> false

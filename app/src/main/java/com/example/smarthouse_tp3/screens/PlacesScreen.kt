@@ -44,20 +44,17 @@ import com.example.smarthouse_tp3.ui.DeviceViewModel
 import com.example.smarthouse_tp3.ui.DevicesViewModel
 import com.example.smarthouse_tp3.ui.NavigationViewModel
 import com.example.smarthouse_tp3.ui.RoomsViewModel
+import kotlinx.coroutines.delay
 
 @Composable
 fun PlacesScreen(
     modifier: Modifier = Modifier,
     navigationViewModel: NavigationViewModel,
     devicesViewModel: DevicesViewModel,
+    roomsViewModel : RoomsViewModel,
     onNavigateToConfigScreen: () -> Unit
 ) {
-    val viewModel: RoomsViewModel = viewModel()
-    val uiState by viewModel.uiState.collectAsState()
-
-    LaunchedEffect(Unit) {
-        viewModel.fetchRooms()
-    }
+    val uiState by roomsViewModel.uiState.collectAsState()
 
     val devicePlaces = remember { mutableListOf("All") }
     LaunchedEffect(uiState.rooms) {
@@ -129,14 +126,15 @@ fun DevicesSmallTileRowPlaces(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 items(items = filteredDevices) { item ->
-                    var myDevice : DeviceViewModel? =
-                        item.id?.let { deviceViewModelMaker(id = it, typeName = item.type?.name) }
-                    if (myDevice != null) {
-                        myDevice = DeviceMap.map.getOrPut(item.id.toString()) {
-                            myDevice!!
-                        }
-                    }
-                    myDevice?.fetchDevice()
+                    val myDevice = DeviceMap.map[item.id]
+                    // var myDevice : DeviceViewModel? =
+                    //     item.id?.let { deviceViewModelMaker(id = it, typeName = item.type?.name) }
+                    // if (myDevice != null) {
+                    //     myDevice = DeviceMap.map.getOrPut(item.id.toString()) {
+                    //         myDevice!!
+                    //     }
+                    // }
+                    // myDevice?.fetchDevice()
                     if (myDevice != null) {
                         DeviceSmallTile(
                             deviceViewModel = myDevice,

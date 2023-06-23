@@ -36,11 +36,12 @@ open class DeviceViewModel(private var deviceId : String) : ViewModel() {
         return uiState.value.isLoading
     }
 
-    fun fetchDevice() {
-        fetchDevice(deviceId)
+    fun fetchDevice() : DeviceViewModel {
+        return fetchDevice(deviceId)
     }
 
-    open fun fetchDevice(deviceId: String) {
+    open fun fetchDevice(deviceId: String): DeviceViewModel {
+        Log.d("MYFETCH", "fetchDevice")
         //fetchJob?.cancel()
         fetchJob = viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
@@ -48,6 +49,8 @@ open class DeviceViewModel(private var deviceId : String) : ViewModel() {
                 val apiService = RetrofitClient.getApiService()
                 apiService.getDevice(deviceId = deviceId)
             }.onSuccess { response ->
+                Log.d("MYFETCH", "success")
+
                 _uiState.update { it.copy(
                     isLoading = false,
                     id = response.body()?.device?.id,
@@ -66,6 +69,7 @@ open class DeviceViewModel(private var deviceId : String) : ViewModel() {
                 }
             }
         }
+        return this
         Log.d("MYDEVICE", uiState.value.toString())
     }
 

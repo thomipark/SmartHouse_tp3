@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 
 class LightViewModel(deviceId : String) : DeviceViewModel(deviceId) {
-    override fun fetchDevice(deviceId: String) {
+    override fun fetchDevice(deviceId: String): LightViewModel {
         super.fetchDevice(deviceId)
         _uiState.update {
             it.copy(
@@ -21,6 +21,7 @@ class LightViewModel(deviceId : String) : DeviceViewModel(deviceId) {
                 }
             )
         }
+        return this
     }
 
     override fun getSmallIconsList(): List<Int> {
