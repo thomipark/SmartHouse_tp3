@@ -95,18 +95,24 @@ fun DevicesSmallTileRowFav(
 
     Column(modifier = modifier) {
         if (FavouritesList.list.isEmpty()) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(16.dp),
-                contentAlignment = Alignment.Center
+            Column(
+                modifier = modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(
-                    text = noDevicesText,
-                    style = MaterialTheme.typography.body1,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(16.dp)
-                )
+                if (FavouritesList.list.isEmpty()) {
+                    Box(
+                        modifier = Modifier.padding(16.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = noDevicesText,
+                            style = MaterialTheme.typography.body1,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier.padding(16.dp)
+                        )
+                    }
+                }
             }
         } else {
             LazyColumn(

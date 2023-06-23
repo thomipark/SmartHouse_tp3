@@ -187,7 +187,7 @@ fun AirConditionerConfigScreen(viewModel : AirConditionerViewModel) {
                 }
 
                 Text(
-                    text = if(uiState.state?.verticalSwing.toString() != "auto") uiState.state?.horizontalSwing.toString() + "°" else "",
+                    text = if(uiState.state?.verticalSwing.toString() != "auto") uiState.state?.verticalSwing.toString() + "°" else "auto",
                     style = MaterialTheme.typography.body1,
                     textAlign = TextAlign.Center,
                     fontSize = 25.sp,
@@ -242,7 +242,7 @@ fun AirConditionerConfigScreen(viewModel : AirConditionerViewModel) {
                     }
                 }
                 Text(
-                    text = if(uiState.state?.horizontalSwing.toString() != "auto") uiState.state?.horizontalSwing.toString() + "°" else "",
+                    text = if(uiState.state?.horizontalSwing.toString() != "auto") uiState.state?.horizontalSwing.toString() + "°" else "auto",
                     style = MaterialTheme.typography.body1,
                     textAlign = TextAlign.Center,
                     fontSize = 25.sp,

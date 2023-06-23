@@ -19,6 +19,8 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.AlertDialog
+import androidx.compose.material.Button
 import androidx.compose.material.Card
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
@@ -96,7 +98,9 @@ fun SmallRoutineTile(
     Surface(
         shape = MaterialTheme.shapes.small, modifier = modifier
     ) {
-        Card(modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
+        Card(modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 4.dp),
             backgroundColor = MaterialTheme.colors.primaryVariant,
             onClick = {
                 navigationViewModel.selectNewRoutine(routine)
@@ -189,7 +193,7 @@ fun SmallRoutineTileExtended(
                         Box(
                             modifier = Modifier
                                 .size(8.dp)
-                                .background(if(MaterialTheme.colors.isLight) Color.White else Color.Black)
+                                .background(if (MaterialTheme.colors.isLight) Color.White else Color.Black)
                                 .padding(32.dp, 0.dp, 32.dp, 0.dp)
                         )
                         Text(
@@ -215,10 +219,12 @@ fun PlayButton(
     routinesViewModel: RoutinesViewModel
 ) {
     var isClicked by remember { mutableStateOf(false) }
+    var showDialog by remember { mutableStateOf(false) }
 
     val tint by animateColorAsState(
         if (isClicked) MaterialTheme.colors.secondary else if (MaterialTheme.colors.isLight) Color.White else Color.Black
     )
+
     LaunchedEffect(isClicked) {
         if (isClicked) {
             delay(150)
@@ -229,7 +235,10 @@ fun PlayButton(
     IconButton(
         onClick = {
             isClicked = !isClicked
-            networkRoutine.id?.let { routinesViewModel.executeRoutine(it) }
+            networkRoutine.id?.let {
+                routinesViewModel.executeRoutine(it)
+                showDialog = true
+            }
         },
         modifier = Modifier.padding(horizontal = 20.dp)
     ) {
@@ -243,7 +252,32 @@ fun PlayButton(
             modifier = Modifier.size(playIconSize)
         )
     }
+    
+    val dialogText = networkRoutine.name?.let {
+        stringResource(id = R.string.RoutinedialogText,
+            it
+        )
+    }
+
+    if (showDialog) {
+        AlertDialog(
+            onDismissRequest = { showDialog = false },
+            title = {
+                if (dialogText != null) {
+                    Text(text = dialogText)
+                }
+            },
+            confirmButton = {
+                Button(
+                    onClick = { showDialog = false }
+                ) {
+                    Text(text = "OK")
+                }
+            }
+        )
+    }
 }
+
 
 
 @Composable
@@ -256,8 +290,12 @@ fun SmallRoutineTilesRow(
     val isHorizontal = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
     val routinesUiState by routinesViewModel.uiState.collectAsState()
 
+    val configuration = LocalConfiguration.current
+    val screenLayout = configuration.screenLayout and Configuration.SCREENLAYOUT_SIZE_MASK
 
-    if (isHorizontal) {
+    val isTablet = (screenLayout == Configuration.SCREENLAYOUT_SIZE_XLARGE || screenLayout == Configuration.SCREENLAYOUT_SIZE_LARGE)
+
+    if (isHorizontal || isTablet) {
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
             contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
