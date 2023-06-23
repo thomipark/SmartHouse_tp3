@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.Card
@@ -27,6 +28,7 @@ import androidx.compose.ui.unit.sp
 import com.example.smarthouse_tp3.R
 import androidx.compose.runtime.*
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.smarthouse_tp3.ui.AirConditionerFanSpeed
@@ -185,7 +187,11 @@ fun AirConditionerConfigScreen(viewModel : AirConditionerViewModel) {
                 }
 
                 Text(
-                    text = uiState.state?.verticalSwing.toString()
+                    text = if(uiState.state?.verticalSwing.toString() != "auto") uiState.state?.horizontalSwing.toString() + "°" else "",
+                    style = MaterialTheme.typography.body1,
+                    textAlign = TextAlign.Center,
+                    fontSize = 25.sp,
+                    fontWeight = FontWeight.Bold
                 )
 
                 IconButton(
@@ -216,7 +222,7 @@ fun AirConditionerConfigScreen(viewModel : AirConditionerViewModel) {
                         Icon(
                             painter = painterResource(R.drawable.baseline_arrow_left_24),
                             contentDescription = "Icon",
-                            modifier = Modifier.size(80.dp)
+                            modifier = Modifier.size(100.dp).padding(end = 12.dp)
                         )
                     }
 
@@ -230,13 +236,18 @@ fun AirConditionerConfigScreen(viewModel : AirConditionerViewModel) {
                         Icon(
                             painter = painterResource(R.drawable.baseline_arrow_right_24),
                             contentDescription = "Icon",
-                            modifier = Modifier.size(80.dp)
+                            modifier = Modifier.size(100.dp).padding(start = 12.dp)
 
                         )
                     }
                 }
                 Text(
-                    text = uiState.state?.horizontalSwing.toString()
+                    text = if(uiState.state?.horizontalSwing.toString() != "auto") uiState.state?.horizontalSwing.toString() + "°" else "",
+                    style = MaterialTheme.typography.body1,
+                    textAlign = TextAlign.Center,
+                    fontSize = 25.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.offset(y = (-70).dp)
                 )
 
             }

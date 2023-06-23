@@ -176,25 +176,25 @@ fun AdvancedRoutineDeviceTile(
                                     actionResId?.let { stringResource(it) } ?: actionName
 
                                 val additionalText = when (actionResId) {
-                                    R.string.action_setTemperature -> " to ${
+                                    R.string.action_setTemperature -> " ${
                                         action.params.toString().replace(
                                             "[\\[\\]]".toRegex(), ""
                                         )
                                     }°C"
 
-                                    R.string.action_setHeat -> " to ${
+                                    R.string.action_setHeat -> " ${
                                         action.params.toString().replace(
                                             "[\\[\\]]".toRegex(), ""
                                         )
                                     }"
 
-                                    R.string.action_setConvection -> " to ${
+                                    R.string.action_setConvection -> " ${
                                         action.params.toString().replace(
                                             "[\\[\\]]".toRegex(), ""
                                         )
                                     }"
 
-                                    R.string.action_setGrill -> " to ${
+                                    R.string.action_setGrill -> " ${
                                         action.params.toString().replace(
                                             "[\\[\\]]".toRegex(), ""
                                         )
@@ -206,20 +206,20 @@ fun AdvancedRoutineDeviceTile(
                                         )
                                     }"
 
-                                    R.string.action_setMode -> " to ${
+                                    R.string.action_setMode -> " ${
                                         action.params.toString().replace(
                                             "[\\[\\]]".toRegex(), ""
                                         )
                                     }"
 
-                                    R.string.action_setBrightness -> " to ${
+                                    R.string.action_setBrightness -> " ${
                                         action.params.toString().substring(1)
                                             .replace("\\..*".toRegex(), "")
                                     }%"
 
-                                    R.string.action_setColor -> " to "
+                                    R.string.action_setColor -> " "
 
-                                    R.string.action_setHorizontalSwing -> " to ${
+                                    R.string.action_setHorizontalSwing -> " ${
                                         if (action.params.toString().replace(
                                                 "[\\[\\]]".toRegex(), ""
                                             ) != "null"
@@ -228,7 +228,7 @@ fun AdvancedRoutineDeviceTile(
                                         ) + "°" else "auto"
                                     }"
 
-                                    R.string.action_setVerticalSwing -> " to ${
+                                    R.string.action_setVerticalSwing -> " ${
                                         if (action.params.toString().replace(
                                                 "[\\[\\]]".toRegex(), ""
                                             ) != "null"
