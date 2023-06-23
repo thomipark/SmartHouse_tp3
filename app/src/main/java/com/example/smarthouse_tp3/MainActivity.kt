@@ -25,6 +25,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.smarthouse_tp3.notification.MyIntent
 import com.example.smarthouse_tp3.notification.SkipNotificationReceiver
+import com.example.smarthouse_tp3.ui.DeviceMap
 import com.example.smarthouse_tp3.ui.DevicesViewModel
 import com.example.smarthouse_tp3.ui.NavigationViewModel
 import com.example.smarthouse_tp3.ui.NotificationList
@@ -40,7 +41,7 @@ class MainActivity : ComponentActivity() {
 
 
     @OptIn(ExperimentalPermissionsApi::class)
-    @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
+    @SuppressLint("UnusedMaterialScaffoldPaddingParameter", "StateFlowValueCalledInComposition")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -51,12 +52,6 @@ class MainActivity : ComponentActivity() {
                 val navigationViewModel: NavigationViewModel = viewModel()
                 val deviceConfigScreen = stringResource(id = R.string.device_configuration_screen)
                 val routineConfigScreen = stringResource(id = R.string.routine_configuration_screen)
-
-                val navigationUiState by navigationViewModel.uiState.collectAsState()
-
-
-
-
 
 
                 showBottomBar = when (navBackStackEntry?.destination?.route) {
@@ -85,8 +80,6 @@ class MainActivity : ComponentActivity() {
                             }
                         }
                     }
-
-
 
                     MyNavHost(
                         navController = navController,
@@ -121,7 +114,7 @@ class MainActivity : ComponentActivity() {
         val deviceId = intent?.getStringExtra(MyIntent.DEVICE_ID)
 
         val skip = isAppInForeground() || !NotificationList.list.contains(deviceId)
-        receiver = SkipNotificationReceiver(DEVICE_ID,skip)
+        receiver = SkipNotificationReceiver(skip)
         IntentFilter(MyIntent.SHOW_NOTIFICATION)
             .apply { priority = 1 }
             .also {
@@ -135,7 +128,6 @@ class MainActivity : ComponentActivity() {
 
     override fun onStop() {
         super.onStop()
-
         unregisterReceiver(receiver)
     }
 

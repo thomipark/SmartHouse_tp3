@@ -84,14 +84,7 @@ open class DeviceViewModel(private var deviceId : String) : ViewModel() {
                 uiState.value.id?.let { it1 -> fetchDevice(it1) }
             }
         }
-        // .onFailure { e ->
-        //     _uiState.update { it.copy(
-        //         message = e.message,
-        //         isLoading = false
-        //     )
-        //     }
-        // }
-        // }
+
     }
 
     open fun changeSwitchState() {
@@ -169,6 +162,9 @@ open class DeviceViewModel(private var deviceId : String) : ViewModel() {
                 favourite = !uiState.value.favourite
             )
         }
+    }
+    fun getFavourite(): Boolean{
+        return _uiState.value.favourite
     }
 }
 

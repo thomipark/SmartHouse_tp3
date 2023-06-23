@@ -13,7 +13,7 @@ abstract class Device(name: String) {
     abstract var deviceIcon: Int
     abstract var deviceType: Type
 
-    abstract fun getSmallIconsList(): List<Int>
+
 
     init {
         this.name = name

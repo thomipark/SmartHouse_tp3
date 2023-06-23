@@ -51,7 +51,6 @@ import com.example.smarthouse_tp3.Routine
 import com.example.smarthouse_tp3.RoutineDevice
 import com.example.smarthouse_tp3.createDeviceRoutineNetworks
 import com.example.smarthouse_tp3.data.network.model.NetworkRoutine
-import com.example.smarthouse_tp3.ui.DevicesViewModel
 import com.example.smarthouse_tp3.ui.NavigationViewModel
 import com.example.smarthouse_tp3.ui.RoutinesViewModel
 import com.example.smarthouse_tp3.ui.theme.SmartHouse_tp3Theme
@@ -64,7 +63,6 @@ import kotlinx.coroutines.delay
 fun RoutinesScreen(
     modifier: Modifier = Modifier,
     navigationViewModel: NavigationViewModel,
-    devicesViewModel: DevicesViewModel,
     routinesViewModel: RoutinesViewModel,
     onNavigateToConfigScreen: () -> Unit
 ) {
@@ -75,9 +73,8 @@ fun RoutinesScreen(
     ) {
         SmallRoutineTilesRow(
             navigationViewModel = navigationViewModel,
-            onNavigateToConfigScreen = onNavigateToConfigScreen,
             routinesViewModel = routinesViewModel,
-            devicesViewModel = devicesViewModel
+            onNavigateToConfigScreen = onNavigateToConfigScreen
         )
     }
 }
@@ -138,7 +135,7 @@ fun SmallRoutineTile(
                         }
                     }
                 }
-                playButton(networkRoutine = networkRoutine, routinesViewModel = routinesViewModel)
+                PlayButton(networkRoutine = networkRoutine, routinesViewModel = routinesViewModel)
             }
         }
     }
@@ -192,7 +189,7 @@ fun SmallRoutineTileExtended(
                         Box(
                             modifier = Modifier
                                 .size(8.dp)
-                                .background(Color.Black)
+                                .background(if(MaterialTheme.colors.isLight) Color.White else Color.Black)
                                 .padding(32.dp, 0.dp, 32.dp, 0.dp)
                         )
                         Text(
@@ -206,14 +203,14 @@ fun SmallRoutineTileExtended(
                         )
                     }
                 }
-                playButton(networkRoutine = networkRoutine, routinesViewModel = routinesViewModel)
+                PlayButton(networkRoutine = networkRoutine, routinesViewModel = routinesViewModel)
             }
         }
     }
 }
 
 @Composable
-fun playButton(
+fun PlayButton(
     networkRoutine: NetworkRoutine,
     routinesViewModel: RoutinesViewModel
 ) {
@@ -254,7 +251,6 @@ fun SmallRoutineTilesRow(
     modifier: Modifier = Modifier,
     navigationViewModel: NavigationViewModel,
     routinesViewModel: RoutinesViewModel,
-    devicesViewModel: DevicesViewModel,
     onNavigateToConfigScreen: () -> Unit
 ) {
     val isHorizontal = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
@@ -270,7 +266,7 @@ fun SmallRoutineTilesRow(
         ) {
             routinesUiState.networkRoutineList?.let { routine ->
                 items(items = routine.routines) {
-                    SmallRoutineTile(
+                    SmallRoutineTileExtended(
                         navigationViewModel = navigationViewModel,
                         networkRoutine = it,
                         routinesViewModel = routinesViewModel,
@@ -353,10 +349,8 @@ fun SmallRoutineTileExtendedPreview() {
 fun SmallRoutineTileRowPreview() {
     SmallRoutineTilesRow(
         navigationViewModel = NavigationViewModel(),
-        onNavigateToConfigScreen = {},
-        routinesViewModel = RoutinesViewModel(),
-        devicesViewModel = DevicesViewModel()
-    )
+        routinesViewModel = RoutinesViewModel()
+    ) {}
 }
 
 

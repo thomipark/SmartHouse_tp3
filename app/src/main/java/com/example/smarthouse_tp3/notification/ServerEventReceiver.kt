@@ -4,7 +4,9 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.util.Log
+import androidx.compose.runtime.collectAsState
 import com.example.smarthouse_tp3.BuildConfig
+import com.example.smarthouse_tp3.ui.DeviceMap
 import com.example.smarthouse_tp3.ui.NotificationList
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -26,17 +28,24 @@ class ServerEventReceiver : BroadcastReceiver() {
         GlobalScope.launch(Dispatchers.IO) {
             val events = fetchEvents()
             events?.forEach {
+                val event = it.event
                 Log.d(TAG, "Broadcasting send notification intent (${it.deviceId})")
+                Log.d(TAG, "Broadcasting device event (${event})")
+
+
                 val intent2 = Intent().apply {
                     action = MyIntent.SHOW_NOTIFICATION
                     `package` = MyIntent.PACKAGE
                     putExtra(MyIntent.DEVICE_ID, it.deviceId)
-                    putExtra(MyIntent.EVENT, it.event)
+                    putExtra(MyIntent.EVENT, event)
                 }
+
+
+
                 if (NotificationList.list.contains(it.deviceId)){
-                    Log.d(TAG,"Skipped beacuse not in the list")
-                } else {
                     context?.sendOrderedBroadcast(intent2, null)
+                } else {
+                    Log.d(TAG,"Skipped beacuse not in the list")
                 }
 
             }

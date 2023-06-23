@@ -6,14 +6,12 @@ import android.content.Intent
 import android.util.Log
 
 class SkipNotificationReceiver(
-    private val deviceId: String,
     private val skip : Boolean
     ) : BroadcastReceiver()
 {
 
     override fun onReceive(context: Context, intent: Intent) {
         if (skip) {
-            Log.d(TAG, "Skipping notification send ($deviceId)")
             abortBroadcast()
         }
     }
