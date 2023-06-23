@@ -318,7 +318,7 @@ fun LightConfigScreen(
                         modifier = Modifier.size(width = 250.dp, height = 100.dp)
                     ) {
                         Text(
-                            text = if (uiState.switchState) stringResource(id = R.string.turn_on) else stringResource(id = R.string.turn_off),
+                            text = if (!uiState.switchState) stringResource(id = R.string.turn_on) else stringResource(id = R.string.turn_off),
                             fontWeight = FontWeight.ExtraBold,
                             fontSize = 30.sp,
                             textAlign = TextAlign.Center,
