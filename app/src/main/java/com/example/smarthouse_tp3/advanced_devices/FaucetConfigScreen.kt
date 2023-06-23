@@ -29,6 +29,7 @@ import androidx.compose.material.SliderDefaults
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -49,6 +50,7 @@ import androidx.compose.ui.unit.sp
 import com.example.smarthouse_tp3.R
 import com.example.smarthouse_tp3.ui.FaucetUnits
 import com.example.smarthouse_tp3.ui.FaucetViewModel
+import kotlinx.coroutines.delay
 
 @Composable
 fun FaucetConfigScreen(
@@ -347,6 +349,12 @@ fun FaucetConfigScreen(
                     (if (state?.status.toString() == "closed") {
                         sliderValue.value
                     } else {
+                        // LaunchedEffect(Unit) {
+                        //     while(state?.status.toString() != "closed") {
+                        //         delay(10)
+                        //         uiState.id?.let { viewModel.fetchDevice(it) }
+                        //     }
+                        // }
                         uiState.id?.let { viewModel.fetchDevice(it) }
                         state?.dispensedQuantity
                     })?.let {

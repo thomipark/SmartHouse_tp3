@@ -27,6 +27,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -34,6 +35,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.smarthouse_tp3.Device
+import com.example.smarthouse_tp3.R
 import com.example.smarthouse_tp3.data.network.model.NetworkDevice
 import com.example.smarthouse_tp3.ui.DeviceViewModel
 import com.example.smarthouse_tp3.ui.DevicesViewModel
@@ -183,7 +185,7 @@ fun FavoritesSmallTileRow(
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = "No devices added to favorites",
+                    text = stringResource(id = R.string.no_devices_added_to_favorites),
                     style = MaterialTheme.typography.body1,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.padding(16.dp)

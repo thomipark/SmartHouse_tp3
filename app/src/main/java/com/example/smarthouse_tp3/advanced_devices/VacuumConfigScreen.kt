@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -37,6 +38,7 @@ import com.example.smarthouse_tp3.ui.VacuumMode
 import androidx.compose.runtime.*
 import androidx.compose.ui.layout.HorizontalAlignmentLine
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.smarthouse_tp3.ui.RoomsViewModel
@@ -84,132 +86,186 @@ fun VacuumConfigScreen(
     val batteryLevel: Long? = uiState.state!!.batteryLevel
     val batteryIcon: Int = viewModel.getBatteryIcon()
 
+    if (uiState.room?.id != null) {
 
-    Column() {
-        Card(
-            modifier = Modifier
-                .padding(16.dp)
-                .fillMaxWidth(),
-            elevation = 4.dp
-        ) {
+        Column() {
+            Card(
+                modifier = Modifier
+                    .padding(16.dp)
+                    .fillMaxWidth(),
+                elevation = 4.dp
+            ) {
 
+                Row(
+                    modifier = Modifier.padding(16.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Image(
+                        painter = painterResource(batteryIcon),
+                        contentDescription = "Icon",
+                        modifier = Modifier.size(80.dp)
+                    )
+                    Column(
+                        modifier = Modifier.weight(0.8f),
+
+                        ) {
+                        Text(
+                            text = "${uiState.state!!.batteryLevel}%",
+                            style = MaterialTheme.typography.h5,
+                            modifier = Modifier.padding(start = 30.dp, bottom = 8.dp),
+                            fontSize = 80.sp,
+                        )
+                    }
+                }
+            }
             Row(
                 modifier = Modifier.padding(16.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Image(
-                    painter = painterResource(batteryIcon),
-                    contentDescription = "Icon",
-                    modifier = Modifier.size(80.dp)
-                )
-                Column(
-                    modifier = Modifier.weight(0.8f),
 
+                Column(
+                    modifier = Modifier.weight(1f),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Surface(
+                        color = vacColor,
+                        shape = RoundedCornerShape(12.dp),
+                        modifier = Modifier
+                            .size(120.dp)
+                            .padding(8.dp)
                     ) {
+                        IconButton(
+                            onClick = {
+                                viewModel.changeModeVacuum()
+                                vacColor = Color.LightGray
+                                mopColor = Color.White
+                            }
+                        ) {
+                            Icon(
+                                painter = painterResource(R.drawable.vacuum_outline),
+                                contentDescription = "Icon",
+                                modifier = Modifier.size(100.dp)
+                            )
+                        }
+
+                    }
                     Text(
-                        text = "${uiState.state!!.batteryLevel}%",
-                        style = MaterialTheme.typography.h5,
-                        modifier = Modifier.padding(start = 30.dp, bottom = 8.dp),
-                        fontSize = 80.sp,
+                        text = stringResource(id = R.string.vacuum),
+                        style = MaterialTheme.typography.body1
+                    )
+
+                }
+                Column(
+                    modifier = Modifier.weight(1f),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Surface(
+                        color = mopColor,
+                        shape = RoundedCornerShape(12.dp),
+                        modifier = Modifier
+                            .size(120.dp)
+                            .padding(8.dp)
+                    ) {
+                        IconButton(
+                            onClick = {
+                                viewModel.changeModeMop()
+                                vacColor = Color.White
+                                mopColor = Color.LightGray
+                            }
+                        ) {
+                            Icon(
+                                painter = painterResource(R.drawable.baseline_water_drop_24),
+                                contentDescription = "Icon",
+                                modifier = Modifier.size(100.dp)
+                            )
+                        }
+                    }
+                    Text(
+                        text = stringResource(R.string.mop),
+                        style = MaterialTheme.typography.body1,
+                        textAlign = TextAlign.Center
                     )
                 }
             }
-        }
-        Row(
-            modifier = Modifier.padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
 
-            Column(
-                modifier = Modifier.weight(1f),
-                horizontalAlignment = Alignment.CenterHorizontally
+            Row(
+                modifier = Modifier
+                    .padding(16.dp)
+                    .fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
             ) {
-                Surface(
-                    color = vacColor,
-                    shape = RoundedCornerShape(12.dp),
-                    modifier = Modifier
-                        .size(120.dp)
-                        .padding(8.dp)
+                Column(
+                    modifier = Modifier.weight(1f),
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    IconButton(
-                        onClick = {
-                            viewModel.changeModeVacuum()
-                            vacColor = Color.LightGray
-                            mopColor = Color.White
-                        }
+                    Surface(
+                        color = dockColor,
+                        shape = RoundedCornerShape(12.dp),
+                        modifier = Modifier
+                            .padding(8.dp)
+                            .fillMaxWidth()
                     ) {
-                        Icon(
-                            painter = painterResource(R.drawable.vacuum_outline),
-                            contentDescription = "Icon",
-                            modifier = Modifier.size(100.dp)
-                        )
-                    }
 
-                }
-                Text(
-                    text = "VACUUM",
-                    style = MaterialTheme.typography.body1
-                )
-
-            }
-            Column(
-                modifier = Modifier.weight(1f),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Surface(
-                    color = mopColor,
-                    shape = RoundedCornerShape(12.dp),
-                    modifier = Modifier
-                        .size(120.dp)
-                        .padding(8.dp)
-                ) {
-                    IconButton(
-                        onClick = {
-                            viewModel.changeModeMop()
-                            vacColor =  Color.White
-                            mopColor =  Color.LightGray
+                        Button(
+                            onClick = {
+                                if (uiState.state!!.status != "docked") {
+                                    viewModel.dock()
+                                    dockColor = Color.LightGray
+                                    currentRoom = uiState.room?.name
+                                }
+                            },
+                            colors = ButtonDefaults.buttonColors(
+                                backgroundColor = Color.Transparent,
+                            ),
+                            modifier = Modifier.fillMaxWidth(),
+                            elevation = null,
+                            border = null
+                        ) {
+                            Icon(
+                                painter = painterResource(R.drawable.baseline_electric_bolt_24),
+                                contentDescription = "Button Icon",
+                                modifier = Modifier.size(25.dp)
+                            )
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Text(
+                                text = stringResource(R.string.return_to_dock),
+                                modifier = Modifier,
+                                style = MaterialTheme.typography.body1,
+                            )
                         }
-                    ) {
-                        Icon(
-                            painter = painterResource(R.drawable.baseline_water_drop_24),
-                            contentDescription = "Icon",
-                            modifier = Modifier.size(100.dp)
-                        )
                     }
                 }
-                Text(
-                    text = "MOP",
-                    style = MaterialTheme.typography.body1,
-                    textAlign = TextAlign.Center
-                )
             }
-        }
 
-        Row(
-            modifier = Modifier
-                .padding(16.dp)
-                .fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Column(
-                modifier = Modifier.weight(1f),
-                horizontalAlignment = Alignment.CenterHorizontally
+            Card(
+
+                modifier = Modifier
+                    .padding(16.dp)
+                    .fillMaxWidth(),
+                elevation = 4.dp
             ) {
-                Surface(
-                    color = dockColor,
-                    shape = RoundedCornerShape(12.dp),
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .fillMaxWidth()
+                Row(
+                    horizontalArrangement = Arrangement.Start
                 ) {
 
+                    Text(
+                        text = stringResource(id = R.string.current_room),
+                        textAlign = TextAlign.Start,
+                        modifier = Modifier.padding(horizontal = 20.dp),
+                        fontSize = 20.sp
+                    )
+                }
+                Row(
+                    modifier = Modifier
+                        .padding(20.dp)
+                        .fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
+                ) {
                     Button(
                         onClick = {
-                            if (uiState.state!!.status != "docked") {
-                                viewModel.dock()
-                                dockColor = Color.LightGray
-                                currentRoom = uiState.room?.name
-                            }
+                            showDropdown = !showDropdown
+                            roomViewModel.fetchRooms()
                         },
                         colors = ButtonDefaults.buttonColors(
                             backgroundColor = Color.Transparent,
@@ -218,107 +274,73 @@ fun VacuumConfigScreen(
                         elevation = null,
                         border = null
                     ) {
-                        Icon(
-                            painter = painterResource(R.drawable.baseline_electric_bolt_24),
-                            contentDescription = "Button Icon",
-                            modifier = Modifier.size(25.dp)
-                        )
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text(
-                            text = stringResource(R.string.return_to_dock),
-                            modifier = Modifier,
-                            style = MaterialTheme.typography.body1,
-                        )
-                    }
-                }
-            }
-        }
+                        Column {
 
-Card (
-
-    modifier = Modifier
-        .padding(16.dp)
-        .fillMaxWidth(),
-    elevation = 4.dp
-        ) {
-    Row(
-        horizontalArrangement = Arrangement.Start
-    ) {
-
-        Text(
-            text = stringResource(id = R.string.current_room),
-            textAlign = TextAlign.Start,
-            modifier = Modifier.padding(horizontal = 20.dp),
-            fontSize = 20.sp
-        )
-    }
-    Row(
-        modifier = Modifier
-            .padding(20.dp)
-            .fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Center
-    ) {
-        Button(
-            onClick = {
-                showDropdown = !showDropdown
-                roomViewModel.fetchRooms()
-            },
-            colors = ButtonDefaults.buttonColors(
-                backgroundColor = Color.Transparent,
-            ),
-            modifier = Modifier.fillMaxWidth(),
-            elevation = null,
-            border = null
-        ) {
-            Column {
-
-                Row {
-                    currentRoom?.let {
-                        Text(
-                            text = it,
-                            modifier = Modifier.padding(start = 8.dp),
-                            style = MaterialTheme.typography.body1
-                        )
-                    }
+                            Row {
+                                currentRoom?.let {
+                                    Text(
+                                        text = it,
+                                        modifier = Modifier.padding(start = 8.dp),
+                                        style = MaterialTheme.typography.body1
+                                    )
+                                }
 
 
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Icon(
-                        painter = painterResource(R.drawable.baseline_arrow_drop_down_24),
-                        contentDescription = "Dropdown Icon",
-                        modifier = Modifier.size(20.dp)
-                    )
-                }
-            }
-        }
-        DropdownMenu(
-            expanded = showDropdown,
-            onDismissRequest = { showDropdown = false },
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            roomUiState.rooms?.rooms?.let { rooms ->
-                rooms.map { it }.forEach { option ->
-                    DropdownMenuItem(
-                        onClick = {
-                            option.let { viewModel.setLocation(it) }
-                            currentRoom = option.name
-                            showDropdown = false
-                            if (dockColor == Color.LightGray) {
-                                viewModel.pause()
-                                dockColor = Color.White
+                                Spacer(modifier = Modifier.width(8.dp))
+                                Icon(
+                                    painter = painterResource(R.drawable.baseline_arrow_drop_down_24),
+                                    contentDescription = "Dropdown Icon",
+                                    modifier = Modifier.size(20.dp)
+                                )
                             }
                         }
-                    ) {
-                        Text(text = option.name.toString())
                     }
+                    DropdownMenu(
+                        expanded = showDropdown,
+                        onDismissRequest = { showDropdown = false },
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        roomUiState.rooms?.rooms?.let { rooms ->
+                            rooms.map { it }.forEach { option ->
+                                DropdownMenuItem(
+                                    onClick = {
+                                        option.let { viewModel.setLocation(it) }
+                                        currentRoom = option.name
+                                        showDropdown = false
+                                        if (dockColor == Color.LightGray) {
+                                            viewModel.pause()
+                                            dockColor = Color.White
+                                        }
+                                    }
+                                ) {
+                                    Text(text = option.name.toString())
+                                }
+                            }
+                        }
+                    }
+
                 }
             }
+            Log.d("MyDe:", uiState.toString())
         }
-
     }
-}
-        Log.d("MyDe:", uiState.toString())
+    else {
+
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.vacuum_not_associated_with_room),
+                        style = MaterialTheme.typography.body1,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(8.dp)
+                    )
+                }
+
+
+
     }
 }
 

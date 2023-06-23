@@ -40,11 +40,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.smarthouse_tp3.R
 import com.example.smarthouse_tp3.data.network.model.NetworkDevice
 import com.example.smarthouse_tp3.ui.AirConditionerViewModel
 import com.example.smarthouse_tp3.ui.DeviceMap
@@ -198,7 +200,7 @@ fun DeviceSmallTile(
                             .weight(0.25f) // 40% of the available width
                             .width(48.dp)
                             .height(48.dp),
-                        colorFilter = ColorFilter.tint(color = deviceUiState.deviceIconColor) // Para cambiar el color del icono
+                        colorFilter = ColorFilter.tint(color = deviceUiState.deviceIconColor)
                     )
                 }
                 Column(
@@ -290,7 +292,7 @@ fun CategoryItem(
     onCategorySelected: (DeviceCategory) -> Unit
 ) {
     val categoryName = when (category) {
-        DeviceCategory.All -> category.name
+        DeviceCategory.All -> stringResource(id = R.string.all)
         DeviceCategory.AC -> category.name + "s" // Append 's' without modifying the case
         else -> category.name.lowercase()
             .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() } + "s" // Convert to lowercase, capitalize first letter, and add 's'

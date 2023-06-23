@@ -34,9 +34,11 @@ import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.smarthouse_tp3.R
 import com.example.smarthouse_tp3.data.network.model.NetworkDevice
 import com.example.smarthouse_tp3.data.network.model.NetworkRoomList
 import com.example.smarthouse_tp3.ui.DeviceMap
@@ -56,10 +58,12 @@ fun PlacesScreen(
 ) {
     val uiState by roomsViewModel.uiState.collectAsState()
 
-    val devicePlaces = remember { mutableListOf("All") }
+    val allString = stringResource(id = R.string.all)
+
+    val devicePlaces = remember { mutableListOf(allString) }
     LaunchedEffect(uiState.rooms) {
         devicePlaces.clear()
-        devicePlaces.add("All")
+        devicePlaces.add(allString)
         devicePlaces.addAll(getRoomNames(uiState.rooms))
     }
 
@@ -99,17 +103,9 @@ fun DevicesSmallTileRowPlaces(
     val devicesUiState by devicesViewModel.uiState.collectAsState()
     val devicesList = devicesUiState.devices?.devices
 
-    if (devicesList != null) {
-        if (devicesList.isEmpty()){
-            Log.d("Places Screen","lista VACIA TODO MALLL")
-        } else {
-            Log.d("Places Screen","lista llena, todo en orden")
-        }
-    }
-
     var filteredDevices : List<NetworkDevice> = emptyList()
     if (devicesList != null) {
-        filteredDevices = getFilteredDevices(selectedPlace, devicesList)
+        filteredDevices = getFilteredDevices(selectedPlace, devicesList, stringResource(id = R.string.all))
     }
 
     Column(modifier = modifier) {
@@ -152,7 +148,10 @@ fun DevicesSmallTileRowPlaces(
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = if(selectedPlace == "All") "No devices added" else "No devices linked to this place",
+                    text = if(selectedPlace == stringResource(id = R.string.all))
+                        stringResource(R.string.no_devices_added)
+                    else
+                        stringResource(id = R.string.no_devices_linked_to_this_place),
                     style = MaterialTheme.typography.body1,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.padding(16.dp)
@@ -258,7 +257,7 @@ fun PlaceItem(
     }
 }
 
-fun getFilteredDevices(place: String?, devicesList : List<NetworkDevice>): List<NetworkDevice> {
-    return if (place == "All") devicesList
+fun getFilteredDevices(place: String?, devicesList : List<NetworkDevice>, allString : String): List<NetworkDevice> {
+    return if (place == allString) devicesList
     else devicesList.filter { it.room?.name == place }
 }

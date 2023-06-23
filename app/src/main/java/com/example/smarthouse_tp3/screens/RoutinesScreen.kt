@@ -38,6 +38,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -301,7 +302,7 @@ fun SmallRoutineTilesRow(
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = "No routines added",
+                    text = stringResource(id = R.string.no_routines_added),
                     style = MaterialTheme.typography.body1,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.padding(16.dp)

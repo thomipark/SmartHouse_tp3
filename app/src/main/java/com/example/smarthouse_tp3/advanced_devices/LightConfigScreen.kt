@@ -420,7 +420,8 @@ fun LightConfigScreen(
                             color = if(MaterialTheme.colors.isLight) Color.White else Color.Black,
                             fontWeight = FontWeight.Bold,
                             fontSize = 14.sp,
-                            textAlign = TextAlign.Center
+                            textAlign = TextAlign.Center,
+                            maxLines = 1
                         )
                     }
                 }

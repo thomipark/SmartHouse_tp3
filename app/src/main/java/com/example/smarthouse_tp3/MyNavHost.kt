@@ -330,27 +330,28 @@ fun BottomBar(
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navBackStackEntry?.destination?.route
         items.forEach { item ->
+            val route = stringResource(id = item.route)
             BottomNavigationItem(
                 selectedContentColor = MaterialTheme.colors.secondary,
                 unselectedContentColor = MaterialTheme.colors.surface,
                 icon = {
-                    val tint = if (currentRoute == item.route) {
+                    val tint = if (currentRoute == stringResource(id = item.route)) {
                         MaterialTheme.colors.secondary
                     } else {
                         LocalContentColor.current.copy(alpha = LocalContentAlpha.current)
                     }
                     Icon(
                         imageVector = ImageVector.vectorResource(id = item.icon),
-                        contentDescription = item.title,
+                        contentDescription = stringResource(item.title),
                         modifier = Modifier.size(25.dp),
                         tint = tint
                     )
                 },
-                label = { Text(text = item.title) },
+                label = { Text(text = stringResource(id = item.title)) },
                 alwaysShowLabel = true,
-                selected = currentRoute == item.route,
+                selected = currentRoute == stringResource(id = item.route),
                 onClick = {
-                    navController.navigate(item.route) {
+                    navController.navigate(route) {
                         navController.graph.startDestinationRoute?.let { screenRoute ->
                             popUpTo(screenRoute) {
                                 saveState = true

@@ -28,6 +28,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -138,7 +139,7 @@ fun OvenConfigScreen(
                     elevation = 0.dp
                 ) {
                     Text(
-                        text = "Convection",
+                        text = stringResource(id = R.string.convection),
                         style = MaterialTheme.typography.h5,
                         textAlign = TextAlign.Center,
                         modifier = Modifier.padding(16.dp)
@@ -214,7 +215,7 @@ fun OvenConfigScreen(
                     elevation = 0.dp
                 ) {
                     Text(
-                        text = "Grill mode",
+                        text = stringResource(id = R.string.grill_mode),
                         style = MaterialTheme.typography.h5,
                         textAlign = TextAlign.Center,
                         modifier = Modifier.padding(16.dp)
@@ -295,7 +296,7 @@ fun OvenConfigScreen(
                         elevation = 0.dp
                     ) {
                         Text(
-                            text = "Heat source",
+                            text = stringResource(id = R.string.heat_source),
                             style = MaterialTheme.typography.h5,
                             textAlign = TextAlign.Center,
                             modifier = Modifier.padding(16.dp)
