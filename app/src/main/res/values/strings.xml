@@ -32,8 +32,6 @@
     <string name="channel_name">Device notifications</string>
     <string name="channel_description">Device notifications</string>
     <string name="notification_title">My notification</string>
-    <string name="notification_text">"Much longer text that cannot fit one line…"</string>
-    <string name="notification_text2">"Much longer text that cannot fit one line…"</string>
     <string name="message">Notification selected for device id %1$s</string>
     <string name="no_devices_linked_to_routine">No devices linked to routine</string>
     <string name="device_and_actions">Devices &amp; Actions</string>
@@ -77,6 +75,7 @@
     <string name="action_pause">Pause</string>
     <string name="action_dock">Dock to charge</string>
     <string name="action_start">Start cleaning</string>
+    <string name="notification_text">Detected new change in %1\$s (%2\$s) from %3\$s.%nEvent: %4\$s</string>
     <string name="action_setVerticalSwing">Set vertical swing angle</string>
     <string name="action_setHorizontalSwing">Set horizontal swing angle</string>
 

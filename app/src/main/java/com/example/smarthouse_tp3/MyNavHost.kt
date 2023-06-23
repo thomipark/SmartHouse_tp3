@@ -1,5 +1,6 @@
 package com.example.smarthouse_tp3
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -70,19 +71,7 @@ fun MyNavHost(
     val routineConfigurationScreen = stringResource(id = R.string.routine_configuration_screen)
 
     val devicesViewModel: DevicesViewModel = viewModel()
-
-    // devicesViewModel.fetchDevices("Nav Host")
-
     val routinesViewModel: RoutinesViewModel = viewModel()
-
-    if (deviceId != null) {
-        val networkDevice = devicesViewModel.getNetworkDeviceFromId(deviceId)
-        val myDevice: DeviceViewModel? = networkDevice?.let {
-            deviceViewModelMaker(typeName = it.type?.name, id = deviceId)
-        }
-        myDevice?.fetchDevice()
-        myDevice?.let { navigationViewModel.selectNewDeviceViewModel(it) }
-    }
 
 
     NavHost(
@@ -91,6 +80,7 @@ fun MyNavHost(
         modifier = modifier
     ) {
         val bottomPadding = Modifier.padding(0.dp, 0.dp, 0.dp, 56.dp)
+        Log.d("NavHost start route",startDestination)
 
         //MAIN SCREENS
         composable(routinesScreen) {
@@ -103,7 +93,6 @@ fun MyNavHost(
         }
 
         composable(deviceScreen) {
-
             LaunchedEffect(Unit) {
                 devicesViewModel.fetchDevices()
             }
