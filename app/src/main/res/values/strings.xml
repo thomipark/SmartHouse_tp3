@@ -78,5 +78,10 @@
     <string name="notification_text">Detected new change in %1\$s (%2\$s) from %3\$s.%nEvent: %4\$s</string>
     <string name="action_setVerticalSwing">Set vertical swing angle</string>
     <string name="action_setHorizontalSwing">Set horizontal swing angle</string>
+    <string name="acs">ACs</string>
+    <string name="ovens">Ovens</string>
+    <string name="faucets">Faucets</string>
+    <string name="vacuums">Vacuums</string>
+    <string name="lights">Lights</string>
 
 </resources>

@@ -1,12 +1,17 @@
 package com.example.smarthouse_tp3.ui
 
 import android.util.Log
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.Color
 import com.example.smarthouse_tp3.R
 import com.example.smarthouse_tp3.data.network.model.NetworkDeviceState
 import kotlinx.coroutines.flow.update
 
 class FaucetViewModel(deviceId: String) : DeviceViewModel(deviceId = deviceId) {
+
+
+    var isDispensing = mutableStateOf(false)
     override fun fetchDevice(deviceId: String): FaucetViewModel {
         super.fetchDevice(deviceId)
         _uiState.update {
@@ -24,6 +29,7 @@ class FaucetViewModel(deviceId: String) : DeviceViewModel(deviceId = deviceId) {
     }
 
     override fun changeSwitchState() {
+        cancelJobs()
         super.changeSwitchState()
         if (uiState.value.switchState) {
             changeDeviceIconColor(Color.Blue)
@@ -33,6 +39,7 @@ class FaucetViewModel(deviceId: String) : DeviceViewModel(deviceId = deviceId) {
             changeDeviceIconColor(Color.Black)
             uiState.value.id?.let { executeAction(it, "close", arrayOf()) }
             updateUiState(status = "closed")
+            isDispensing.value = false
         }
     }
 
@@ -109,6 +116,18 @@ class FaucetViewModel(deviceId: String) : DeviceViewModel(deviceId = deviceId) {
                 )
             }
         }
+    }
+
+    fun getIsDispensing() : MutableState<Boolean> {
+        return isDispensing
+    }
+
+    fun setDispensing() {
+        isDispensing.value = true
+    }
+
+    fun unsetDispensing() {
+        isDispensing.value = false
     }
 }
 

@@ -68,6 +68,25 @@ fun FaucetConfigScreen(
     val isDispensing = remember { mutableStateOf(false) }
     val isDropdownExpanded = remember { mutableStateOf(false) }
 
+    if (viewModel.getIsDispensing().value) {
+        LaunchedEffect(Unit) {
+            while(viewModel.getIsDispensing().value){
+                delay(10)
+                viewModel.fetchDevice()
+            }
+            viewModel.cancelJobs()
+            delay(1000)
+            viewModel.close()
+
+        }
+    }
+
+    if (viewModel.getIsDispensing().value && uiState.state?.status == "closed") {
+        viewModel.unsetDispensing()
+    }
+
+
+
     if (state != null) {
         if (state.status.toString() == "closed") {
             sliderValue = rememberSaveable { mutableStateOf(0F) }
@@ -276,8 +295,8 @@ fun FaucetConfigScreen(
 
 
         //uiState.id?.let { viewModel.fetchDevice(it) }
-        if (state?.status.toString() == "closed" || (state?.status.toString() == "opened" && isDispensing.value)) {
-            if (state?.status.toString() == "opened") {
+        if (state?.status.toString() == "closed" || (viewModel.getIsDispensing().value)) {
+            if (viewModel.getIsDispensing().value) {
                 Row(
                     modifier = Modifier
                         .padding(top = 45.dp, start = 20.dp, end = 20.dp)
@@ -349,13 +368,18 @@ fun FaucetConfigScreen(
                     (if (state?.status.toString() == "closed") {
                         sliderValue.value
                     } else {
-                        // LaunchedEffect(Unit) {
-                        //     while(state?.status.toString() != "closed") {
-                        //         delay(10)
-                        //         uiState.id?.let { viewModel.fetchDevice(it) }
-                        //     }
-                        // }
-                        uiState.id?.let { viewModel.fetchDevice(it) }
+                        LaunchedEffect(Unit) {
+                            while(viewModel.getIsDispensing().value){
+                                delay(10)
+                                viewModel.fetchDevice()
+                            }
+                            viewModel.cancelJobs()
+                            delay(1000)
+                            viewModel.close()
+
+                        }
+                        sliderValue.value = 0F
+                        // uiState.id?.let { viewModel.fetchDevice(it) }
                         state?.dispensedQuantity
                     })?.let {
                         Box(
@@ -399,10 +423,10 @@ fun FaucetConfigScreen(
                             }
                         }
                     }
-                    if (state?.status.toString() != "closed" && isDispensing.value && aux != 0f && aux == state?.dispensedQuantity) {
-                        viewModel.changeSwitchState()
-                        isDispensing.value = false
-                    }
+                    // if (state?.status.toString() != "closed" && isDispensing.value && aux != 0f && aux == state?.dispensedQuantity) {
+                    //     viewModel.changeSwitchState()
+                    //     isDispensing.value = false
+                    // }
                 }
             }
         }
@@ -418,7 +442,7 @@ fun FaucetConfigScreen(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = "${uiState.name}" + stringResource(id = R.string.is_open_and_running),
+                        text = "${uiState.name} " + stringResource(id = R.string.is_open_and_running),
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold
                     )
@@ -447,7 +471,7 @@ fun FaucetConfigScreen(
                                     sliderValue.value,
                                     selectedUnit.value
                                 )
-                                isDispensing.value = true
+                                viewModel.setDispensing()
                             },
                             colors = ButtonDefaults.buttonColors(
                                 backgroundColor = MaterialTheme.colors.primaryVariant,
@@ -469,40 +493,40 @@ fun FaucetConfigScreen(
             }
         }
 
-        if (state?.status.toString() != "closed") {
-            Row(
-                modifier = Modifier.padding(vertical = 100.dp, horizontal = 16.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Column(
-                    modifier = Modifier.weight(1f),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .size(width = 200.dp, height = 70.dp),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Button(
-                            onClick = { viewModel.changeSwitchState(); isDispensing.value = false},
-                            modifier = Modifier.fillMaxSize(),
-                            enabled = state?.status.toString() != "closed",
-                            elevation = ButtonDefaults.elevation(5.dp),
-                            colors = ButtonDefaults.buttonColors(
-                                backgroundColor = MaterialTheme.colors.primaryVariant
-                            )
-                        ) {
-                            Text(
-                                text = stringResource(id = R.string.close_faucet),
-                                fontWeight = FontWeight.ExtraBold,
-                                fontSize = 20.sp,
-                                textAlign = TextAlign.Center
-                            )
-                        }
-                    }
-                }
-            }
-        }
+        // if (state?.status.toString() != "closed") {
+        //     Row(
+        //         modifier = Modifier.padding(vertical = 100.dp, horizontal = 16.dp),
+        //         verticalAlignment = Alignment.CenterVertically
+        //     ) {
+        //         Column(
+        //             modifier = Modifier.weight(1f),
+        //             horizontalAlignment = Alignment.CenterHorizontally
+        //         ) {
+        //             Box(
+        //                 modifier = Modifier
+        //                     .size(width = 200.dp, height = 70.dp),
+        //                 contentAlignment = Alignment.Center
+        //             ) {
+        //                 Button(
+        //                     onClick = { viewModel.changeSwitchState(); viewModel.unsetDispensing()},
+        //                     modifier = Modifier.fillMaxSize(),
+        //                     enabled = state?.status.toString() != "closed",
+        //                     elevation = ButtonDefaults.elevation(5.dp),
+        //                     colors = ButtonDefaults.buttonColors(
+        //                         backgroundColor = MaterialTheme.colors.primaryVariant
+        //                     )
+        //                 ) {
+        //                     Text(
+        //                         text = stringResource(id = R.string.close_faucet),
+        //                         fontWeight = FontWeight.ExtraBold,
+        //                         fontSize = 20.sp,
+        //                         textAlign = TextAlign.Center
+        //                     )
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
     }
 }
 

@@ -79,4 +79,9 @@
     <string name="action_start">Iniciar limpieza</string>
     <string name="action_setVerticalSwing">Establecer ángulo oscilación vertical</string>
     <string name="action_setHorizontalSwing">Establecer ángulo oscilación horizontal</string>
+    <string name="acs">Aires Acondicionados</string>
+    <string name="ovens">Hornos</string>
+    <string name="faucets">Grifos</string>
+    <string name="vacuums">Aspiradoras</string>
+    <string name="lights">Lamparas</string>
 </resources>

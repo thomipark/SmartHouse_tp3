@@ -275,9 +275,11 @@ fun CategoryItem(
 ) {
     val categoryName = when (category) {
         DeviceCategory.All -> stringResource(id = R.string.all)
-        DeviceCategory.AC -> category.name + "s" // Append 's' without modifying the case
-        else -> category.name.lowercase()
-            .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() } + "s" // Convert to lowercase, capitalize first letter, and add 's'
+        DeviceCategory.AC ->        stringResource(R.string.acs)
+        DeviceCategory.OVEN ->      stringResource(R.string.ovens)
+        DeviceCategory.FAUCET ->    stringResource(R.string.faucets)
+        DeviceCategory.VACUUM ->    stringResource(R.string.vacuums)
+        DeviceCategory.LIGHT ->     stringResource(R.string.lights)
     }
 
     Box(
