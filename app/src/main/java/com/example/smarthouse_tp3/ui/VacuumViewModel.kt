@@ -31,10 +31,7 @@ class VacuumViewModel(deviceId : String) : DeviceViewModel(deviceId) {
     }
 
     override fun getSmallIconsList(): List<Int> {
-        val iconsList = mutableListOf<Int>()
-        iconsList.add(getBatteryIcon())
-
-        return iconsList
+        return emptyList()
     }
 
     fun getBatteryIcon() : Int {
