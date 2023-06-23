@@ -83,4 +83,6 @@
     <string name="lights">Lights</string>
     <string name="action_setVerticalSwing">Set vertical swing angle to</string>
     <string name="action_setHorizontalSwing">Set horizontal swing angle to</string>
+    <string name="no_devices_of_this_type">No devices of this type</string>
+    <string name="RoutinedialogText">%1\$s executed</string>
 </resources>

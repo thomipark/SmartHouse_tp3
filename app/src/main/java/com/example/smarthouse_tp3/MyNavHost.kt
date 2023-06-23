@@ -6,6 +6,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -34,6 +35,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -79,7 +81,6 @@ fun MyNavHost(
         navController = navController, startDestination = startDestination, modifier = modifier
     ) {
         val bottomPadding = Modifier.padding(0.dp, 0.dp, 0.dp, 56.dp)
-        Log.d("NavHost start route", startDestination)
 
         //MAIN SCREENS
         composable(routinesScreen) {
@@ -342,33 +343,67 @@ fun BottomBar(navController: NavController) {
         8.dp
     }
 
+
+
+    val contentColor = MaterialTheme.colors.surface
+    val selectedColor = MaterialTheme.colors.secondary
+    val unselectedColor = contentColor.copy(alpha = LocalContentAlpha.current)
+
+    val iconSize = if (isTablet) 30.dp else 25.dp
+    val itemModifier = Modifier.fillMaxHeight()
+
+    val navigationModifier = Modifier.padding(4.dp)
+
+
     BottomNavigation(
-        backgroundColor = MaterialTheme.colors.primary
+        backgroundColor = MaterialTheme.colors.primary,
+        contentColor = contentColor,
+        modifier = navigationModifier
     ) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navBackStackEntry?.destination?.route
 
-        items.forEach { item ->
+        items.forEachIndexed { index, item ->
             val route = stringResource(id = item.route)
+            val isSelected = currentRoute == stringResource(id = item.route)
+
+            val itemPaddingModifier = if (index != 0) {
+                Modifier.padding(start = itemSpacing)
+            } else {
+                Modifier
+            }
+
+            if (isLandscape && isTablet) {
+                16.dp
+            } else {
+                8.dp
+            }
+
             BottomNavigationItem(
-                selectedContentColor = MaterialTheme.colors.secondary,
-                unselectedContentColor = MaterialTheme.colors.surface,
+                selectedContentColor = selectedColor,
+                unselectedContentColor = unselectedColor,
                 icon = {
-                    val tint = if (currentRoute == stringResource(id = item.route)) {
-                        MaterialTheme.colors.secondary
+                    val tint = if (isSelected) {
+                        selectedColor
                     } else {
-                        LocalContentColor.current.copy(alpha = LocalContentAlpha.current)
+                        unselectedColor
                     }
                     Icon(
                         imageVector = ImageVector.vectorResource(id = item.icon),
                         contentDescription = stringResource(item.title),
-                        modifier = Modifier.size(25.dp),
+                        modifier = Modifier.size(iconSize),
                         tint = tint
                     )
                 },
-                label = { Text(text = stringResource(id = item.title)) },
+                label = {
+                    Text(
+                        text = stringResource(id = item.title),
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                        },
                 alwaysShowLabel = true,
-                selected = currentRoute == stringResource(id = item.route),
+                selected = isSelected,
                 onClick = {
                     navController.navigate(route) {
                         navController.graph.startDestinationRoute?.let { screenRoute ->
@@ -380,8 +415,9 @@ fun BottomBar(navController: NavController) {
                         }
                     }
                 },
-                modifier = Modifier.padding(horizontal = itemSpacing)
+                modifier = itemModifier.then(itemPaddingModifier)
             )
         }
     }
 }
+

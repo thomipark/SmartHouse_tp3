@@ -19,6 +19,8 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.AlertDialog
+import androidx.compose.material.Button
 import androidx.compose.material.Card
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
@@ -217,10 +219,12 @@ fun PlayButton(
     routinesViewModel: RoutinesViewModel
 ) {
     var isClicked by remember { mutableStateOf(false) }
+    var showDialog by remember { mutableStateOf(false) }
 
     val tint by animateColorAsState(
         if (isClicked) MaterialTheme.colors.secondary else if (MaterialTheme.colors.isLight) Color.White else Color.Black
     )
+
     LaunchedEffect(isClicked) {
         if (isClicked) {
             delay(150)
@@ -231,7 +235,10 @@ fun PlayButton(
     IconButton(
         onClick = {
             isClicked = !isClicked
-            networkRoutine.id?.let { routinesViewModel.executeRoutine(it) }
+            networkRoutine.id?.let {
+                routinesViewModel.executeRoutine(it)
+                showDialog = true
+            }
         },
         modifier = Modifier.padding(horizontal = 20.dp)
     ) {
@@ -245,7 +252,32 @@ fun PlayButton(
             modifier = Modifier.size(playIconSize)
         )
     }
+    
+    val dialogText = networkRoutine.name?.let {
+        stringResource(id = R.string.RoutinedialogText,
+            it
+        )
+    }
+
+    if (showDialog) {
+        AlertDialog(
+            onDismissRequest = { showDialog = false },
+            title = {
+                if (dialogText != null) {
+                    Text(text = dialogText)
+                }
+            },
+            confirmButton = {
+                Button(
+                    onClick = { showDialog = false }
+                ) {
+                    Text(text = "OK")
+                }
+            }
+        )
+    }
 }
+
 
 
 @Composable

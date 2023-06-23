@@ -15,6 +15,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.AlertDialog
+import androidx.compose.material.Button
 import androidx.compose.material.Card
 import androidx.compose.material.Divider
 import androidx.compose.material.FloatingActionButton
@@ -88,12 +90,14 @@ fun RoutineTopBar(networkRoutine: NetworkRoutine) {
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(
-                    text = stringResource(id = R.string.device_and_actions),
-                    style = MaterialTheme.typography.h5,
-                    modifier = Modifier.weight(1f),
-                    textAlign = TextAlign.Center
-                )
+                networkRoutine.name?.let {
+                    Text(
+                        text = it,
+                        style = MaterialTheme.typography.h5,
+                        modifier = Modifier.weight(1f),
+                        textAlign = TextAlign.Center
+                    )
+                }
             }
             Divider(
                 color = if (!MaterialTheme.colors.isLight) Color.LightGray else Color.Black,
@@ -291,6 +295,7 @@ fun RoutineBody(
     modifier: Modifier = Modifier
 ) {
     val deviceRoutineNetworkList = createDeviceRoutineNetworks(networkRoutine)
+    var showDialog by remember { mutableStateOf(false) }
 
     LazyColumn(
         contentPadding = PaddingValues(horizontal = 16.dp),
@@ -341,6 +346,7 @@ fun RoutineBody(
                 onClick = {
                     networkRoutine.id?.let { routinesViewModel.executeRoutine(it) }
                     isClicked = !isClicked
+                    showDialog = true
                 },
                 modifier = Modifier
                     .size(128.dp)
@@ -359,6 +365,30 @@ fun RoutineBody(
                 )
             }
         }
+    }
+
+    val dialogText = networkRoutine.name?.let {
+        stringResource(id = R.string.RoutinedialogText,
+            it
+        )
+    }
+
+    if (showDialog) {
+        AlertDialog(
+            onDismissRequest = { showDialog = false },
+            title = {
+                if (dialogText != null) {
+                    Text(text = dialogText)
+                }
+            },
+            confirmButton = {
+                Button(
+                    onClick = { showDialog = false }
+                ) {
+                    Text(text = "OK")
+                }
+            }
+        )
     }
 }
 
