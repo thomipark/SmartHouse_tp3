@@ -33,8 +33,7 @@
     <string name="channel_name">Notificación de dispositivos</string>
     <string name="channel_description">Notificación de dispositivos</string>
     <string name="notification_title">Mi notificación</string>
-    <string name="notification_text">texto limite para esto ver clase 22</string>
-    <string name="notification_text2">texto limite para esto ver clase 22</string>
+    <string name="notification_text">Se detecto un cambio en %1\\$s (%2\\$s) en %3\\$s.%nEvento: %4\\$s</string>
     <string name="message">Notificación seleccionado para dispositivo id %1$s</string>
     <string name="no_devices_linked_to_routine">No hay dispositivos asociados a esta rutina</string>
     <string name="device_and_actions">Dispositivos y Acciones</string>
