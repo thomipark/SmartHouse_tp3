@@ -34,4 +34,14 @@
     <string name="notification_text">"Much longer text that cannot fit one line…"</string>
     <string name="notification_text2">"Much longer text that cannot fit one line…"</string>
     <string name="message">Notification selected for device id %1$s</string>
+    <string name="no_devices_linked_to_routine">No devices linked to routine</string>
+    <string name="device_and_actions"><![CDATA[Devices & Actions]]></string>
+    <string name="unit">Unit</string>
+    <string name="volume">Volume</string>
+    <string name="dispense_volume">Dispense volume</string>
+    <string name="is_open_and_running">is open and running</string>
+    <string name="dispense">Dispense</string>
+    <string name="close_faucet">Close Faucet</string>
+    <string name="turn_on">Turn on</string>
+    <string name="turn_off">Turn off</string>
 </resources>

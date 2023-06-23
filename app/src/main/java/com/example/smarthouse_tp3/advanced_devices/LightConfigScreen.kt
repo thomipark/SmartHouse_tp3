@@ -91,12 +91,14 @@ fun LightConfigScreen(
                     horizontalAlignment = Alignment.Start
                 ) {
                     Card(
-                        modifier = Modifier.width(160.dp).height(70.dp),
+                        modifier = Modifier
+                            .width(160.dp)
+                            .height(70.dp),
                         border = BorderStroke(0.5.dp, Color.LightGray),
                         elevation = 0.dp
                     ) {
                         Text(
-                            text = "Hue",
+                            text = stringResource(id = R.string.hue),
                             style = MaterialTheme.typography.h5,
                             textAlign = TextAlign.Center,
                             modifier = Modifier.padding(16.dp)
@@ -144,12 +146,14 @@ fun LightConfigScreen(
                 horizontalAlignment = Alignment.Start
             ) {
                 Card(
-                    modifier = Modifier.width(160.dp).height(70.dp),
+                    modifier = Modifier
+                        .width(160.dp)
+                        .height(70.dp),
                     border = BorderStroke(0.5.dp, Color.LightGray),
                     elevation = 0.dp
                 ) {
                     Text(
-                        text = "Brightness",
+                        text = stringResource(id = R.string.brightness_text),
                         style = MaterialTheme.typography.h5,
                         textAlign = TextAlign.Center,
                         modifier = Modifier.padding(16.dp)
@@ -308,7 +312,7 @@ fun LightConfigScreen(
                         modifier = Modifier.size(width = 250.dp, height = 100.dp)
                     ) {
                         Text(
-                            text = "Turn ${if (uiState.switchState) "off" else "on"}",
+                            text = "${if (uiState.switchState) stringResource(id = R.string.turn_on) else stringResource(id = R.string.turn_off)}",
                             fontWeight = FontWeight.ExtraBold,
                             fontSize = 30.sp,
                             textAlign = TextAlign.Center,

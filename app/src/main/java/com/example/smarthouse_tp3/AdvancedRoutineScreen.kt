@@ -31,6 +31,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -79,7 +80,7 @@ fun RoutineTopBar(networkRoutine: NetworkRoutine) {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "Devices & Actions",
+                    text = stringResource(id = R.string.device_and_actions),
                     style = MaterialTheme.typography.h5,
                     modifier = Modifier.weight(1f),
                     textAlign = TextAlign.Center
@@ -172,7 +173,7 @@ fun RoutineBody(
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        text = "No devices linked to routine",
+                        text = stringResource(id = R.string.no_devices_linked_to_routine),
                         style = MaterialTheme.typography.body1,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier.padding(8.dp)

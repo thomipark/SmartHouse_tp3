@@ -38,6 +38,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -45,6 +46,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.smarthouse_tp3.R
 import com.example.smarthouse_tp3.ui.FaucetUnits
 import com.example.smarthouse_tp3.ui.FaucetViewModel
 
@@ -106,7 +108,7 @@ fun FaucetConfigScreen(
                         elevation = 0.dp
                     ) {
                         Text(
-                            text = "Unit",
+                            text = stringResource(R.string.unit),
                             style = MaterialTheme.typography.h5,
                             textAlign = TextAlign.Center,
                             modifier = Modifier.padding(16.dp)
@@ -195,7 +197,7 @@ fun FaucetConfigScreen(
                         elevation = 0.dp
                     ) {
                         Text(
-                            text = "Volume",
+                            text = stringResource(id = R.string.volume),
                             style = MaterialTheme.typography.h5,
                             textAlign = TextAlign.Center,
                             modifier = Modifier.padding(16.dp)
@@ -292,7 +294,7 @@ fun FaucetConfigScreen(
                             elevation = 0.dp
                         ) {
                             Text(
-                                text = "Dispensed volume",
+                                text = stringResource(id = R.string.dispense_volume),
                                 style = MaterialTheme.typography.h5,
                                 textAlign = TextAlign.Center,
                                 modifier = Modifier.padding(horizontal = 8.dp, vertical = 16.dp)
@@ -408,7 +410,7 @@ fun FaucetConfigScreen(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = "${uiState.name} is open and running",
+                        text = "${uiState.name}" + stringResource(id = R.string.is_open_and_running),
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold
                     )
@@ -447,7 +449,7 @@ fun FaucetConfigScreen(
                             modifier = Modifier.size(width = 250.dp, height = 100.dp)
                         ) {
                             Text(
-                                text = "Dispense",
+                                text = stringResource(id = R.string.dispense),
                                 fontWeight = FontWeight.ExtraBold,
                                 fontSize = 30.sp,
                                 textAlign = TextAlign.Center,
@@ -483,7 +485,7 @@ fun FaucetConfigScreen(
                             )
                         ) {
                             Text(
-                                text = "Close faucet",
+                                text = stringResource(id = R.string.close_faucet),
                                 fontWeight = FontWeight.ExtraBold,
                                 fontSize = 20.sp,
                                 textAlign = TextAlign.Center
