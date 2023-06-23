@@ -114,7 +114,7 @@ class MainActivity : ComponentActivity() {
         val deviceId = intent?.getStringExtra(MyIntent.DEVICE_ID)
 
         val skip = isAppInForeground() || !NotificationList.list.contains(deviceId)
-        receiver = SkipNotificationReceiver(DEVICE_ID,skip)
+        receiver = SkipNotificationReceiver(skip)
         IntentFilter(MyIntent.SHOW_NOTIFICATION)
             .apply { priority = 1 }
             .also {

@@ -132,15 +132,6 @@ fun DevicesSmallTileRow(
             ) {
                 items(items = filteredDevices) { item ->
                     val myDevice = DeviceMap.map[item.id]
-                    // var myDevice : DeviceViewModel? =
-                    //     item.id?.let { deviceViewModelMaker(id = it, typeName = item.type?.name) }
-                    // if (myDevice != null) {
-                    //     DeviceMap.map.get()
-                    //     // myDevice = DeviceMap.map.getOrPut(item.id.toString()) {
-                    //     //     item.id?.let { deviceViewModelMaker(id = it, typeName = item.type?.name) }
-                    //     //         ?.fetchDevice()!!
-                    //     // }
-                    // }
                     if (myDevice != null) {
                         DeviceSmallTile(
                             deviceViewModel = myDevice,
@@ -163,14 +154,7 @@ fun DeviceSmallTile(
     onNavigateToConfigScreen: () -> Unit
 ) {
     val deviceUiState by deviceViewModel.uiState.collectAsState()
-    //deviceViewModel.fetchDevice()
 
-    // deviceViewModel.fetchDevice()
-
-    // LaunchedEffect(Unit) {
-    //     delay(1000)
-    //     deviceViewModel.fetchDevice()
-    // }
 
 
     Surface(
@@ -233,9 +217,7 @@ fun DeviceSmallTile(
                             .fillMaxSize()
                             .padding(horizontal = 8.dp, vertical = 4.dp)
                     ) {
-                        if (deviceUiState.switchState) {
-                            SmallIconsList(imageList = deviceViewModel.getSmallIconsList())
-                        }
+
                     }
                 }
 
@@ -324,21 +306,7 @@ fun getFilteredDevices(category: DeviceCategory, deviceList : List<NetworkDevice
     }
 }
 
-@Composable
-fun SmallIconsList(imageList: List<Int>) {
-    Row(verticalAlignment = Alignment.CenterVertically) {
-        imageList.forEach { id ->
-            Image(
-                painter = painterResource(id),
-                contentDescription = null,
-                modifier = Modifier
-                    .padding(horizontal = 4.dp)
-                    .width(32.dp)
-                    .height(32.dp)
-            )
-        }
-    }
-}
+
 
 enum class DeviceCategory(val stringValue: String) {
     All("All"),

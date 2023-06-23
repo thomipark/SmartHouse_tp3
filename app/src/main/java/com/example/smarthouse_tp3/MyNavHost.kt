@@ -1,5 +1,6 @@
 package com.example.smarthouse_tp3
 
+import android.content.res.Configuration
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -28,6 +29,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -48,7 +50,6 @@ import com.example.smarthouse_tp3.screens.PlacesScreen
 import com.example.smarthouse_tp3.screens.RoutinesScreen
 import com.example.smarthouse_tp3.screens.deviceViewModelMaker
 import com.example.smarthouse_tp3.ui.DeviceMap
-import com.example.smarthouse_tp3.ui.DeviceViewModel
 import com.example.smarthouse_tp3.ui.DevicesViewModel
 import com.example.smarthouse_tp3.ui.NavigationViewModel
 import com.example.smarthouse_tp3.ui.RoomsViewModel
@@ -178,29 +179,33 @@ fun MyNavHost(
         onDispose { /* Cleanup logic if needed */ }
     }
 }
-
 @Composable
 fun TopBar(
     navController: NavController,
     navigationViewModel: NavigationViewModel = viewModel()
 ) {
     val currentRoute = navController.currentDestination?.route ?: ""
-    val showBackIcon =
-        currentRoute == stringResource(id = R.string.device_configuration_screen) || currentRoute == stringResource(id = R.string.routine_configuration_screen)
-    val navigationUiState by navigationViewModel.uiState.collectAsState()
+    val showBackIcon = currentRoute == stringResource(id = R.string.device_configuration_screen) || currentRoute == stringResource(id = R.string.routine_configuration_screen)
 
-    val showNotificationIcon =
-        currentRoute == stringResource(id = R.string.device_configuration_screen)
+
+    val navigationUiState by navigationViewModel.uiState.collectAsState()
+    val showIcons = currentRoute == stringResource(id = R.string.device_configuration_screen)
 
     navigationUiState.selectedDeviceViewModel?.let { navigationViewModel.updateNotification(it.getNotification()) }
-    val notificationState = remember { mutableStateOf(navigationUiState.notification) }
+    val notificationState   = remember { mutableStateOf(navigationUiState.notification) }
+    navigationUiState.selectedDeviceViewModel?.let { navigationViewModel.updateFavourite(it.getFavourite()) }
+    val favouriteState      = remember { mutableStateOf(navigationUiState.favourite) }
 
-
-
-    val notificationContentDescription = if (notificationState.value == true) {
+    val notificationContentDescription = if (notificationState.value) {
         "Notification On"
     } else {
         "Notification Off"
+    }
+
+    val favouriteContentDescription = if (favouriteState.value) {
+        "Favourite On"
+    } else {
+        "Favourite Off"
     }
 
 
@@ -217,39 +222,64 @@ fun TopBar(
         TopAppBar(
             title = { /* Title content */ },
             navigationIcon = {
-
                 IconButton(onClick = { navController.navigateUp() }) {
                     Icon(
                         painter = painterResource(R.drawable.backarrow),
                         contentDescription = "Back"
                     )
                 }
-
             },
             actions = {
-                if (showNotificationIcon) {
-                    IconButton(onClick = {
-                        navigationViewModel.setNotification()
-                        navigationUiState.selectedDeviceViewModel?.setNotification()
+                if (showIcons) {
+                    Row {
+                        IconButton(onClick = {
+                            navigationViewModel.setFavourite()
+                            navigationUiState.selectedDeviceViewModel?.setFavourite()
 
-                        if (navigationUiState.notification) {
-                            navigationViewModel.removeDevicesNotificationList()
-                        } else {
-                            navigationViewModel.addDevicesNotificationList()
-                        }
-                    }) {
-                        Icon(
-                            painter = if (navigationUiState.notification) {
-                                painterResource(R.drawable.notifications_on)
+                            if (navigationUiState.favourite) {
+                                navigationViewModel.removeDevicesFavoriteList()
                             } else {
-                                painterResource(R.drawable.notifications_off)
-                            },
-                            contentDescription = notificationContentDescription,
-                            modifier = Modifier
-                                .padding(8.dp)
-                                .size(40.dp)
-                        )
+                                navigationViewModel.addDevicesFavoriteList()
+                            }
+                        }) {
+                            Icon(
+                                painter = if (navigationUiState.favourite) {
+                                    painterResource(R.drawable.favourites_icon_on)
+                                } else {
+                                    painterResource(R.drawable.favourites_icon_off)
+                                },
+                                contentDescription = favouriteContentDescription,
+                                modifier = Modifier
+                                    .padding(8.dp)
+                                    .size(40.dp)
+                            )
+                        }
                     }
+                    Row {
+                        IconButton(onClick = {
+                            navigationViewModel.setNotification()
+                            navigationUiState.selectedDeviceViewModel?.setNotification()
+
+                            if (navigationUiState.notification) {
+                                navigationViewModel.removeDevicesNotificationList()
+                            } else {
+                                navigationViewModel.addDevicesNotificationList()
+                            }
+                        }) {
+                            Icon(
+                                painter = if (navigationUiState.notification) {
+                                    painterResource(R.drawable.notifications_on)
+                                } else {
+                                    painterResource(R.drawable.notifications_off)
+                                },
+                                contentDescription = notificationContentDescription,
+                                modifier = Modifier
+                                    .padding(8.dp)
+                                    .size(40.dp)
+                            )
+                        }
+                    }
+
                 }
             },
             backgroundColor = MaterialTheme.colors.primary
@@ -299,11 +329,8 @@ fun TopBar(
         }
     }
 }
-
 @Composable
-fun BottomBar(
-    navController: NavController
-) {
+fun BottomBar(navController: NavController) {
     val items = listOf(
         MainScreen.DevicesScreen,
         MainScreen.PlacesScreen,
@@ -311,11 +338,22 @@ fun BottomBar(
         MainScreen.FavoritesScreen
     )
 
+    val configuration = LocalConfiguration.current
+    val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+    val isTablet = configuration.smallestScreenWidthDp >= 600
+
+    val itemSpacing = if (isLandscape && isTablet) {
+        16.dp
+    } else {
+        8.dp
+    }
+
     BottomNavigation(
         backgroundColor = MaterialTheme.colors.primary
     ) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navBackStackEntry?.destination?.route
+
         items.forEach { item ->
             val route = stringResource(id = item.route)
             BottomNavigationItem(
@@ -347,7 +385,8 @@ fun BottomBar(
                             restoreState = true
                         }
                     }
-                }
+                },
+                modifier = Modifier.padding(horizontal = itemSpacing)
             )
         }
     }
