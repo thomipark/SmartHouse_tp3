@@ -86,9 +86,8 @@ fun MyNavHost(
         //MAIN SCREENS
         composable(routinesScreen) {
             RoutinesScreen(
-                navigationViewModel = navigationViewModel,
                 modifier = bottomPadding,
-                devicesViewModel = devicesViewModel,
+                navigationViewModel = navigationViewModel,
                 routinesViewModel = routinesViewModel
             ) { navController.navigate(routineConfigurationScreen) }
         }
