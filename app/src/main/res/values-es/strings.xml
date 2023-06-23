@@ -84,4 +84,5 @@
     <string name="lights">Lamparas</string>
     <string name="action_setVerticalSwing">Establecer ángulo oscilación vertical a</string>
     <string name="action_setHorizontalSwing">Establecer ángulo oscilación horizontal a</string>
+    <string name="no_devices_of_this_type">No hay dispositivos de este tipo</string>
 </resources>

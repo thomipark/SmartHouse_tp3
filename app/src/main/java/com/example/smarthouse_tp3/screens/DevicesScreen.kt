@@ -108,8 +108,8 @@ fun DevicesSmallTileRow(
         }
         if (filteredDevices.isEmpty()) {
             val noDevicesText = when (selectedCategory) {
-                DeviceCategory.All -> "No devices added"
-                else -> "No devices of this type"
+                DeviceCategory.All -> stringResource(R.string.no_devices_added)
+                else -> stringResource(id = R.string.no_devices_of_this_type)
             }
             Box(
                 modifier = Modifier
