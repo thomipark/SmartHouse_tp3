@@ -28,7 +28,7 @@ class ShowNotificationReceiver : BroadcastReceiver() {
     }
 
     @SuppressLint("StringFormatInvalid")
-    private fun showNotification(context: Context, device: DeviceViewModel, event : String) {
+    private fun showNotification(context: Context, device: DeviceViewModel, event: String) {
         val intent = Intent(context, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             putExtra(MyIntent.DEVICE_ID, device.getDeviceId())

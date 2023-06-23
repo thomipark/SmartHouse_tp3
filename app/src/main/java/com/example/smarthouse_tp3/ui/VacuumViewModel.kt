@@ -8,7 +8,7 @@ import com.example.smarthouse_tp3.data.network.model.NetworkDeviceRoom
 import com.example.smarthouse_tp3.data.network.model.NetworkDeviceState
 import kotlinx.coroutines.flow.update
 
-class VacuumViewModel(deviceId : String) : DeviceViewModel(deviceId) {
+class VacuumViewModel(deviceId: String) : DeviceViewModel(deviceId) {
     override fun fetchDevice(deviceId: String): VacuumViewModel {
 
         Log.d("MYDEVICEswitchVAC", uiState.value.toString())
@@ -34,7 +34,7 @@ class VacuumViewModel(deviceId : String) : DeviceViewModel(deviceId) {
         return emptyList()
     }
 
-    fun getBatteryIcon() : Int {
+    fun getBatteryIcon(): Int {
         val batteryLevel = uiState.value.state?.batteryLevel
         if (uiState.value.state?.status == "docked") {
             return R.drawable.baseline_battery_charging_full_24
@@ -81,8 +81,8 @@ class VacuumViewModel(deviceId : String) : DeviceViewModel(deviceId) {
 
 
     private fun updateUiState(
-        switchState : Boolean = uiState.value.switchState,
-        deviceIconColor : Color = uiState.value.deviceIconColor,
+        switchState: Boolean = uiState.value.switchState,
+        deviceIconColor: Color = uiState.value.deviceIconColor,
         status: String? = uiState.value.state?.status,
         mode: String? = uiState.value.state?.mode,
         batteryLevel: Long? = uiState.value.state?.batteryLevel,
@@ -176,7 +176,7 @@ class VacuumViewModel(deviceId : String) : DeviceViewModel(deviceId) {
         }
     }
 
-    fun setLocation(room : NetworkDeviceRoom) {
+    fun setLocation(room: NetworkDeviceRoom) {
         Log.d("MYROOM", room.toString())
         updateUiState(location = room)
 
@@ -199,6 +199,7 @@ enum class VacuumMode(val index: Int, val stringValue: String) {
         fun fromIndex(value: Int): VacuumMode {
             return values().find { it.index == value } ?: VACUUM
         }
+
         fun fromString(value: String): VacuumMode {
             return values().find { it.stringValue == value } ?: VACUUM
         }

@@ -74,7 +74,8 @@ fun FavoritesScreen(
 ) {
 
     Column(
-        modifier = modifier.padding(0.dp, 8.dp, 0.dp, 0.dp)    ) {
+        modifier = modifier.padding(0.dp, 8.dp, 0.dp, 0.dp)
+    ) {
         DevicesSmallTileRowFav(
             navigationViewModel = navigationViewModel,
             onNavigateToConfigScreen = onNavigateToConfigScreen,

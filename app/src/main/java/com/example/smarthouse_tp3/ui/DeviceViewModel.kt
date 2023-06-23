@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-open class DeviceViewModel(private var deviceId : String) : ViewModel() {
+open class DeviceViewModel(private var deviceId: String) : ViewModel() {
 
     protected val _uiState = MutableStateFlow(DeviceUiState())
     val uiState: StateFlow<DeviceUiState> = _uiState.asStateFlow()
@@ -30,6 +30,7 @@ open class DeviceViewModel(private var deviceId : String) : ViewModel() {
     open fun getSmallIconsList(): List<Int> {
         return emptyList()
     }
+
     fun dismissMessage() {
         _uiState.update { it.copy(message = null) }
     }
@@ -38,11 +39,11 @@ open class DeviceViewModel(private var deviceId : String) : ViewModel() {
     //     uiState.value.device?.id?.let { fetchDevice(it) }
     // }
 
-    fun isLoading() : Boolean {
+    fun isLoading(): Boolean {
         return uiState.value.isLoading
     }
 
-    fun fetchDevice() : DeviceViewModel {
+    fun fetchDevice(): DeviceViewModel {
         return fetchDevice(deviceId)
     }
 
@@ -57,15 +58,17 @@ open class DeviceViewModel(private var deviceId : String) : ViewModel() {
             }.onSuccess { response ->
                 Log.d("MYFETCH", "success")
 
-                _uiState.update { it.copy(
-                    isLoading = false,
-                    id = response.body()?.device?.id,
-                    name = response.body()?.device?.name,
-                    type = response.body()?.device?.type,
-                    state = response.body()?.device?.state,
-                    room = response.body()?.device?.room,
-                    meta = response.body()?.device?.meta
-                ) }
+                _uiState.update {
+                    it.copy(
+                        isLoading = false,
+                        id = response.body()?.device?.id,
+                        name = response.body()?.device?.name,
+                        type = response.body()?.device?.type,
+                        state = response.body()?.device?.state,
+                        room = response.body()?.device?.room,
+                        meta = response.body()?.device?.meta
+                    )
+                }
             }.onFailure { e ->
                 _uiState.update {
                     it.copy(
@@ -94,22 +97,25 @@ open class DeviceViewModel(private var deviceId : String) : ViewModel() {
     }
 
     open fun changeSwitchState() {
-        _uiState.update { currentState->
-                currentState.copy(
-                  switchState = !uiState.value.switchState
-                ) }
+        _uiState.update { currentState ->
+            currentState.copy(
+                switchState = !uiState.value.switchState
+            )
+        }
     }
 
-    fun fetchFromDevicesViewModel(networkDevice: NetworkDevice){
-        _uiState.update { it.copy(
-            isLoading = false,
-            id = networkDevice.id,
-            name = networkDevice.name,
-            type = networkDevice.type,
-            state = networkDevice.state,
-            room = networkDevice.room,
-            meta = networkDevice.meta
-        ) }
+    fun fetchFromDevicesViewModel(networkDevice: NetworkDevice) {
+        _uiState.update {
+            it.copy(
+                isLoading = false,
+                id = networkDevice.id,
+                name = networkDevice.name,
+                type = networkDevice.type,
+                state = networkDevice.state,
+                room = networkDevice.room,
+                meta = networkDevice.meta
+            )
+        }
     }
 
     fun getType(): String? {
@@ -152,24 +158,27 @@ open class DeviceViewModel(private var deviceId : String) : ViewModel() {
         return copiedViewModel
     }
 
-    fun setNotification(){
+    fun setNotification() {
         _uiState.update { currentState ->
             currentState.copy(
                 notification = !uiState.value.notification
             )
         }
     }
-    fun getNotification(): Boolean{
+
+    fun getNotification(): Boolean {
         return _uiState.value.notification
     }
-    fun setFavourite(){
+
+    fun setFavourite() {
         _uiState.update { currentState ->
             currentState.copy(
                 favourite = !uiState.value.favourite
             )
         }
     }
-    fun getFavourite(): Boolean{
+
+    fun getFavourite(): Boolean {
         return _uiState.value.favourite
     }
 }

@@ -54,7 +54,7 @@ class RoutinesViewModel : ViewModel() {
         }
     }
 
-    fun executeRoutine(routineId : String){
+    fun executeRoutine(routineId: String) {
         fetchJob?.cancel()
         fetchJob = viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
@@ -71,7 +71,7 @@ class RoutinesViewModel : ViewModel() {
 @Preview
 @Composable
 fun RoutinePreview() {
-    val routineViewModel : RoutinesViewModel = viewModel()
+    val routineViewModel: RoutinesViewModel = viewModel()
     routineViewModel.fetchRoutines()
     val uiState by routineViewModel.uiState.collectAsState()
 

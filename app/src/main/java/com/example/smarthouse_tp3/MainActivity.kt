@@ -39,7 +39,6 @@ class MainActivity : ComponentActivity() {
     private lateinit var receiver: SkipNotificationReceiver
     private var shouldSkipNotification: Boolean = true
 
-
     @OptIn(ExperimentalPermissionsApi::class)
     @SuppressLint("UnusedMaterialScaffoldPaddingParameter", "StateFlowValueCalledInComposition")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -90,7 +89,6 @@ class MainActivity : ComponentActivity() {
                 }
 
 
-
             }
         }
     }
@@ -109,6 +107,7 @@ class MainActivity : ComponentActivity() {
         }
         return false
     }
+
     override fun onStart() {
         super.onStart()
         val deviceId = intent?.getStringExtra(MyIntent.DEVICE_ID)

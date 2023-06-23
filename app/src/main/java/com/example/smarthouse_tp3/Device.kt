@@ -1,6 +1,4 @@
 package com.example.smarthouse_tp3
-
-
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.Color
@@ -12,8 +10,6 @@ abstract class Device(name: String) {
     private var deviceIconColor = mutableStateOf(Color.Black)
     abstract var deviceIcon: Int
     abstract var deviceType: Type
-
-
 
     init {
         this.name = name

@@ -81,8 +81,8 @@ class DevicesViewModel : ViewModel() {
     fun getNetworkDeviceFromId(id: String): NetworkDevice? {
         val list = _uiState.value.devices?.devices
         if (list != null) {
-            for (device in list){
-                if (device.id == id){
+            for (device in list) {
+                if (device.id == id) {
                     return device
                 }
             }

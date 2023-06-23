@@ -6,9 +6,8 @@ import android.content.Intent
 import android.util.Log
 
 class SkipNotificationReceiver(
-    private val skip : Boolean
-    ) : BroadcastReceiver()
-{
+    private val skip: Boolean
+) : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
         if (skip) {

@@ -118,7 +118,7 @@ class FaucetViewModel(deviceId: String) : DeviceViewModel(deviceId = deviceId) {
         }
     }
 
-    fun getIsDispensing() : MutableState<Boolean> {
+    fun getIsDispensing(): MutableState<Boolean> {
         return isDispensing
     }
 
@@ -132,13 +132,13 @@ class FaucetViewModel(deviceId: String) : DeviceViewModel(deviceId = deviceId) {
 }
 
 enum class FaucetUnits(val index: Int, val stringValue: String) {
-    KILOLITERS  (0, "kl"   ),
-    HECTOLITERS (1, "hl"   ),
-    DECALITERS  (2, "dal"  ),
-    LITERS      (3, "l"    ),
-    DECILITERS  (4, "dl"   ),
-    CENTILITERS (5, "cl"   ),
-    MILLILITERS (6, "ml"   );
+    KILOLITERS(0, "kl"),
+    HECTOLITERS(1, "hl"),
+    DECALITERS(2, "dal"),
+    LITERS(3, "l"),
+    DECILITERS(4, "dl"),
+    CENTILITERS(5, "cl"),
+    MILLILITERS(6, "ml");
 
     companion object {
         fun fromIndex(value: Int): FaucetUnits {
@@ -148,6 +148,7 @@ enum class FaucetUnits(val index: Int, val stringValue: String) {
         fun getFaucetUnitValues(): List<String> {
             return FaucetUnits.values().map { it.stringValue }
         }
+
         fun fromString(value: String): FaucetUnits {
             return values().find { it.stringValue == value } ?: KILOLITERS
         }

@@ -42,7 +42,7 @@ class NavigationViewModel : ViewModel() {
         }
     }
 
-    fun addDevicesNotificationList (){
+    fun addDevicesNotificationList() {
         val id = _uiState.value.selectedDeviceViewModel?.getDeviceId()
         if (id != null) {
             NotificationList.list.add(id)
@@ -51,7 +51,7 @@ class NavigationViewModel : ViewModel() {
         }
     }
 
-    fun removeDevicesNotificationList (){
+    fun removeDevicesNotificationList() {
         val id = _uiState.value.selectedDeviceViewModel?.getDeviceId()
         if (id != null) {
             NotificationList.list.remove(id)
@@ -59,6 +59,7 @@ class NavigationViewModel : ViewModel() {
             Log.d("ServerEventReceiver listNM", FavouritesList.list.toString())
         }
     }
+
     fun addDevicesFavoriteList() {
         val id = _uiState.value.selectedDeviceViewModel?.getDeviceId()
         if (id != null) {
@@ -76,7 +77,7 @@ class NavigationViewModel : ViewModel() {
     }
 
 
-    fun setNotification(){
+    fun setNotification() {
         _uiState.update { currentState ->
             currentState.copy(
                 notification = !uiState.value.notification
@@ -84,7 +85,7 @@ class NavigationViewModel : ViewModel() {
         }
     }
 
-    fun updateNotification(not : Boolean){
+    fun updateNotification(not: Boolean) {
         _uiState.update { currentState ->
             currentState.copy(
                 notification = not
@@ -92,7 +93,7 @@ class NavigationViewModel : ViewModel() {
         }
     }
 
-    fun setFavourite(){
+    fun setFavourite() {
         _uiState.update { currentState ->
             currentState.copy(
                 favourite = !uiState.value.favourite
@@ -100,7 +101,7 @@ class NavigationViewModel : ViewModel() {
         }
     }
 
-    fun updateFavourite(not : Boolean){
+    fun updateFavourite(not: Boolean) {
         _uiState.update { currentState ->
             currentState.copy(
                 favourite = not

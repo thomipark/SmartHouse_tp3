@@ -293,7 +293,8 @@ fun SmallRoutineTilesRow(
     val configuration = LocalConfiguration.current
     val screenLayout = configuration.screenLayout and Configuration.SCREENLAYOUT_SIZE_MASK
 
-    val isTablet = (screenLayout == Configuration.SCREENLAYOUT_SIZE_XLARGE || screenLayout == Configuration.SCREENLAYOUT_SIZE_LARGE)
+    val isTablet =
+        (screenLayout == Configuration.SCREENLAYOUT_SIZE_XLARGE || screenLayout == Configuration.SCREENLAYOUT_SIZE_LARGE)
 
     if (isHorizontal || isTablet) {
         LazyVerticalGrid(
@@ -390,7 +391,6 @@ fun SmallRoutineTileRowPreview() {
         routinesViewModel = RoutinesViewModel()
     ) {}
 }
-
 
 val routineDevice1Action1 = Action("turn on")
 val routineDevice1Action2 = Action("set temperature to 220 C")
