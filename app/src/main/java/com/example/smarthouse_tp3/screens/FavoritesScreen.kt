@@ -110,7 +110,8 @@ fun DevicesSmallTileRowFav(
                             text = noDevicesText,
                             style = MaterialTheme.typography.body1,
                             fontWeight = FontWeight.Bold,
-                            modifier = Modifier.padding(16.dp)
+                            modifier = Modifier.padding(16.dp),
+                            textAlign = TextAlign.Center
                         )
                     }
                 }
