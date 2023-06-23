@@ -24,8 +24,9 @@
     <string name="return_to_dock">RETURN TO CHARGING STATION</string>
     <string name="brightness_text">Brightness:</string>
     <string name="change_color">Change Color</string>
-    <string name="select_color">Select a Color:</string>
+    <string name="select_hue">Select hue</string>
     <string name="save_color">Save</string>
+    <string name="cancel">Cancel</string>
     <string name="device_type_error">Error: Device could not be loaded. Device type not known.</string>
     <string name="current_room">Current Room</string>
     <string name="channel_name">Device notifications</string>

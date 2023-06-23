@@ -19,14 +19,15 @@
     <string name="config_light_screen">Configuración de Luz</string>
     <string name="config_vacuum_screen">Configuración de Aspiradora</string>
     <string name="intensity">Intensidad</string>
-    <string name="hue">Tono</string>
+    <string name="hue">Color</string>
     <string name="mode">MODO</string>
     <string name="fan_speed_text">Velocidad del Ventilador:\n%s</string>
     <string name="return_to_dock">REGRESAR A LA ESTACIÓN DE CARGA</string>
     <string name="brightness_text">Brillo:</string>
     <string name="change_color">Cambiar Color</string>
-    <string name="select_color">Seleccionar un Color:</string>
+    <string name="select_hue">Seleccione un color</string>
     <string name="save_color">Guardar</string>
+    <string name="cancel">Cancelar</string>
     <string name="device_type_error">Error: No se pudo cargar el dispositivo. Tipo de dispositivo desconocido.</string>
     <string name="current_room">Cuartio actual</string>
     <string name="channel_name">Notifiacion de dispositivos</string>
