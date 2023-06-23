@@ -61,22 +61,22 @@
     <string name="action_open">Open</string>
     <string name="action_close">Close</string>
     <string name="action_dispense">Dispense</string>
-    <string name="action_setColor">Change color</string>
-    <string name="action_setBrightness">Change brightness</string>
+    <string name="action_setColor">Change color to</string>
+    <string name="action_setBrightness">Change brightness to</string>
     <string name="action_turnOn">Turn on</string>
     <string name="action_turnOff">Turn off</string>
-    <string name="action_setTemperature">Set temperature</string>
-    <string name="action_setHeat">Set oven heat mode</string>
-    <string name="action_setGrill">Set grill mode</string>
-    <string name="action_setConvection">Set convection mode</string>
-    <string name="action_setMode">Change mode</string>
+    <string name="action_setTemperature">Set temperature to</string>
+    <string name="action_setHeat">Set oven heat mode to</string>
+    <string name="action_setGrill">Set grill mode to</string>
+    <string name="action_setConvection">Set convection mode to</string>
+    <string name="action_setMode">Change mode to</string>
     <string name="action_setFanSpeed">Set fan speed</string>
     <string name="action_setLocation">Set new charge location</string>
     <string name="action_pause">Pause</string>
     <string name="action_dock">Dock to charge</string>
     <string name="action_start">Start cleaning</string>
     <string name="notification_text">Detected new change in %1\$s (%2\$s) from %3\$s.%nEvent: %4\$s</string>
-    <string name="action_setVerticalSwing">Set vertical swing angle</string>
-    <string name="action_setHorizontalSwing">Set horizontal swing angle</string>
+    <string name="action_setVerticalSwing">Set vertical swing angle to</string>
+    <string name="action_setHorizontalSwing">Set horizontal swing angle to</string>
 
 </resources>
