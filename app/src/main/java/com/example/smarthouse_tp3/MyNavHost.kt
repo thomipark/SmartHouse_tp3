@@ -331,7 +331,6 @@ fun TopBar(
     }
 }
 
-
 @Composable
 fun BottomBar(navController: NavController) {
     val items = listOf(
@@ -345,28 +344,15 @@ fun BottomBar(navController: NavController) {
     val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
     val isTablet = configuration.smallestScreenWidthDp >= 600
 
-    val itemSpacing = if (isLandscape && isTablet) {
-        16.dp
-    } else {
-        8.dp
-    }
-
-
-
     val contentColor = MaterialTheme.colors.surface
     val selectedColor = MaterialTheme.colors.secondary
     val unselectedColor = contentColor.copy(alpha = LocalContentAlpha.current)
 
     val iconSize = if (isTablet) 30.dp else 25.dp
-    val itemModifier = Modifier.fillMaxHeight()
-
-    val navigationModifier = Modifier.padding(4.dp)
-
 
     BottomNavigation(
         backgroundColor = MaterialTheme.colors.primary,
-        contentColor = contentColor,
-        modifier = navigationModifier
+        contentColor = contentColor
     ) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navBackStackEntry?.destination?.route
@@ -374,18 +360,6 @@ fun BottomBar(navController: NavController) {
         items.forEachIndexed { index, item ->
             val route = stringResource(id = item.route)
             val isSelected = currentRoute == stringResource(id = item.route)
-
-            val itemPaddingModifier = if (index != 0) {
-                Modifier.padding(start = itemSpacing)
-            } else {
-                Modifier
-            }
-
-            if (isLandscape && isTablet) {
-                16.dp
-            } else {
-                8.dp
-            }
 
             BottomNavigationItem(
                 selectedContentColor = selectedColor,
@@ -409,7 +383,7 @@ fun BottomBar(navController: NavController) {
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
-                        },
+                },
                 alwaysShowLabel = true,
                 selected = isSelected,
                 onClick = {
@@ -422,10 +396,10 @@ fun BottomBar(navController: NavController) {
                             restoreState = true
                         }
                     }
-                },
-                modifier = itemModifier.then(itemPaddingModifier)
+                }
             )
         }
     }
 }
+
 
