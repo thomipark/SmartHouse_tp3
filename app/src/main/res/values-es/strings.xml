@@ -40,7 +40,7 @@
     <string name="unit">Unidad</string>
     <string name="volume">Volumen</string>
     <string name="dispense_volume">Dispensar volumen</string>
-    <string name="is_open_and_running">Está abierto</string>
+    <string name="is_open_and_running">está abierto</string>
     <string name="dispense">Dispensar</string>
     <string name="close_faucet">Cerrar grifo</string>
     <string name="turn_on">Apagar</string>

@@ -493,40 +493,40 @@ fun FaucetConfigScreen(
             }
         }
 
-        // if (state?.status.toString() != "closed") {
-        //     Row(
-        //         modifier = Modifier.padding(vertical = 100.dp, horizontal = 16.dp),
-        //         verticalAlignment = Alignment.CenterVertically
-        //     ) {
-        //         Column(
-        //             modifier = Modifier.weight(1f),
-        //             horizontalAlignment = Alignment.CenterHorizontally
-        //         ) {
-        //             Box(
-        //                 modifier = Modifier
-        //                     .size(width = 200.dp, height = 70.dp),
-        //                 contentAlignment = Alignment.Center
-        //             ) {
-        //                 Button(
-        //                     onClick = { viewModel.changeSwitchState(); viewModel.unsetDispensing()},
-        //                     modifier = Modifier.fillMaxSize(),
-        //                     enabled = state?.status.toString() != "closed",
-        //                     elevation = ButtonDefaults.elevation(5.dp),
-        //                     colors = ButtonDefaults.buttonColors(
-        //                         backgroundColor = MaterialTheme.colors.primaryVariant
-        //                     )
-        //                 ) {
-        //                     Text(
-        //                         text = stringResource(id = R.string.close_faucet),
-        //                         fontWeight = FontWeight.ExtraBold,
-        //                         fontSize = 20.sp,
-        //                         textAlign = TextAlign.Center
-        //                     )
-        //                 }
-        //             }
-        //         }
-        //     }
-        // }
+         if (state?.status.toString() != "closed") {
+             Row(
+                 modifier = Modifier.padding(vertical = 100.dp, horizontal = 16.dp),
+                 verticalAlignment = Alignment.CenterVertically
+             ) {
+                 Column(
+                     modifier = Modifier.weight(1f),
+                     horizontalAlignment = Alignment.CenterHorizontally
+                 ) {
+                     Box(
+                         modifier = Modifier
+                             .size(width = 200.dp, height = 70.dp),
+                         contentAlignment = Alignment.Center
+                     ) {
+                         Button(
+                             onClick = { viewModel.changeSwitchState(); viewModel.unsetDispensing()},
+                             modifier = Modifier.fillMaxSize(),
+                             enabled = state?.status.toString() != "closed",
+                             elevation = ButtonDefaults.elevation(5.dp),
+                             colors = ButtonDefaults.buttonColors(
+                                 backgroundColor = MaterialTheme.colors.primaryVariant
+                             )
+                         ) {
+                             Text(
+                                 text = stringResource(id = R.string.close_faucet),
+                                 fontWeight = FontWeight.ExtraBold,
+                                 fontSize = 20.sp,
+                                 textAlign = TextAlign.Center
+                             )
+                         }
+                     }
+                 }
+             }
+         }
     }
 }
 
