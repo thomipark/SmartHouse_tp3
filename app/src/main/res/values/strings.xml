@@ -20,7 +20,7 @@
     <string name="intensity">Intensity</string>
     <string name="hue">Hue</string>
     <string name="mode">MODE</string>
-    <string name="fan_speed_text">Speed:\n%s</string>
+    <string name="fan_speed_text">Speed:\n%s%</string>
     <string name="return_to_dock">RETURN TO CHARGING STATION</string>
     <string name="brightness_text">Brightness:</string>
     <string name="change_color">Change Color</string>

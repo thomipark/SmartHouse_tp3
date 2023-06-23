@@ -160,7 +160,6 @@ fun AirConditionerConfigScreen(viewModel : AirConditionerViewModel) {
                 Text(
                     text = stringResource(R.string.fan_speed_text, fanSpeed.stringValue),
                     style = MaterialTheme.typography.body1,
-                    maxLines = 1,
                     textAlign = TextAlign.Center
                 )
             }
@@ -188,7 +187,7 @@ fun AirConditionerConfigScreen(viewModel : AirConditionerViewModel) {
                 }
 
                 Text(
-                    text = uiState.state?.verticalSwing.toString(),
+                    text = if(uiState.state?.verticalSwing.toString() != "auto") uiState.state?.horizontalSwing.toString() + "°" else "",
                     style = MaterialTheme.typography.body1,
                     textAlign = TextAlign.Center,
                     fontSize = 25.sp,
@@ -243,7 +242,7 @@ fun AirConditionerConfigScreen(viewModel : AirConditionerViewModel) {
                     }
                 }
                 Text(
-                    text = uiState.state?.horizontalSwing.toString(),
+                    text = if(uiState.state?.horizontalSwing.toString() != "auto") uiState.state?.horizontalSwing.toString() + "°" else "",
                     style = MaterialTheme.typography.body1,
                     textAlign = TextAlign.Center,
                     fontSize = 25.sp,
