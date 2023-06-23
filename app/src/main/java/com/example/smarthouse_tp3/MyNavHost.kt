@@ -174,7 +174,11 @@ fun MyNavHost(
 
         //SCREEN DE ADVANCED ROUTINES
         composable(routineConfigurationScreen) {
-            RoutineConfigScreen(navigationViewModel = navigationViewModel, routinesViewModel = routinesViewModel, devicesViewModel = devicesViewModel)
+            RoutineConfigScreen(
+                navigationViewModel = navigationViewModel,
+                routinesViewModel = routinesViewModel,
+                devicesViewModel = devicesViewModel
+            )
         }
     }
 
@@ -192,9 +196,13 @@ fun TopBar(
     navigationViewModel: NavigationViewModel = viewModel()
 ) {
     val currentRoute = navController.currentDestination?.route ?: ""
-    val showBackIcon = currentRoute == stringResource(id = R.string.device_configuration_screen) || currentRoute == stringResource(id = R.string.routine_configuration_screen)
-    val navigationUiState by navigationViewModel.uiState.collectAsState()
-    val showNotificationIcon = currentRoute == stringResource(id = R.string.device_configuration_screen)
+    val showBackIcon =
+        currentRoute == stringResource(id = R.string.device_configuration_screen) || currentRoute == stringResource(
+            id = R.string.routine_configuration_screen
+        )
+
+    val showNotificationIcon =
+        currentRoute == stringResource(id = R.string.device_configuration_screen)
 
     val notificationToggleState = remember { mutableStateOf(false) }
 
@@ -250,7 +258,10 @@ fun TopBar(
                     }) {
                         Icon(
                             painter = notificationIcon,
-                            contentDescription = notificationContentDescription
+                            contentDescription = notificationContentDescription,
+                            modifier = Modifier
+                                .padding(8.dp)
+                                .size(40.dp)
                         )
                     }
                 }

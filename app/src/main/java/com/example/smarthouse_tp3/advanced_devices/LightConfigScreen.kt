@@ -52,7 +52,7 @@ import com.github.skydoves.colorpicker.compose.rememberColorPickerController
 @Composable
 fun LightConfigScreen(
     viewModel: LightViewModel
-){
+) {
     val uiState by viewModel.uiState.collectAsState()
     val controller = rememberColorPickerController()
     val initialValue = uiState.state?.brightness?.toFloat()
@@ -72,10 +72,10 @@ fun LightConfigScreen(
         return Color(red.coerceAtMost(1f), green.coerceAtMost(1f), blue.coerceAtMost(1f))
     }
 
-    Column {
+    val color =
+        Color(android.graphics.Color.parseColor(colorString)) // Convert the color string to a Color object
 
-        val color =
-            Color(android.graphics.Color.parseColor(colorString)) // Convert the color string to a Color object
+    Column {
 
         Column {
             Row(
@@ -126,7 +126,7 @@ fun LightConfigScreen(
                                 backgroundColor = color
                             ),
                             modifier = Modifier.size(width = 120.dp, height = 120.dp)
-                        ){}
+                        ) {}
                     }
                 }
             }
@@ -264,9 +264,15 @@ fun LightConfigScreen(
                             )
                         },
                         colors = SliderDefaults.colors(
-                            thumbColor = if(uiState.switchState) lightenColor(color, formattedValue.toFloat()/100) else Color.LightGray,
-                            activeTrackColor = if(uiState.switchState) lightenColor(color, formattedValue.toFloat()/100) else Color.LightGray,
-                            inactiveTrackColor = if(uiState.switchState) color else Color.Gray,
+                            thumbColor = if (uiState.switchState) lightenColor(
+                                color,
+                                formattedValue.toFloat() / 100
+                            ) else Color.LightGray,
+                            activeTrackColor = if (uiState.switchState) lightenColor(
+                                color,
+                                formattedValue.toFloat() / 100
+                            ) else Color.LightGray,
+                            inactiveTrackColor = if (uiState.switchState) color else Color.Gray,
                         ),
                         valueRange = 0f..100f,
                         modifier = Modifier.offset(x = (-5).dp)
@@ -316,7 +322,7 @@ fun LightConfigScreen(
                             fontWeight = FontWeight.ExtraBold,
                             fontSize = 30.sp,
                             textAlign = TextAlign.Center,
-                            color = if(MaterialTheme.colors.isLight) Color.White else Color.Black,
+                            color = if (MaterialTheme.colors.isLight) Color.White else Color.Black,
                         )
                     }
                 }
@@ -328,7 +334,15 @@ fun LightConfigScreen(
     if (isPopupOpen.value) {
         AlertDialog(
             onDismissRequest = { isPopupOpen.value = false },
-            title = { Text(text = stringResource(R.string.select_color)) },
+            title = {
+                Text(
+                    text = stringResource(R.string.select_hue),
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 25.sp,
+                    textAlign = TextAlign.Center,
+                    color = if (MaterialTheme.colors.isLight) Color.Black else Color.White
+                )
+            },
             text = {
                 Column {
 
@@ -337,12 +351,12 @@ fun LightConfigScreen(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(350.dp)
-                                .padding(10.dp),
+                                .padding(10.dp)
+                                .offset(y = (-20).dp),
+                            initialColor = color,
                             controller = controller,
                             onColorChanged = { colorEnvelope: ColorEnvelope ->
-
                                 hexCode = colorEnvelope.hexCode
-
                             }
                         )
                     }
@@ -354,30 +368,63 @@ fun LightConfigScreen(
                             AlphaTile(
                                 modifier = Modifier
                                     .align(Alignment.CenterHorizontally)
-                                    .size(80.dp)
-                                    .clip(RoundedCornerShape(6.dp)),
+                                    .size(120.dp)
+                                    .clip(RoundedCornerShape(2.dp)),
                                 controller = controller
                             )
                         }
-
-
                     }
                 }
 
             },
             confirmButton = {
-                Button(
-                    onClick = {
-                        isPopupOpen.value = false
-                        viewModel.changeColor(hexCode.substring(2))
-                    },
-                    colors = ButtonDefaults.buttonColors(
-                        backgroundColor = MaterialTheme.colors.primary
-                    )
+                Box(
+                    modifier = Modifier
+                        .padding(5.dp)
                 ) {
-                    Text(text = stringResource(R.string.save_color))
+
+                    Button(
+                        modifier = Modifier.width(90.dp),
+                        onClick = {
+                            isPopupOpen.value = false
+                            viewModel.changeColor(hexCode.substring(2))
+                        },
+                        colors = ButtonDefaults.buttonColors(
+                            backgroundColor = MaterialTheme.colors.primaryVariant
+                        )
+                    ) {
+                        Text(text = stringResource(R.string.save_color),
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 14.sp,
+                            textAlign = TextAlign.Center
+                        )
+                    }
                 }
-            }
+            },
+            dismissButton = {
+                Box(
+                    modifier = Modifier
+                        .padding(5.dp)
+                        .offset(x = (-98).dp)
+                ) {
+
+                    Button(
+                        modifier = Modifier.width(90.dp),
+                        onClick = { isPopupOpen.value = false },
+                        colors = ButtonDefaults.buttonColors(
+                            backgroundColor = Color.Gray
+                        )
+                    ) {
+                        Text(
+                            text = stringResource(R.string.cancel),
+                            color = if(MaterialTheme.colors.isLight) Color.White else Color.Black,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 14.sp,
+                            textAlign = TextAlign.Center
+                        )
+                    }
+                }
+            },
         )
     }
 }
