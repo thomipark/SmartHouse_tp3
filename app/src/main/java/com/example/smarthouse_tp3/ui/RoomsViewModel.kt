@@ -53,4 +53,9 @@ class RoomsViewModel : ViewModel() {
         return uiState.value.rooms?.rooms?.find { it.name == roomName }
             ?: return NetworkDeviceRoom()
     }
+
+    fun getRoomFromId(roomId: String): NetworkDeviceRoom {
+        return uiState.value.rooms?.rooms?.find { it.id == roomId }
+            ?: return NetworkDeviceRoom()
+    }
 }
