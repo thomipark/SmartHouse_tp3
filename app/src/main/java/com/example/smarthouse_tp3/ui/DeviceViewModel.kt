@@ -1,6 +1,7 @@
 package com.example.smarthouse_tp3.ui
 
 import android.util.Log
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -19,7 +20,12 @@ open class DeviceViewModel(private var deviceId : String) : ViewModel() {
     protected val _uiState = MutableStateFlow(DeviceUiState())
     val uiState: StateFlow<DeviceUiState> = _uiState.asStateFlow()
 
+
     private var fetchJob: Job? = null
+
+    fun cancelJobs() {
+        fetchJob?.cancel()
+    }
 
     open fun getSmallIconsList(): List<Int> {
         return emptyList()
