@@ -256,8 +256,12 @@ fun SmallRoutineTilesRow(
     val isHorizontal = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
     val routinesUiState by routinesViewModel.uiState.collectAsState()
 
+    val configuration = LocalConfiguration.current
+    val screenLayout = configuration.screenLayout and Configuration.SCREENLAYOUT_SIZE_MASK
 
-    if (isHorizontal) {
+    val isTablet = (screenLayout == Configuration.SCREENLAYOUT_SIZE_XLARGE || screenLayout == Configuration.SCREENLAYOUT_SIZE_LARGE)
+
+    if (isHorizontal || isTablet) {
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
             contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
