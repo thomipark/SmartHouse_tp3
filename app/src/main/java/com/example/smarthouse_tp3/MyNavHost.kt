@@ -48,7 +48,6 @@ import com.example.smarthouse_tp3.screens.PlacesScreen
 import com.example.smarthouse_tp3.screens.RoutinesScreen
 import com.example.smarthouse_tp3.screens.deviceViewModelMaker
 import com.example.smarthouse_tp3.ui.DeviceMap
-import com.example.smarthouse_tp3.ui.DeviceViewModel
 import com.example.smarthouse_tp3.ui.DevicesViewModel
 import com.example.smarthouse_tp3.ui.NavigationViewModel
 import com.example.smarthouse_tp3.ui.RoomsViewModel
@@ -85,9 +84,8 @@ fun MyNavHost(
         //MAIN SCREENS
         composable(routinesScreen) {
             RoutinesScreen(
-                navigationViewModel = navigationViewModel,
                 modifier = bottomPadding,
-                devicesViewModel = devicesViewModel,
+                navigationViewModel = navigationViewModel,
                 routinesViewModel = routinesViewModel
             ) { navController.navigate(routineConfigurationScreen) }
         }
