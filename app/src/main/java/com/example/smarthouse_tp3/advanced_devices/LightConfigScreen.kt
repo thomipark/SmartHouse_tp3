@@ -318,7 +318,9 @@ fun LightConfigScreen(
                         modifier = Modifier.size(width = 250.dp, height = 100.dp)
                     ) {
                         Text(
-                            text = if (!uiState.switchState) stringResource(id = R.string.turn_on) else stringResource(id = R.string.turn_off),
+                            text = if (!uiState.switchState) stringResource(id = R.string.turn_on) else stringResource(
+                                id = R.string.turn_off
+                            ),
                             fontWeight = FontWeight.ExtraBold,
                             fontSize = 30.sp,
                             textAlign = TextAlign.Center,
@@ -393,7 +395,8 @@ fun LightConfigScreen(
                             backgroundColor = MaterialTheme.colors.primaryVariant
                         )
                     ) {
-                        Text(text = stringResource(R.string.save_color),
+                        Text(
+                            text = stringResource(R.string.save_color),
                             fontWeight = FontWeight.Bold,
                             fontSize = 14.sp,
                             textAlign = TextAlign.Center
@@ -417,7 +420,7 @@ fun LightConfigScreen(
                     ) {
                         Text(
                             text = stringResource(R.string.cancel),
-                            color = if(MaterialTheme.colors.isLight) Color.White else Color.Black,
+                            color = if (MaterialTheme.colors.isLight) Color.White else Color.Black,
                             fontWeight = FontWeight.Bold,
                             fontSize = 14.sp,
                             textAlign = TextAlign.Center,

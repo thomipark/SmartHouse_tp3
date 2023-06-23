@@ -1,7 +1,6 @@
 package com.example.smarthouse_tp3.advanced_devices
 
 
-import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -18,28 +17,26 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.example.smarthouse_tp3.R
-import androidx.compose.runtime.*
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.smarthouse_tp3.R
 import com.example.smarthouse_tp3.ui.AirConditionerFanSpeed
 import com.example.smarthouse_tp3.ui.AirConditionerMode
 import com.example.smarthouse_tp3.ui.AirConditionerViewModel
-import com.example.smarthouse_tp3.ui.DeviceViewModel
-import com.example.smarthouse_tp3.ui.OvenViewModel
 
 
 @Composable
-fun AirConditionerConfigScreen(viewModel : AirConditionerViewModel) {
+fun AirConditionerConfigScreen(viewModel: AirConditionerViewModel) {
 
     val uiState by viewModel.uiState.collectAsState()
 
@@ -187,7 +184,7 @@ fun AirConditionerConfigScreen(viewModel : AirConditionerViewModel) {
                 }
 
                 Text(
-                    text = if(uiState.state?.verticalSwing.toString() != "auto") uiState.state?.verticalSwing.toString() + "°" else "auto",
+                    text = if (uiState.state?.verticalSwing.toString() != "auto") uiState.state?.verticalSwing.toString() + "°" else "auto",
                     style = MaterialTheme.typography.body1,
                     textAlign = TextAlign.Center,
                     fontSize = 25.sp,
@@ -222,7 +219,9 @@ fun AirConditionerConfigScreen(viewModel : AirConditionerViewModel) {
                         Icon(
                             painter = painterResource(R.drawable.baseline_arrow_left_24),
                             contentDescription = "Icon",
-                            modifier = Modifier.size(100.dp).padding(end = 12.dp)
+                            modifier = Modifier
+                                .size(100.dp)
+                                .padding(end = 12.dp)
                         )
                     }
 
@@ -236,13 +235,15 @@ fun AirConditionerConfigScreen(viewModel : AirConditionerViewModel) {
                         Icon(
                             painter = painterResource(R.drawable.baseline_arrow_right_24),
                             contentDescription = "Icon",
-                            modifier = Modifier.size(100.dp).padding(start = 12.dp)
+                            modifier = Modifier
+                                .size(100.dp)
+                                .padding(start = 12.dp)
 
                         )
                     }
                 }
                 Text(
-                    text = if(uiState.state?.horizontalSwing.toString() != "auto") uiState.state?.horizontalSwing.toString() + "°" else "auto",
+                    text = if (uiState.state?.horizontalSwing.toString() != "auto") uiState.state?.horizontalSwing.toString() + "°" else "auto",
                     style = MaterialTheme.typography.body1,
                     textAlign = TextAlign.Center,
                     fontSize = 25.sp,
@@ -260,7 +261,7 @@ fun AirConditionerConfigScreen(viewModel : AirConditionerViewModel) {
 @Composable
 fun AirConditionerScreenPreview() {
 
-    val viewModel: AirConditionerViewModel= viewModel()
+    val viewModel: AirConditionerViewModel = viewModel()
     viewModel.fetchDevice("d495cc0b87d1e918")
 
 

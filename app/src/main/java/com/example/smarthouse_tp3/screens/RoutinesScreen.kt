@@ -96,7 +96,9 @@ fun SmallRoutineTile(
     Surface(
         shape = MaterialTheme.shapes.small, modifier = modifier
     ) {
-        Card(modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
+        Card(modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 4.dp),
             backgroundColor = MaterialTheme.colors.primaryVariant,
             onClick = {
                 navigationViewModel.selectNewRoutine(routine)
@@ -189,7 +191,7 @@ fun SmallRoutineTileExtended(
                         Box(
                             modifier = Modifier
                                 .size(8.dp)
-                                .background(if(MaterialTheme.colors.isLight) Color.White else Color.Black)
+                                .background(if (MaterialTheme.colors.isLight) Color.White else Color.Black)
                                 .padding(32.dp, 0.dp, 32.dp, 0.dp)
                         )
                         Text(
@@ -259,7 +261,8 @@ fun SmallRoutineTilesRow(
     val configuration = LocalConfiguration.current
     val screenLayout = configuration.screenLayout and Configuration.SCREENLAYOUT_SIZE_MASK
 
-    val isTablet = (screenLayout == Configuration.SCREENLAYOUT_SIZE_XLARGE || screenLayout == Configuration.SCREENLAYOUT_SIZE_LARGE)
+    val isTablet =
+        (screenLayout == Configuration.SCREENLAYOUT_SIZE_XLARGE || screenLayout == Configuration.SCREENLAYOUT_SIZE_LARGE)
 
     if (isHorizontal || isTablet) {
         LazyVerticalGrid(
@@ -356,7 +359,6 @@ fun SmallRoutineTileRowPreview() {
         routinesViewModel = RoutinesViewModel()
     ) {}
 }
-
 
 val routineDevice1Action1 = Action("turn on")
 val routineDevice1Action2 = Action("set temperature to 220 C")

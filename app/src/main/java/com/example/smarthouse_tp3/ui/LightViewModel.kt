@@ -7,7 +7,7 @@ import com.example.smarthouse_tp3.data.network.model.NetworkDeviceState
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 
-class LightViewModel(deviceId : String) : DeviceViewModel(deviceId) {
+class LightViewModel(deviceId: String) : DeviceViewModel(deviceId) {
     override fun fetchDevice(deviceId: String): LightViewModel {
         super.fetchDevice(deviceId)
         _uiState.update {
@@ -59,7 +59,7 @@ class LightViewModel(deviceId : String) : DeviceViewModel(deviceId) {
     }
 
     private fun updateUiState(
-        switchState : Boolean = uiState.value.switchState,
+        switchState: Boolean = uiState.value.switchState,
         status: String? = uiState.value.state?.status,
         color: String? = uiState.value.state?.color,
         brightness: String? = uiState.value.state?.brightness

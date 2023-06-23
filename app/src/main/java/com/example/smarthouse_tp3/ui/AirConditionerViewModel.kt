@@ -5,7 +5,7 @@ import com.example.smarthouse_tp3.R
 import com.example.smarthouse_tp3.data.network.model.NetworkDeviceState
 import kotlinx.coroutines.flow.update
 
-class AirConditionerViewModel(deviceId : String): DeviceViewModel(deviceId = deviceId) {
+class AirConditionerViewModel(deviceId: String) : DeviceViewModel(deviceId = deviceId) {
     override fun fetchDevice(deviceId: String): AirConditionerViewModel {
         super.fetchDevice(deviceId)
         _uiState.update {
@@ -80,7 +80,7 @@ class AirConditionerViewModel(deviceId : String): DeviceViewModel(deviceId = dev
         horizontalSwing: String? = uiState.value.state?.horizontalSwing,
         fanSpeed: String? = uiState.value.state?.fanSpeed
     ) {
-        _uiState.update { currentState->
+        _uiState.update { currentState ->
             currentState.copy(
                 state = NetworkDeviceState(
                     status = status,
@@ -108,16 +108,18 @@ class AirConditionerViewModel(deviceId : String): DeviceViewModel(deviceId = dev
         }
     }
 
-    fun getMode() : AirConditionerMode? {
+    fun getMode(): AirConditionerMode? {
         return uiState.value.state?.mode?.let { AirConditionerMode.fromString(it) }
     }
 
     fun iterateFanSpeed() {
         val state = uiState.value.state
         if (state != null) {
-            updateUiState(fanSpeed = state.fanSpeed?.let { AirConditionerFanSpeed.getNextFromString(
-                it
-            ).stringValue })
+            updateUiState(fanSpeed = state.fanSpeed?.let {
+                AirConditionerFanSpeed.getNextFromString(
+                    it
+                ).stringValue
+            })
         }
         uiState.value.id?.let {
             executeAction(
@@ -127,9 +129,10 @@ class AirConditionerViewModel(deviceId : String): DeviceViewModel(deviceId = dev
         }
     }
 
-    fun getFanSpeed() : AirConditionerFanSpeed ? {
+    fun getFanSpeed(): AirConditionerFanSpeed? {
         return uiState.value.state?.fanSpeed?.let { AirConditionerFanSpeed.fromString(it) }
     }
+
     fun increaseVerticalFanDirection() {
         val state = uiState.value.state
         if (state != null) {

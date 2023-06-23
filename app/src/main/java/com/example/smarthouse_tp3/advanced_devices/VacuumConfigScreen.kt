@@ -257,7 +257,7 @@ fun VacuumConfigScreen(
                 ) {
                     Card(
                         modifier = Modifier.width(160.dp),
-                        border = BorderStroke(0.5.dp, if(colorTheme) Color.Black else Color.White),
+                        border = BorderStroke(0.5.dp, if (colorTheme) Color.Black else Color.White),
                         elevation = 0.dp
                     ) {
                         Text(
@@ -280,9 +280,9 @@ fun VacuumConfigScreen(
                             .height(100.dp),
                         shape = RoundedCornerShape(20),
                         backgroundColor = MaterialTheme.colors.primaryVariant,
-                        border = BorderStroke(0.5.dp, if(colorTheme) Color.Black else Color.White),
+                        border = BorderStroke(0.5.dp, if (colorTheme) Color.Black else Color.White),
 
-                    ) {
+                        ) {
                         Box(
                             modifier = Modifier
                                 .fillMaxSize(),

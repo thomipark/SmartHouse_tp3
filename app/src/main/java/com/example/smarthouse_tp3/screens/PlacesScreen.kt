@@ -53,7 +53,7 @@ fun PlacesScreen(
     modifier: Modifier = Modifier,
     navigationViewModel: NavigationViewModel,
     devicesViewModel: DevicesViewModel,
-    roomsViewModel : RoomsViewModel,
+    roomsViewModel: RoomsViewModel,
     onNavigateToConfigScreen: () -> Unit
 ) {
     val uiState by roomsViewModel.uiState.collectAsState()
@@ -96,16 +96,17 @@ fun DevicesSmallTileRowPlaces(
     selectedPlace: String?,
     onPlaceSelected: (String?) -> Unit,
     navigationViewModel: NavigationViewModel,
-    devicesViewModel : DevicesViewModel,
+    devicesViewModel: DevicesViewModel,
     onNavigateToConfigScreen: () -> Unit
 ) {
 
     val devicesUiState by devicesViewModel.uiState.collectAsState()
     val devicesList = devicesUiState.devices?.devices
 
-    var filteredDevices : List<NetworkDevice> = emptyList()
+    var filteredDevices: List<NetworkDevice> = emptyList()
     if (devicesList != null) {
-        filteredDevices = getFilteredDevices(selectedPlace, devicesList, stringResource(id = R.string.all))
+        filteredDevices =
+            getFilteredDevices(selectedPlace, devicesList, stringResource(id = R.string.all))
     }
 
     Column(modifier = modifier) {
@@ -148,7 +149,7 @@ fun DevicesSmallTileRowPlaces(
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = if(selectedPlace == stringResource(id = R.string.all))
+                    text = if (selectedPlace == stringResource(id = R.string.all))
                         stringResource(R.string.no_devices_added)
                     else
                         stringResource(id = R.string.no_devices_linked_to_this_place),
@@ -257,7 +258,11 @@ fun PlaceItem(
     }
 }
 
-fun getFilteredDevices(place: String?, devicesList : List<NetworkDevice>, allString : String): List<NetworkDevice> {
+fun getFilteredDevices(
+    place: String?,
+    devicesList: List<NetworkDevice>,
+    allString: String
+): List<NetworkDevice> {
     return if (place == allString) devicesList
     else devicesList.filter { it.room?.name == place }
 }

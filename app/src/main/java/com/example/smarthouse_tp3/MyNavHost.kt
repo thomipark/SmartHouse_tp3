@@ -76,12 +76,10 @@ fun MyNavHost(
 
 
     NavHost(
-        navController = navController,
-        startDestination = startDestination,
-        modifier = modifier
+        navController = navController, startDestination = startDestination, modifier = modifier
     ) {
         val bottomPadding = Modifier.padding(0.dp, 0.dp, 0.dp, 56.dp)
-        Log.d("NavHost start route",startDestination)
+        Log.d("NavHost start route", startDestination)
 
         //MAIN SCREENS
         composable(routinesScreen) {
@@ -99,8 +97,9 @@ fun MyNavHost(
 
             val devicesUiState by devicesViewModel.uiState.collectAsState()
             devicesUiState.devices?.devices?.forEach {
-                val myDevice = it.id?.let { item -> deviceViewModelMaker(id = item, typeName = it.type?.name) }
-                LaunchedEffect (Unit) {
+                val myDevice =
+                    it.id?.let { item -> deviceViewModelMaker(id = item, typeName = it.type?.name) }
+                LaunchedEffect(Unit) {
                     delay(100)
                     myDevice?.fetchDevice()
                 }
@@ -133,8 +132,9 @@ fun MyNavHost(
             }
             val devicesUiState by devicesViewModel.uiState.collectAsState()
             devicesUiState.devices?.devices?.forEach {
-                val myDevice = it.id?.let { item -> deviceViewModelMaker(id = item, typeName = it.type?.name) }
-                LaunchedEffect (Unit) {
+                val myDevice =
+                    it.id?.let { item -> deviceViewModelMaker(id = item, typeName = it.type?.name) }
+                LaunchedEffect(Unit) {
                     delay(100)
                     myDevice?.fetchDevice()
                 }
@@ -178,22 +178,25 @@ fun MyNavHost(
         onDispose { /* Cleanup logic if needed */ }
     }
 }
+
 @Composable
 fun TopBar(
-    navController: NavController,
-    navigationViewModel: NavigationViewModel = viewModel()
+    navController: NavController, navigationViewModel: NavigationViewModel = viewModel()
 ) {
     val currentRoute = navController.currentDestination?.route ?: ""
-    val showBackIcon = currentRoute == stringResource(id = R.string.device_configuration_screen) || currentRoute == stringResource(id = R.string.routine_configuration_screen)
+    val showBackIcon =
+        currentRoute == stringResource(id = R.string.device_configuration_screen) || currentRoute == stringResource(
+            id = R.string.routine_configuration_screen
+        )
 
 
     val navigationUiState by navigationViewModel.uiState.collectAsState()
     val showIcons = currentRoute == stringResource(id = R.string.device_configuration_screen)
 
     navigationUiState.selectedDeviceViewModel?.let { navigationViewModel.updateNotification(it.getNotification()) }
-    val notificationState   = remember { mutableStateOf(navigationUiState.notification) }
+    val notificationState = remember { mutableStateOf(navigationUiState.notification) }
     navigationUiState.selectedDeviceViewModel?.let { navigationViewModel.updateFavourite(it.getFavourite()) }
-    val favouriteState      = remember { mutableStateOf(navigationUiState.favourite) }
+    val favouriteState = remember { mutableStateOf(navigationUiState.favourite) }
 
     val notificationContentDescription = if (notificationState.value) {
         "Notification On"
@@ -208,7 +211,6 @@ fun TopBar(
     }
 
 
-
     val routeToIconMap = mapOf(
         stringResource(id = R.string.device_screen) to R.drawable.screen_devices_icon,
         stringResource(id = R.string.favorites_screen) to R.drawable.screen_favorites_icon,
@@ -218,78 +220,72 @@ fun TopBar(
 
 
     if (showBackIcon) {
-        TopAppBar(
-            title = { /* Title content */ },
-            navigationIcon = {
-                IconButton(onClick = { navController.navigateUp() }) {
-                    Icon(
-                        painter = painterResource(R.drawable.backarrow),
-                        contentDescription = "Back"
-                    )
-                }
-            },
-            actions = {
-                if (showIcons) {
-                    Row {
-                        IconButton(onClick = {
-                            navigationViewModel.setFavourite()
-                            navigationUiState.selectedDeviceViewModel?.setFavourite()
+        TopAppBar(title = { /* Title content */ }, navigationIcon = {
+            IconButton(onClick = { navController.navigateUp() }) {
+                Icon(
+                    painter = painterResource(R.drawable.backarrow), contentDescription = "Back"
+                )
+            }
+        }, actions = {
+            if (showIcons) {
+                Row {
+                    IconButton(onClick = {
+                        navigationViewModel.setFavourite()
+                        navigationUiState.selectedDeviceViewModel?.setFavourite()
 
-                            if (navigationUiState.favourite) {
-                                navigationViewModel.removeDevicesFavoriteList()
-                            } else {
-                                navigationViewModel.addDevicesFavoriteList()
-                            }
-                        }) {
-                            Icon(
-                                painter = if (navigationUiState.favourite) {
-                                    painterResource(R.drawable.favourites_icon_on)
-                                } else {
-                                    painterResource(R.drawable.favourites_icon_off)
-                                },
-                                contentDescription = favouriteContentDescription,
-                                modifier = Modifier
-                                    .padding(8.dp)
-                                    .size(40.dp)
-                            )
+                        if (navigationUiState.favourite) {
+                            navigationViewModel.removeDevicesFavoriteList()
+                        } else {
+                            navigationViewModel.addDevicesFavoriteList()
                         }
-                    }
-                    Row {
-                        IconButton(onClick = {
-                            navigationViewModel.setNotification()
-                            navigationUiState.selectedDeviceViewModel?.setNotification()
-
-                            if (navigationUiState.notification) {
-                                navigationViewModel.removeDevicesNotificationList()
+                    }) {
+                        Icon(
+                            painter = if (navigationUiState.favourite) {
+                                painterResource(R.drawable.favourites_icon_on)
                             } else {
-                                navigationViewModel.addDevicesNotificationList()
-                            }
-                        }) {
-                            Icon(
-                                painter = if (navigationUiState.notification) {
-                                    painterResource(R.drawable.notifications_on)
-                                } else {
-                                    painterResource(R.drawable.notifications_off)
-                                },
-                                contentDescription = notificationContentDescription,
-                                modifier = Modifier
-                                    .padding(8.dp)
-                                    .size(40.dp)
-                            )
-                        }
+                                painterResource(R.drawable.favourites_icon_off)
+                            },
+                            contentDescription = favouriteContentDescription,
+                            modifier = Modifier
+                                .padding(8.dp)
+                                .size(40.dp)
+                        )
                     }
-
                 }
-            },
-            backgroundColor = MaterialTheme.colors.primary
+                Row {
+                    IconButton(onClick = {
+                        navigationViewModel.setNotification()
+                        navigationUiState.selectedDeviceViewModel?.setNotification()
+
+                        if (navigationUiState.notification) {
+                            navigationViewModel.removeDevicesNotificationList()
+                        } else {
+                            navigationViewModel.addDevicesNotificationList()
+                        }
+                    }) {
+                        Icon(
+                            painter = if (navigationUiState.notification) {
+                                painterResource(R.drawable.notifications_on)
+                            } else {
+                                painterResource(R.drawable.notifications_off)
+                            },
+                            contentDescription = notificationContentDescription,
+                            modifier = Modifier
+                                .padding(8.dp)
+                                .size(40.dp)
+                        )
+                    }
+                }
+
+            }
+        }, backgroundColor = MaterialTheme.colors.primary
         )
     } else {
         Box(
             modifier = Modifier
                 .height(56.dp)
                 .background(MaterialTheme.colors.primary)
-                .fillMaxWidth(),
-            contentAlignment = Alignment.Center
+                .fillMaxWidth(), contentAlignment = Alignment.Center
         ) {
             routeToIconMap[currentRoute]?.let { iconRes ->
                 val icon = ImageVector.vectorResource(iconRes)
@@ -301,9 +297,7 @@ fun TopBar(
                 ) {
 
                     Box(
-                        modifier = Modifier
-                            .padding(end = 8.dp),
-                        contentAlignment = Alignment.Center
+                        modifier = Modifier.padding(end = 8.dp), contentAlignment = Alignment.Center
                     ) {
                         Icon(
                             imageVector = icon,
@@ -328,6 +322,7 @@ fun TopBar(
         }
     }
 }
+
 @Composable
 fun BottomBar(navController: NavController) {
     val items = listOf(

@@ -9,7 +9,7 @@ data class NavigationUiState(
     val selectedRoutine: Routine? = null,
     val selectedDeviceViewModel: DeviceViewModel? = null,
     val selectedNetworkRoutine: NetworkRoutine? = null,
-    val firstTime : Boolean = true,
+    val firstTime: Boolean = true,
     val favourite: Boolean = false,
     val notification: Boolean = false
 

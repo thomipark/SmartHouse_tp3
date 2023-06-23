@@ -43,7 +43,8 @@ class MyApplication : Application() {
         val intent = Intent(this, ServerEventReceiver::class.java)
 
         var pendingIntent = PendingIntent.getBroadcast(
-                this, 0, intent, PendingIntent.FLAG_NO_CREATE or PendingIntent.FLAG_IMMUTABLE)
+            this, 0, intent, PendingIntent.FLAG_NO_CREATE or PendingIntent.FLAG_IMMUTABLE
+        )
         if (pendingIntent != null)
             alarmManager.cancel(pendingIntent)
 

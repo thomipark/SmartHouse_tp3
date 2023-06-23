@@ -36,7 +36,7 @@ import com.example.smarthouse_tp3.ui.OvenViewModel
 import com.example.smarthouse_tp3.ui.VacuumViewModel
 
 @Composable
-fun DeviceConfigScreen(navigationViewModel : NavigationViewModel) {
+fun DeviceConfigScreen(navigationViewModel: NavigationViewModel) {
 
     val navUiState by navigationViewModel.uiState.collectAsState()
     val viewModel = navUiState.selectedDeviceViewModel ?: return
@@ -51,7 +51,8 @@ fun DeviceConfigScreen(navigationViewModel : NavigationViewModel) {
         topBar = {
             DeviceTopBar(viewModel)
         },
-        content = {it
+        content = {
+            it
             DeviceBody(viewModel)
 
         }
@@ -79,9 +80,11 @@ fun DeviceTopBar(viewModel: DeviceViewModel) {
                         .size(55.dp)
                         .weight(1f),
                     // Para cambiar el color del icono
-                    colorFilter = ColorFilter.tint(color =
-                    if(uiState.deviceIconColor == Color.Black && !MaterialTheme.colors.isLight)
-                        Color.LightGray else uiState.deviceIconColor)
+                    colorFilter = ColorFilter.tint(
+                        color =
+                        if (uiState.deviceIconColor == Color.Black && !MaterialTheme.colors.isLight)
+                            Color.LightGray else uiState.deviceIconColor
+                    )
                 )
             }
             Spacer(modifier = Modifier.width(16.dp))
@@ -107,7 +110,7 @@ fun DeviceTopBar(viewModel: DeviceViewModel) {
             )
         }
         Divider(
-            color = if(!MaterialTheme.colors.isLight) Color.LightGray else Color.Black,
+            color = if (!MaterialTheme.colors.isLight) Color.LightGray else Color.Black,
             thickness = 1.dp,
             modifier = Modifier.padding(top = 16.dp)
         )
@@ -115,15 +118,15 @@ fun DeviceTopBar(viewModel: DeviceViewModel) {
 }
 
 @Composable
-fun DeviceBody(viewModel : DeviceViewModel) {
+fun DeviceBody(viewModel: DeviceViewModel) {
     val uiState by viewModel.uiState.collectAsState()
 
     when (uiState.type?.name) {
-        "ac"        -> AirConditionerConfigScreen(viewModel = viewModel as AirConditionerViewModel)
-        "lamp"      -> LightConfigScreen(viewModel = viewModel as LightViewModel)
-        "vacuum"    -> VacuumConfigScreen(viewModel = viewModel as VacuumViewModel)
-        "oven"      -> OvenConfigScreen(viewModel = viewModel as OvenViewModel)
-        "faucet"    -> FaucetConfigScreen(viewModel = viewModel as FaucetViewModel)
+        "ac" -> AirConditionerConfigScreen(viewModel = viewModel as AirConditionerViewModel)
+        "lamp" -> LightConfigScreen(viewModel = viewModel as LightViewModel)
+        "vacuum" -> VacuumConfigScreen(viewModel = viewModel as VacuumViewModel)
+        "oven" -> OvenConfigScreen(viewModel = viewModel as OvenViewModel)
+        "faucet" -> FaucetConfigScreen(viewModel = viewModel as FaucetViewModel)
         else -> {
             Column {
                 // Text(text = uiState.toString())

@@ -43,10 +43,10 @@ class ServerEventReceiver : BroadcastReceiver() {
 
                 DeviceMap.map[it.deviceId]?.uiState?.value?.type?.name
 
-                if (NotificationList.list.contains(it.deviceId) || event != "locationChanged"){
+                if (NotificationList.list.contains(it.deviceId) || event != "locationChanged") {
                     context?.sendOrderedBroadcast(intent2, null)
                 } else {
-                    Log.d(TAG,"Skipped beacuse not in the list")
+                    Log.d(TAG, "Skipped beacuse not in the list")
                 }
 
             }

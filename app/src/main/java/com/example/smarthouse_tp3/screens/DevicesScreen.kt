@@ -102,7 +102,7 @@ fun DevicesSmallTileRow(
             onCategorySelected = { category -> selectedCategory = category }
         )
 
-        var filteredDevices : List<NetworkDevice> = emptyList()
+        var filteredDevices: List<NetworkDevice> = emptyList()
         if (devicesList != null) {
             filteredDevices = getFilteredDevices(selectedCategory, devicesList)
         }
@@ -149,7 +149,7 @@ fun DevicesSmallTileRow(
 @Composable
 fun DeviceSmallTile(
     modifier: Modifier = Modifier,
-    deviceViewModel : DeviceViewModel = viewModel(),
+    deviceViewModel: DeviceViewModel = viewModel(),
     navigationViewModel: NavigationViewModel,
     onNavigateToConfigScreen: () -> Unit
 ) {
@@ -237,7 +237,6 @@ fun DeviceSmallTile(
 }
 
 
-
 @Composable
 fun SlideGroup(
     categories: Array<DeviceCategory>,
@@ -275,11 +274,11 @@ fun CategoryItem(
 ) {
     val categoryName = when (category) {
         DeviceCategory.All -> stringResource(id = R.string.all)
-        DeviceCategory.AC ->        stringResource(R.string.acs)
-        DeviceCategory.OVEN ->      stringResource(R.string.ovens)
-        DeviceCategory.FAUCET ->    stringResource(R.string.faucets)
-        DeviceCategory.VACUUM ->    stringResource(R.string.vacuums)
-        DeviceCategory.LIGHT ->     stringResource(R.string.lights)
+        DeviceCategory.AC -> stringResource(R.string.acs)
+        DeviceCategory.OVEN -> stringResource(R.string.ovens)
+        DeviceCategory.FAUCET -> stringResource(R.string.faucets)
+        DeviceCategory.VACUUM -> stringResource(R.string.vacuums)
+        DeviceCategory.LIGHT -> stringResource(R.string.lights)
     }
 
     Box(
@@ -301,13 +300,15 @@ fun CategoryItem(
     }
 }
 
-fun getFilteredDevices(category: DeviceCategory, deviceList : List<NetworkDevice>): List<NetworkDevice> {
+fun getFilteredDevices(
+    category: DeviceCategory,
+    deviceList: List<NetworkDevice>
+): List<NetworkDevice> {
     return when (category) {
         DeviceCategory.All -> deviceList
         else -> deviceList.filter { it.type?.name == category.stringValue }
     }
 }
-
 
 
 enum class DeviceCategory(val stringValue: String) {
@@ -321,7 +322,7 @@ enum class DeviceCategory(val stringValue: String) {
 
 
 @Composable
-fun deviceViewModelMaker(id : String = "", typeName : String?) : DeviceViewModel{
+fun deviceViewModelMaker(id: String = "", typeName: String?): DeviceViewModel {
     if (typeName == "lamp") {
         return LightViewModel(deviceId = id)
     } else if (typeName == "oven") {

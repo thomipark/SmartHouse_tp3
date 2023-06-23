@@ -70,7 +70,7 @@ fun FaucetConfigScreen(
 
     if (viewModel.getIsDispensing().value) {
         LaunchedEffect(Unit) {
-            while(viewModel.getIsDispensing().value){
+            while (viewModel.getIsDispensing().value) {
                 delay(10)
                 viewModel.fetchDevice()
             }
@@ -369,7 +369,7 @@ fun FaucetConfigScreen(
                         sliderValue.value
                     } else {
                         LaunchedEffect(Unit) {
-                            while(viewModel.getIsDispensing().value){
+                            while (viewModel.getIsDispensing().value) {
                                 delay(10)
                                 viewModel.fetchDevice()
                             }
@@ -485,7 +485,7 @@ fun FaucetConfigScreen(
                                 fontWeight = FontWeight.ExtraBold,
                                 fontSize = 30.sp,
                                 textAlign = TextAlign.Center,
-                                color = if(MaterialTheme.colors.isLight) Color.White else Color.Black,
+                                color = if (MaterialTheme.colors.isLight) Color.White else Color.Black,
                             )
                         }
                     }

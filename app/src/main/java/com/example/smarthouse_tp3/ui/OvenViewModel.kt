@@ -5,7 +5,7 @@ import com.example.smarthouse_tp3.R
 import com.example.smarthouse_tp3.data.network.model.NetworkDeviceState
 import kotlinx.coroutines.flow.update
 
-class OvenViewModel(deviceId : String) : DeviceViewModel(deviceId) {
+class OvenViewModel(deviceId: String) : DeviceViewModel(deviceId) {
     override fun fetchDevice(deviceId: String): OvenViewModel {
         super.fetchDevice(deviceId)
         _uiState.update {
@@ -122,12 +122,12 @@ class OvenViewModel(deviceId : String) : DeviceViewModel(deviceId) {
 
 
     private fun updateUiState(
-        switchState : Boolean = uiState.value.switchState,
-        status      : String? = uiState.value.state?.status,
-        temperature : Long? = uiState.value.state?.temperature,
-        heat        : String? =  uiState.value.state?.heat,
-        grill       : String? =  uiState.value.state?.grill,
-        convection  : String? =  uiState.value.state?.convection
+        switchState: Boolean = uiState.value.switchState,
+        status: String? = uiState.value.state?.status,
+        temperature: Long? = uiState.value.state?.temperature,
+        heat: String? = uiState.value.state?.heat,
+        grill: String? = uiState.value.state?.grill,
+        convection: String? = uiState.value.state?.convection
 
     ) {
         _uiState.update { currentState ->
@@ -167,6 +167,7 @@ enum class OvenFanMode(val index: Int, val stringValue: String) {
             val nextIndex = (currentIndex + 1) % values().size
             return fromIndex(nextIndex)
         }
+
         fun getIndexFromString(value: String): Int {
             return OvenFanMode.values().indexOfFirst { it.stringValue == value }
         }
