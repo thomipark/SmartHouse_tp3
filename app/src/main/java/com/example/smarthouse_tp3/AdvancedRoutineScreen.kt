@@ -2,6 +2,7 @@ package com.example.smarthouse_tp3
 
 import android.provider.Settings.Global.getString
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -9,6 +10,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -36,9 +38,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.smarthouse_tp3.data.network.model.NetworkRoutine
+import com.example.smarthouse_tp3.screens.fadingEdges
 import com.example.smarthouse_tp3.ui.DevicesViewModel
 import com.example.smarthouse_tp3.ui.NavigationViewModel
+import com.example.smarthouse_tp3.ui.RoomsViewModel
 import com.example.smarthouse_tp3.ui.RoutinesViewModel
 import kotlinx.coroutines.delay
 
@@ -48,7 +53,6 @@ fun RoutineConfigScreen(
     routinesViewModel: RoutinesViewModel,
     devicesViewModel: DevicesViewModel
 ) {
-
     val navigationUiState by navigationViewModel.uiState.collectAsState()
 
     Scaffold(
@@ -122,13 +126,14 @@ fun AdvancedRoutineDeviceTile(
     actionMap["setTemperature"] = R.string.action_setTemperature
     actionMap["setMode"] = R.string.action_setMode
     actionMap["setFanSpeed"] = R.string.action_setFanSpeed
-    actionMap["setVerticalSwing"] = R.string.setVerticalSwing
-    actionMap["setHorizontalSwing"] = R.string.setHorizontalSwing
+    actionMap["setVerticalSwing"] = R.string.action_setVerticalSwing
+    actionMap["setHorizontalSwing"] = R.string.action_setHorizontalSwing
     actionMap["setLocation"] = R.string.action_setLocation
     actionMap["pause"] = R.string.action_pause
     actionMap["dock"] = R.string.action_dock
     actionMap["start"] = R.string.action_start
 
+    val roomsViewModel: RoomsViewModel = viewModel()
 
     Surface(
         shape = MaterialTheme.shapes.small,
@@ -168,41 +173,108 @@ fun AdvancedRoutineDeviceTile(
                             action.actionName?.let { actionName ->
                                 val actionResId = actionMap[actionName]
                                 val actionText =
-                                    if (actionResId != null) stringResource(actionResId) else actionName
+                                    actionResId?.let { stringResource(it) } ?: actionName
+
+                                val additionalText = when (actionResId) {
+                                    R.string.action_setTemperature -> " to ${
+                                        action.params.toString().replace(
+                                            "[\\[\\]]".toRegex(), ""
+                                        )
+                                    }°C"
+
+                                    R.string.action_setHeat -> " to ${
+                                        action.params.toString().replace(
+                                            "[\\[\\]]".toRegex(), ""
+                                        )
+                                    }"
+
+                                    R.string.action_setConvection -> " to ${
+                                        action.params.toString().replace(
+                                            "[\\[\\]]".toRegex(), ""
+                                        )
+                                    }"
+
+                                    R.string.action_setGrill -> " to ${
+                                        action.params.toString().replace(
+                                            "[\\[\\]]".toRegex(), ""
+                                        )
+                                    }"
+
+                                    R.string.action_dispense -> " ${
+                                        action.params.toString().replace(
+                                            "[\\[\\]]".toRegex(), ""
+                                        )
+                                    }"
+
+                                    R.string.action_setMode -> " to ${
+                                        action.params.toString().replace(
+                                            "[\\[\\]]".toRegex(), ""
+                                        )
+                                    }"
+
+                                    R.string.action_setBrightness -> " to ${
+                                        action.params.toString().substring(1)
+                                            .replace("\\..*".toRegex(), "")
+                                    }%"
+
+                                    R.string.action_setColor -> " to "
+
+                                    R.string.action_setHorizontalSwing -> " to ${
+                                        if (action.params.toString().replace(
+                                                "[\\[\\]]".toRegex(), ""
+                                            ) != "null"
+                                        ) action.params.toString().replace(
+                                            "[\\[\\]]".toRegex(), ""
+                                        ) + "°" else "auto"
+                                    }"
+
+                                    R.string.action_setVerticalSwing -> " to ${
+                                        if (action.params.toString().replace(
+                                                "[\\[\\]]".toRegex(), ""
+                                            ) != "null"
+                                        ) action.params.toString().replace(
+                                            "[\\[\\]]".toRegex(), ""
+                                        ) + "°" else "auto"
+                                    }"
+
+                                    R.string.action_setLocation -> {
+                                        val roomId = roomsViewModel.getRoomFromId(
+                                            action.params.toString().replace(
+                                                "[\\[\\]]".toRegex(), ""
+                                            )
+                                        ).name.toString()
+
+                                        if (roomId != "null" && roomId != "")
+                                            " to $roomId" else ""
+                                    }
+
+                                    else -> ""
+                                }
+
                                 Text(
-                                    text = actionText + if (actionText == R.string.action_setTemperature.let {
-                                            stringResource(
-                                                it
-                                            )
-                                        }) " to " + action.params.toString().replace(
-                                        "[\\[\\]]".toRegex(),
-                                        ""
-                                    ) + "°C" else if (actionText == R.string.action_setHeat.let {
-                                            stringResource(
-                                                it
-                                            )
-                                        }) " to " + action.params.toString()
-                                        .replace(
-                                            "[\\[\\]]".toRegex(),
-                                            ""
-                                        ) else if (actionText == R.string.action_setConvection.let {
-                                            stringResource(
-                                                it
-                                            )
-                                        }) " to " + action.params.toString()
-                                        .replace(
-                                            "[\\[\\]]".toRegex(),
-                                            ""
-                                        ) else if (actionText == R.string.action_setGrill.let {
-                                            stringResource(
-                                                it
-                                            )
-                                        }) " to " + action.params.toString()
-                                        .replace("[\\[\\]]".toRegex(), "") else "",
+                                    text = actionText + additionalText,
                                     style = MaterialTheme.typography.body1,
                                     modifier = Modifier.padding(start = 8.dp)
                                 )
+                                if (actionResId == R.string.action_setColor) {
+                                    val colorString = "#FF${
+                                        action.params.toString().replace("[\\[\\]]".toRegex(), "")
+                                    }"
+
+                                    Card(
+                                        modifier = Modifier
+                                            .size(18.dp)
+                                            .offset(5.dp, 0.9.dp),
+                                        backgroundColor = Color(
+                                            android.graphics.Color.parseColor(
+                                                colorString
+                                            )
+                                        ),
+                                        border = BorderStroke(0.3.dp, Color.Black),
+                                    ) {}
+                                }
                             }
+
                         }
                     }
                 }

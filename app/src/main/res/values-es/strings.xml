@@ -74,11 +74,10 @@
     <string name="action_setConvection">Cambiar modo de convección</string>
     <string name="action_setMode">Cambiar modo</string>
     <string name="action_setFanSpeed">Establecer velocidad del ventilador</string>
-    <string name="action_setSwing">Establecer ángulo de oscilación</string>
     <string name="action_setLocation">Establecer nuevo lugar de carga</string>
     <string name="action_pause">Pausar</string>
     <string name="action_dock">Atracar al puerto de carga</string>
     <string name="action_start">Iniciar limpieza</string>
-    <string name="setVerticalSwing">Establecer ángulo oscilación vertical</string>
-    <string name="setHorizontalSwing">Establecer ángulo oscilación horizontal</string>
+    <string name="action_setVerticalSwing">Establecer ángulo oscilación vertical</string>
+    <string name="action_setHorizontalSwing">Establecer ángulo oscilación horizontal</string>
 </resources>

@@ -73,12 +73,11 @@
     <string name="action_setConvection">Set convection mode</string>
     <string name="action_setMode">Change mode</string>
     <string name="action_setFanSpeed">Set fan speed</string>
-    <string name="action_setSwing">Set swing angle</string>
     <string name="action_setLocation">Set new charge location</string>
     <string name="action_pause">Pause</string>
     <string name="action_dock">Dock to charge</string>
     <string name="action_start">Start cleaning</string>
-    <string name="setVerticalSwing">Set vertical swing angle</string>
-    <string name="setHorizontalSwing">Set horizontal swing angle</string>
+    <string name="action_setVerticalSwing">Set vertical swing angle</string>
+    <string name="action_setHorizontalSwing">Set horizontal swing angle</string>
 
 </resources>
