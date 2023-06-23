@@ -133,7 +133,7 @@ fun AdvancedRoutineDeviceTile(
                             Box(
                                 modifier = Modifier
                                     .size(8.dp)
-                                    .background(Color.Black)
+                                    .background(if (MaterialTheme.colors.isLight) Color.White else Color.Black)
                             )
 
                             action.actionName?.let {

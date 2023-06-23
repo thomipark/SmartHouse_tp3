@@ -99,13 +99,13 @@ fun SmallRoutineTile(
     Surface(
         shape = MaterialTheme.shapes.small, modifier = modifier
     ) {
-        Card(modifier = Modifier.fillMaxWidth(),
+        Card(modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
             backgroundColor = MaterialTheme.colors.primaryVariant,
             onClick = {
                 navigationViewModel.selectNewRoutine(routine)
                 navigationViewModel.selectNewNetworkRoutine(networkRoutine)
                 onNavigateToConfigScreen()
-        }) {
+            }) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -130,6 +130,7 @@ fun SmallRoutineTile(
                             Text(
                                 text = it,
                                 style = MaterialTheme.typography.h5,
+                                fontWeight = FontWeight.Bold,
                                 textAlign = TextAlign.Center,
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis, // Display the text in a single line
@@ -161,9 +162,9 @@ fun SmallRoutineTileExtended(
             .fillMaxWidth()
             .height(128.dp),
             backgroundColor = MaterialTheme.colors.primaryVariant, onClick = {
-            navigationViewModel.selectNewNetworkRoutine(networkRoutine)
-            onNavigateToConfigScreen()
-        }) {
+                navigationViewModel.selectNewNetworkRoutine(networkRoutine)
+                onNavigateToConfigScreen()
+            }) {
             Row(
                 verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(8.dp)
             ) {
@@ -211,14 +212,15 @@ fun SmallRoutineTileExtended(
     }
 }
 
-@Composable fun playButton(
+@Composable
+fun playButton(
     networkRoutine: NetworkRoutine,
     routinesViewModel: RoutinesViewModel
-){
+) {
     var isClicked by remember { mutableStateOf(false) }
 
     val tint by animateColorAsState(
-        if (isClicked) MaterialTheme.colors.secondary else Color.Black
+        if (isClicked) MaterialTheme.colors.secondary else if (MaterialTheme.colors.isLight) Color.White else Color.Black
     )
     LaunchedEffect(isClicked) {
         if (isClicked) {
@@ -278,23 +280,24 @@ fun SmallRoutineTilesRow(
             }
         }
     } else {
-        if (routinesUiState.networkRoutineList != null) {
+        if (routinesUiState.networkRoutineList != null && routinesUiState.networkRoutineList?.routines?.isNotEmpty() == true) {
             LazyColumn(
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-            contentPadding = PaddingValues(horizontal = 16.dp),
-            modifier = modifier.fillMaxWidth()
-        ) {
-            routinesUiState.networkRoutineList?.let { routine ->
-                items(items = routine.routines) {
-                    SmallRoutineTile(
-                        navigationViewModel = navigationViewModel,
-                        networkRoutine = it,
-                        routinesViewModel = routinesViewModel,
-                        onNavigateToConfigScreen = onNavigateToConfigScreen
-                    )
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+                contentPadding = PaddingValues(horizontal = 16.dp),
+                modifier = modifier.fillMaxWidth()
+            ) {
+                routinesUiState.networkRoutineList?.let { routine ->
+                    items(items = routine.routines) {
+                        SmallRoutineTile(
+                            navigationViewModel = navigationViewModel,
+                            networkRoutine = it,
+                            routinesViewModel = routinesViewModel,
+                            onNavigateToConfigScreen = onNavigateToConfigScreen
+                        )
+                    }
                 }
             }
-        } } else {
+        } else {
             Box(
                 modifier = Modifier
                     .fillMaxSize()
@@ -344,6 +347,7 @@ fun SmallRoutineTileExtendedPreview() {
         )
     }
 }
+
 @Preview
 @Composable
 fun SmallRoutineTileRowPreview() {

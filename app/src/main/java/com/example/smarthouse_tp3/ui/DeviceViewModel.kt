@@ -160,6 +160,9 @@ open class DeviceViewModel(private var deviceId : String) : ViewModel() {
             )
         }
     }
+    fun getNotification(): Boolean{
+        return _uiState.value.notification
+    }
     fun setFavourite(){
         _uiState.update { currentState ->
             currentState.copy(

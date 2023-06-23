@@ -27,6 +27,7 @@ import com.example.smarthouse_tp3.notification.MyIntent
 import com.example.smarthouse_tp3.notification.SkipNotificationReceiver
 import com.example.smarthouse_tp3.ui.DevicesViewModel
 import com.example.smarthouse_tp3.ui.NavigationViewModel
+import com.example.smarthouse_tp3.ui.NotificationList
 import com.example.smarthouse_tp3.ui.theme.SmartHouse_tp3Theme
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionRequired
@@ -94,11 +95,9 @@ class MainActivity : ComponentActivity() {
 
 
                 }
-                val deviceId = intent?.getStringExtra(MyIntent.DEVICE_ID)
-                shouldSkipNotification = !navigationViewModel.containsNotification(deviceId)
-                Log.d("ServerEventReceiver",
-                    (!navigationViewModel.containsNotification(deviceId)).toString() + deviceId
-                )
+
+
+
             }
         }
     }
@@ -119,8 +118,9 @@ class MainActivity : ComponentActivity() {
     }
     override fun onStart() {
         super.onStart()
+        val deviceId = intent?.getStringExtra(MyIntent.DEVICE_ID)
 
-        val skip = isAppInForeground()
+        val skip = isAppInForeground() || !NotificationList.list.contains(deviceId)
         receiver = SkipNotificationReceiver(DEVICE_ID,skip)
         IntentFilter(MyIntent.SHOW_NOTIFICATION)
             .apply { priority = 1 }

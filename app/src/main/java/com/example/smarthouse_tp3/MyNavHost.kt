@@ -197,31 +197,23 @@ fun TopBar(
 ) {
     val currentRoute = navController.currentDestination?.route ?: ""
     val showBackIcon =
-        currentRoute == stringResource(id = R.string.device_configuration_screen) || currentRoute == stringResource(
-            id = R.string.routine_configuration_screen
-        )
+        currentRoute == stringResource(id = R.string.device_configuration_screen) || currentRoute == stringResource(id = R.string.routine_configuration_screen)
+    val navigationUiState by navigationViewModel.uiState.collectAsState()
 
     val showNotificationIcon =
         currentRoute == stringResource(id = R.string.device_configuration_screen)
 
-    val notificationToggleState = remember { mutableStateOf(false) }
+    navigationUiState.selectedDeviceViewModel?.let { navigationViewModel.updateNotification(it.getNotification()) }
+    val notificationState = remember { mutableStateOf(navigationUiState.notification) }
 
-    val notificationIcon = if (notificationToggleState.value) {
-        painterResource(R.drawable.notifications_on)
-    } else {
-        painterResource(R.drawable.notifications_off)
-    }
 
-    val notificationContentDescription = if (notificationToggleState.value) {
+
+    val notificationContentDescription = if (notificationState.value == true) {
         "Notification On"
     } else {
         "Notification Off"
     }
 
-    val toggleNotification = {
-        notificationToggleState.value = !notificationToggleState.value
-        // Handle notification toggle logic here
-    }
 
 
     val routeToIconMap = mapOf(
@@ -248,16 +240,21 @@ fun TopBar(
             actions = {
                 if (showNotificationIcon) {
                     IconButton(onClick = {
-                        toggleNotification()
-                        if (notificationToggleState.value) {
+                        navigationViewModel.setNotification()
+                        navigationUiState.selectedDeviceViewModel?.setNotification()
+
+                        if (navigationUiState.notification) {
                             navigationViewModel.removeDevicesNotificationList()
                         } else {
                             navigationViewModel.addDevicesNotificationList()
                         }
-
                     }) {
                         Icon(
-                            painter = notificationIcon,
+                            painter = if (navigationUiState.notification) {
+                                painterResource(R.drawable.notifications_on)
+                            } else {
+                                painterResource(R.drawable.notifications_off)
+                            },
                             contentDescription = notificationContentDescription,
                             modifier = Modifier
                                 .padding(8.dp)
@@ -265,7 +262,8 @@ fun TopBar(
                         )
                     }
                 }
-            }
+            },
+            backgroundColor = MaterialTheme.colors.primary
         )
     } else {
         Box(

@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import com.example.smarthouse_tp3.BuildConfig
+import com.example.smarthouse_tp3.ui.NotificationList
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.Dispatchers
@@ -32,8 +33,14 @@ class ServerEventReceiver : BroadcastReceiver() {
                     putExtra(MyIntent.DEVICE_ID, it.deviceId)
                     putExtra(MyIntent.EVENT, it.event)
                 }
-                context?.sendOrderedBroadcast(intent2, null)
+                if (NotificationList.list.contains(it.deviceId)){
+                    Log.d(TAG,"Skipped beacuse not in the list")
+                } else {
+                    context?.sendOrderedBroadcast(intent2, null)
+                }
+
             }
+
         }
     }
 

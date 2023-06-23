@@ -10,5 +10,5 @@ data class NavigationUiState(
     val selectedDeviceViewModel: DeviceViewModel? = null,
     val selectedNetworkRoutine: NetworkRoutine? = null,
     val firstTime : Boolean = true,
-    val devicesNotificationList: MutableList<String> = mutableListOf()
+    val notification: Boolean = false
 )
