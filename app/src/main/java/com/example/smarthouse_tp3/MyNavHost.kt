@@ -265,7 +265,8 @@ fun TopBar(
                         )
                     }
                 }
-            }
+            },
+            backgroundColor = MaterialTheme.colors.primary
         )
     } else {
         Box(
