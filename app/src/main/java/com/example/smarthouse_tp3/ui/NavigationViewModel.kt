@@ -46,6 +46,8 @@ class NavigationViewModel : ViewModel() {
         val id = _uiState.value.selectedDeviceViewModel?.getDeviceId()
         if (id != null) {
             NotificationList.list.add(id)
+            Log.d("ServerEventReceiver add", id.toString())
+            Log.d("ServerEventReceiver listNM", NotificationList.list.toString())
         }
     }
 
@@ -53,12 +55,15 @@ class NavigationViewModel : ViewModel() {
         val id = _uiState.value.selectedDeviceViewModel?.getDeviceId()
         if (id != null) {
             NotificationList.list.remove(id)
+            Log.d("ServerEventReceiver remove", id.toString())
+            Log.d("ServerEventReceiver listNM", FavouritesList.list.toString())
         }
     }
     fun addDevicesFavoriteList() {
         val id = _uiState.value.selectedDeviceViewModel?.getDeviceId()
         if (id != null) {
             FavouritesList.list.add(id)
+
         }
     }
 
@@ -66,6 +71,7 @@ class NavigationViewModel : ViewModel() {
         val id = _uiState.value.selectedDeviceViewModel?.getDeviceId()
         if (id != null) {
             FavouritesList.list.remove(id)
+
         }
     }
 

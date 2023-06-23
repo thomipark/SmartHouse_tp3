@@ -22,8 +22,7 @@ class ShowNotificationReceiver : BroadcastReceiver() {
             val deviceViewModel = DeviceMap.map[deviceId]
             if (deviceViewModel != null) {
                 intent.getStringExtra(MyIntent.EVENT)
-                    ?.let { showNotification(context, deviceViewModel, it)
-                    }
+                    ?.let { showNotification(context, deviceViewModel, it) }
             }
         }
     }
