@@ -1,5 +1,6 @@
 package com.example.smarthouse_tp3
 
+import android.provider.Settings.Global.getString
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -35,9 +36,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.example.smarthouse_tp3.data.network.model.NetworkAction
 import com.example.smarthouse_tp3.data.network.model.NetworkRoutine
-import com.example.smarthouse_tp3.ui.DeviceViewModel
 import com.example.smarthouse_tp3.ui.DevicesViewModel
 import com.example.smarthouse_tp3.ui.NavigationViewModel
 import com.example.smarthouse_tp3.ui.RoutinesViewModel
@@ -49,6 +48,7 @@ fun RoutineConfigScreen(
     routinesViewModel: RoutinesViewModel,
     devicesViewModel: DevicesViewModel
 ) {
+
     val navigationUiState by navigationViewModel.uiState.collectAsState()
 
     Scaffold(
@@ -62,7 +62,12 @@ fun RoutineConfigScreen(
                     .fillMaxSize()
                     .padding(horizontal = 8.dp)
             ) {
-                navigationUiState.selectedNetworkRoutine?.let { it1 -> RoutineBody(it1,routinesViewModel) }
+                navigationUiState.selectedNetworkRoutine?.let { it1 ->
+                    RoutineBody(
+                        it1,
+                        routinesViewModel
+                    )
+                }
             }
         }
     )
@@ -87,7 +92,7 @@ fun RoutineTopBar(networkRoutine: NetworkRoutine) {
                 )
             }
             Divider(
-                color = if(!MaterialTheme.colors.isLight) Color.LightGray else Color.Black,
+                color = if (!MaterialTheme.colors.isLight) Color.LightGray else Color.Black,
                 thickness = 1.dp,
                 modifier = Modifier.padding(top = 16.dp)
             )
@@ -101,6 +106,30 @@ fun AdvancedRoutineDeviceTile(
     deviceRoutineNetwork: DeviceRoutineNetwork,
     modifier: Modifier = Modifier
 ) {
+
+    val actionMap: MutableMap<String, Int> = HashMap()
+    actionMap["open"] = R.string.action_open
+    actionMap["close"] = R.string.action_close
+    actionMap["dispense"] = R.string.action_dispense
+    actionMap["setColor"] = R.string.action_setColor
+    actionMap["setBrightness"] = R.string.action_setBrightness
+    actionMap["turnOn"] = R.string.action_turnOn
+    actionMap["turnOff"] = R.string.action_turnOff
+    actionMap["setTemperature"] = R.string.action_setTemperature
+    actionMap["setHeat"] = R.string.action_setHeat
+    actionMap["setGrill"] = R.string.action_setGrill
+    actionMap["setConvection"] = R.string.action_setConvection
+    actionMap["setTemperature"] = R.string.action_setTemperature
+    actionMap["setMode"] = R.string.action_setMode
+    actionMap["setFanSpeed"] = R.string.action_setFanSpeed
+    actionMap["setVerticalSwing"] = R.string.setVerticalSwing
+    actionMap["setHorizontalSwing"] = R.string.setHorizontalSwing
+    actionMap["setLocation"] = R.string.action_setLocation
+    actionMap["pause"] = R.string.action_pause
+    actionMap["dock"] = R.string.action_dock
+    actionMap["start"] = R.string.action_start
+
+
     Surface(
         shape = MaterialTheme.shapes.small,
         modifier = modifier
@@ -136,9 +165,40 @@ fun AdvancedRoutineDeviceTile(
                                     .background(if (MaterialTheme.colors.isLight) Color.White else Color.Black)
                             )
 
-                            action.actionName?.let {
+                            action.actionName?.let { actionName ->
+                                val actionResId = actionMap[actionName]
+                                val actionText =
+                                    if (actionResId != null) stringResource(actionResId) else actionName
                                 Text(
-                                    text = it,  //Action getName
+                                    text = actionText + if (actionText == R.string.action_setTemperature.let {
+                                            stringResource(
+                                                it
+                                            )
+                                        }) " to " + action.params.toString().replace(
+                                        "[\\[\\]]".toRegex(),
+                                        ""
+                                    ) + "°C" else if (actionText == R.string.action_setHeat.let {
+                                            stringResource(
+                                                it
+                                            )
+                                        }) " to " + action.params.toString()
+                                        .replace(
+                                            "[\\[\\]]".toRegex(),
+                                            ""
+                                        ) else if (actionText == R.string.action_setConvection.let {
+                                            stringResource(
+                                                it
+                                            )
+                                        }) " to " + action.params.toString()
+                                        .replace(
+                                            "[\\[\\]]".toRegex(),
+                                            ""
+                                        ) else if (actionText == R.string.action_setGrill.let {
+                                            stringResource(
+                                                it
+                                            )
+                                        }) " to " + action.params.toString()
+                                        .replace("[\\[\\]]".toRegex(), "") else "",
                                     style = MaterialTheme.typography.body1,
                                     modifier = Modifier.padding(start = 8.dp)
                                 )
@@ -159,7 +219,7 @@ fun RoutineBody(
     modifier: Modifier = Modifier
 ) {
     val deviceRoutineNetworkList = createDeviceRoutineNetworks(networkRoutine)
-    
+
     LazyColumn(
         contentPadding = PaddingValues(horizontal = 16.dp),
         modifier = modifier.fillMaxWidth()
@@ -209,7 +269,7 @@ fun RoutineBody(
                 onClick = {
                     networkRoutine.id?.let { routinesViewModel.executeRoutine(it) }
                     isClicked = !isClicked
-                          },
+                },
                 modifier = Modifier
                     .size(128.dp)
                     .padding(4.dp),
@@ -235,7 +295,7 @@ fun RoutineBody(
  * Creates a list of DeviceRoutineNetworks which contains a Device with its actions to execute
  */
 fun createDeviceRoutineNetworks(networkRoutines: NetworkRoutine): List<DeviceRoutineNetwork> {
-    val deviceActionMap = mutableMapOf<String,DeviceRoutineNetwork>()
+    val deviceActionMap = mutableMapOf<String, DeviceRoutineNetwork>()
 
     for (action in networkRoutines.actions) {
         action.device?.id?.let {

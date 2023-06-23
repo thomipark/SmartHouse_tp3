@@ -60,4 +60,25 @@
     <string name="no_devices_added">No devices added</string>
     <string name="no_devices_linked_to_this_place">No devices linked to this place</string>
     <string name="vacuum_not_associated_with_room">Vacuum must be linked to a room\nLink it using the webapp</string>
+    <string name="action_open">Open</string>
+    <string name="action_close">Close</string>
+    <string name="action_dispense">Dispense</string>
+    <string name="action_setColor">Change color</string>
+    <string name="action_setBrightness">Change brightness</string>
+    <string name="action_turnOn">Turn on</string>
+    <string name="action_turnOff">Turn off</string>
+    <string name="action_setTemperature">Set temperature</string>
+    <string name="action_setHeat">Set oven heat mode</string>
+    <string name="action_setGrill">Set grill mode</string>
+    <string name="action_setConvection">Set convection mode</string>
+    <string name="action_setMode">Change mode</string>
+    <string name="action_setFanSpeed">Set fan speed</string>
+    <string name="action_setSwing">Set swing angle</string>
+    <string name="action_setLocation">Set new charge location</string>
+    <string name="action_pause">Pause</string>
+    <string name="action_dock">Dock to charge</string>
+    <string name="action_start">Start cleaning</string>
+    <string name="setVerticalSwing">Set vertical swing angle</string>
+    <string name="setHorizontalSwing">Set horizontal swing angle</string>
+
 </resources>
